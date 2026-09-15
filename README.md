@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Fiambrería Hamdan
 
-## Getting Started
+Sitio web en desarrollo para **Fiambrería Hamdan**, comercio familiar de San Miguel de Tucumán con trayectoria desde 1992.
 
-First, run the development server:
+La primera etapa del proyecto está enfocada en presentar la marca, ordenar la experiencia de pedidos y dar visibilidad a la venta mayorista de quesos, fiambres y alimentos. La arquitectura queda preparada para sumar catálogo minorista, cuentas de clientes, carrito persistente y pagos online en etapas posteriores.
+
+## Estado actual
+
+- Home responsive con identidad visual Hamdan.
+- Header fijo con navegación, búsqueda, acceso a cuenta, WhatsApp y carrito.
+- Hero con historia de la marca, Hamdini y fachada real del local.
+- Accesos a Fiambres, Lácteos, Alimentos, Mayorista, Cómo pedir y Contacto.
+- Flujo visual de compra.
+- Presentación de cuenta de cliente y futuros pagos online.
+- Sección específica para pedidos mayoristas.
+- Información comercial y de contacto trasladada al pie de página.
+
+## Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- ESLint
+
+## Desarrollo local
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Para validar el proyecto:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+```
 
-## Learn More
+## Próximas etapas
 
-To learn more about Next.js, take a look at the following resources:
+1. Catálogo real administrable.
+2. Carrito y checkout.
+3. Registro e inicio de sesión.
+4. Precios mayoristas y minoristas separados.
+5. Integración con Mercado Pago y transferencia.
+6. Panel de administración para productos, precios y pedidos.
+7. Conexión del dominio `fiambreriahamdan.com` y despliegue en Vercel.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Proyecto desarrollado para acompañar la digitalización de Fiambrería Hamdan.
