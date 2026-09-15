@@ -1,8 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f3eb;
-  --foreground: #18231f;
+  --background: #fffaf0;
+  --foreground: #382a22;
+  --hamdan-red: #8f1f23;
+  --hamdan-burgundy: #71191d;
+  --cheese-gold: #efc35a;
+  --kraft: #d7aa68;
+  --cream: #fff8e9;
+  --wood: #4a281c;
 }
 
 * {
@@ -11,17 +17,21 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--background);
 }
 
 body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
 button,
-a {
+a,
+input,
+summary {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -30,7 +40,174 @@ a {
   text-decoration: none;
 }
 
-button {
+button,
+input {
   font: inherit;
+}
+
+button,
+summary {
   cursor: pointer;
+}
+
+::selection {
+  background: #f0c769;
+  color: #55221e;
+}
+
+.font-display {
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: -0.02em;
+}
+
+.handwritten {
+  font-family: "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+}
+
+.paper-surface {
+  background-color: #fff9ed;
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(143, 31, 35, 0.025) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 65%, rgba(164, 109, 28, 0.03) 0 1px, transparent 1.5px),
+    linear-gradient(90deg, rgba(127, 81, 47, 0.018) 1px, transparent 1px),
+    linear-gradient(rgba(127, 81, 47, 0.018) 1px, transparent 1px);
+  background-size: 26px 26px, 31px 31px, 48px 48px, 48px 48px;
+}
+
+.hero-magic::before,
+.hero-magic::after {
+  content: "✦";
+  position: absolute;
+  z-index: 0;
+  color: rgba(215, 161, 55, 0.35);
+  font-size: 36px;
+  pointer-events: none;
+}
+
+.hero-magic::before {
+  left: 2.5%;
+  top: 19%;
+  transform: rotate(12deg);
+}
+
+.hero-magic::after {
+  right: 2%;
+  bottom: 20%;
+  transform: rotate(-10deg) scale(0.75);
+}
+
+.cart-board {
+  isolation: isolate;
+  min-height: 46px;
+  border: 1px solid rgba(94, 48, 25, 0.32);
+  border-radius: 11px 14px 14px 11px;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.12), transparent 20%),
+    linear-gradient(135deg, #8c522b, #6c3c23 58%, #9a6035);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.2),
+    0 7px 16px rgba(85, 47, 24, 0.2);
+}
+
+.cart-board::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: 8px;
+  top: -8px;
+  width: 24px;
+  height: 14px;
+  border: 1px solid rgba(94, 48, 25, 0.32);
+  border-bottom: 0;
+  border-radius: 9px 9px 0 0;
+  background: #7e4728;
+}
+
+.cart-board::after {
+  content: "✦";
+  position: absolute;
+  left: -8px;
+  top: -8px;
+  color: #efc35a;
+  font-size: 14px;
+  text-shadow: 0 0 12px rgba(239, 195, 90, 0.7);
+}
+
+.magic-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.magic-button::after {
+  content: "✦";
+  position: absolute;
+  right: 14px;
+  top: -20px;
+  color: #f4cd66;
+  opacity: 0;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.magic-button:hover::after {
+  opacity: 1;
+  transform: translateY(26px) rotate(25deg);
+}
+
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 28%;
+  width: 18px;
+  height: 18px;
+  border-right: 2px solid #8e1e24;
+  border-bottom: 2px solid #8e1e24;
+  background: #fffdf6;
+  transform: rotate(45deg);
+}
+
+.polaroid {
+  border: 1px solid rgba(111, 65, 38, 0.12);
+  border-radius: 4px;
+}
+
+.wood-card {
+  background-color: #5e251f;
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,0.04), transparent 18%, rgba(0,0,0,0.035) 52%, transparent 79%),
+    repeating-linear-gradient(4deg, rgba(255,255,255,0.018) 0 2px, transparent 2px 7px),
+    linear-gradient(135deg, #7f2523, #571f1b 68%, #46251c);
+}
+
+.contact-band {
+  background-color: #76231f;
+  background-image:
+    repeating-linear-gradient(2deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 6px),
+    linear-gradient(90deg, #5a281e, #7c2623 48%, #602119);
+  box-shadow: inset 0 10px 30px rgba(49, 18, 12, 0.16);
+}
+
+@media (max-width: 640px) {
+  .hero-magic::before,
+  .hero-magic::after {
+    display: none;
+  }
+
+  .cart-board {
+    min-width: 48px;
+    justify-content: center;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

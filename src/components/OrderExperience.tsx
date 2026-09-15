@@ -41,9 +41,9 @@ export default function OrderExperience() {
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f4ca63] text-[#6b241d] shadow-inner"><BasketIcon size={28} /></div>
           </div>
           <div className="mt-6 grid gap-3 text-sm">
-            <div className="flex items-center gap-3 rounded-xl bg-white/8 px-4 py-3"><CardIcon size={18} className="text-[#f2c75f]" /><span>Pago online con Mercado Pago</span></div>
-            <div className="flex items-center gap-3 rounded-xl bg-white/8 px-4 py-3"><span className="text-[#f2c75f]">✓</span><span>Transferencia bancaria</span></div>
-            <div className="flex items-center gap-3 rounded-xl bg-white/8 px-4 py-3"><WhatsAppIcon size={18} className="text-[#f2c75f]" /><span>También podés coordinar por WhatsApp</span></div>
+            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><CardIcon size={18} className="text-[#f2c75f]" /><span>Pago online con Mercado Pago</span></div>
+            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><span className="text-[#f2c75f]">✓</span><span>Transferencia bancaria</span></div>
+            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><WhatsAppIcon size={18} className="text-[#f2c75f]" /><span>También podés coordinar por WhatsApp</span></div>
           </div>
           <p className="handwritten mt-6 rotate-[-2deg] text-right text-lg font-bold text-[#f5d384]">Del local a tu mesa ♥</p>
         </aside>
