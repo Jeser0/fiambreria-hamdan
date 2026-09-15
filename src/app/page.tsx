@@ -1,5 +1,7 @@
+import HamdanFooter from "@/components/HamdanFooter";
 import HamdanHeader from "@/components/HamdanHeader";
 import HamdanHero from "@/components/HamdanHero";
+import OrderExperience from "@/components/OrderExperience";
 import SectionGateways from "@/components/SectionGateways";
 import ShoppingJourney from "@/components/ShoppingJourney";
 
@@ -10,6 +12,8 @@ export default function Home() {
       <HamdanHero />
       <SectionGateways />
       <ShoppingJourney />
+      <OrderExperience />
+      <HamdanFooter />
     </main>
   );
 }
