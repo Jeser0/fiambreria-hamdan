@@ -2,7 +2,6 @@ import {
   BoxIcon,
   ClipboardIcon,
   PinIcon,
-  StoreIcon,
 } from "./Icons";
 
 function CheeseIcon() {
