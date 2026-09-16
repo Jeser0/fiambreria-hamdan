@@ -29,10 +29,10 @@ function FoodIcon() {
 }
 
 const cards = [
-  { title: "Fiambres", subtitle: "Los clásicos de siempre", href: "#catalogo", icon: <HamIcon />, tone: "text-[#8f1f23]" },
-  { title: "Lácteos", subtitle: "Calidad todos los días", href: "#catalogo", icon: <CheeseIcon />, tone: "text-[#b66d0f]" },
-  { title: "Alimentos", subtitle: "Todo para tu mesa", href: "#catalogo", icon: <FoodIcon />, tone: "text-[#8f1f23]" },
-  { title: "Pedidos por mayor", subtitle: "Precios especiales", href: "#mayorista", icon: <BoxIcon size={28} />, tone: "text-[#b66d0f]" },
+  { title: "Fiambres", subtitle: "Los clásicos de siempre", href: "/mayorista#catalogo", icon: <HamIcon />, tone: "text-[#8f1f23]" },
+  { title: "Lácteos", subtitle: "Calidad todos los días", href: "/mayorista#catalogo", icon: <CheeseIcon />, tone: "text-[#b66d0f]" },
+  { title: "Alimentos", subtitle: "Todo para tu mesa", href: "/mayorista#catalogo", icon: <FoodIcon />, tone: "text-[#8f1f23]" },
+  { title: "Pedidos por mayor", subtitle: "Precios especiales", href: "/mayorista", icon: <BoxIcon size={28} />, tone: "text-[#b66d0f]" },
   { title: "Cómo pedir", subtitle: "Rápido y sencillo", href: "#como-pedir", icon: <ClipboardIcon size={28} />, tone: "text-[#8f1f23]" },
   { title: "Contacto", subtitle: "Te esperamos", href: "#contacto", icon: <PinIcon size={28} />, tone: "text-[#8f1f23]" },
 ];
