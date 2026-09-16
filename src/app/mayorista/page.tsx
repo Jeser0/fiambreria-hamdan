@@ -9,6 +9,16 @@ export const metadata: Metadata = {
   title: "Catálogo mayorista",
   description:
     "Catálogo mayorista de Fiambrería Hamdan para comercios y gastronomía en Tucumán. Consultá quesos, fiambres, alimentos, disponibilidad y precios vigentes.",
+  alternates: {
+    canonical: "/mayorista",
+  },
+  openGraph: {
+    title: "Catálogo mayorista | Fiambrería Hamdan",
+    description: "Consultá productos mayoristas, disponibilidad y precios vigentes en Fiambrería Hamdan.",
+    url: "/mayorista",
+    type: "website",
+    locale: "es_AR",
+  },
 };
 
 type MayoristaPageProps = {
