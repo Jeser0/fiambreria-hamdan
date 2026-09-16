@@ -21,12 +21,12 @@ export default function OrderExperience() {
               </div>
             </div>
             <div className="flex min-w-52 flex-col gap-3">
-              <a href="https://wa.me/543813514449" target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#f2c65f] px-5 py-3.5 text-sm font-black text-[#4a2a1c] transition hover:-translate-y-0.5 hover:bg-[#f7d47d]">
+              <a href="https://wa.me/543813514449?text=Hola%20Hamdan%2C%20quisiera%20consultar%20por%20precios%20mayoristas." target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/12 px-5 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/18">
                 <WhatsAppIcon size={19} /> Consultar mayorista
               </a>
-              <button type="button" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-5 py-3.5 text-sm font-black text-white transition hover:bg-white/15">
+              <a href="/mayorista" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/12 px-5 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/18">
                 <BoxIcon size={18} /> Ver sección mayorista
-              </button>
+              </a>
             </div>
           </div>
         </div>

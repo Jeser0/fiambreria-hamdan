@@ -34,11 +34,15 @@ export default function ShoppingJourney() {
           </div>
         </div>
 
-        <aside className="rounded-3xl border border-[#8f1f23]/12 bg-[#f7ead7] p-6">
+        <aside id="cuenta" className="scroll-mt-40 rounded-3xl border border-[#8f1f23]/12 bg-[#f7ead7] p-6">
           <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#8f1f23] shadow-sm"><UserIcon size={22} /></div>
-          <h3 className="font-display mt-4 text-2xl font-black text-[#7b2022]">Tu cuenta Hamdan</h3>
-          <p className="mt-3 text-sm leading-6 text-[#68574e]">Iniciá sesión para guardar tus pedidos, ver tu historial y comprar más rápido.</p>
-          <button type="button" className="mt-5 w-full rounded-xl border border-[#8f1f23]/20 bg-white px-4 py-3 text-sm font-black text-[#7f2023] transition hover:-translate-y-0.5 hover:shadow-md">Mi cuenta →</button>
+          <h3 className="font-display mt-4 text-2xl font-black text-[#7b2022]">Registrate o iniciá sesión</h3>
+          <p className="mt-3 text-sm leading-6 text-[#68574e]">Guardá tus pedidos, consultá tu historial y comprá más rápido cuando habilitemos las cuentas de clientes.</p>
+          <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+            <button type="button" className="rounded-xl bg-[#8f1f23] px-4 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#76191d] hover:shadow-md">Iniciar sesión</button>
+            <button type="button" className="rounded-xl border border-[#8f1f23]/25 bg-white px-4 py-3 text-sm font-black text-[#7f2023] transition hover:-translate-y-0.5 hover:bg-[#fffaf2] hover:shadow-md">Registrarse</button>
+          </div>
+          <p className="mt-3 text-[11px] leading-4 text-[#8a7468]">El acceso con Google se integrará con autenticación real; no vamos a simular cuentas ni contraseñas.</p>
         </aside>
       </div>
     </section>

@@ -28,10 +28,10 @@ export default function HamdanHero() {
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
-            <a href="#secciones" className="magic-button inline-flex items-center gap-2 rounded-xl bg-[#8e1e24] px-5 py-3 text-sm font-black text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#76171c] hover:shadow-lg">
+            <a href="#secciones" className="magic-button inline-flex items-center gap-2 rounded-xl border border-[#7d171c]/25 bg-[#a7242b] px-5 py-3 text-sm font-black text-[#fff8eb] shadow-[0_8px_20px_rgba(142,30,36,0.18)] transition hover:-translate-y-0.5 hover:bg-[#941f25] hover:shadow-[0_12px_24px_rgba(142,30,36,0.24)]">
               <StoreIcon size={18} /> Explorar secciones <span aria-hidden>→</span>
             </a>
-            <a href="#como-pedir" className="inline-flex items-center gap-2 rounded-xl bg-[#f5c95c] px-5 py-3 text-sm font-black text-[#3f2d1f] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f7d475] hover:shadow-lg">
+            <a href="/mayorista" className="inline-flex items-center gap-2 rounded-xl bg-[#f5c95c] px-5 py-3 text-sm font-black text-[#3f2d1f] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f7d475] hover:shadow-lg">
               <BasketIcon size={18} /> Comprar online <span aria-hidden>→</span>
             </a>
             <a href="#mayorista" className="inline-flex items-center gap-2 rounded-xl border border-[#8e1e24]/30 bg-[#fffaf0]/70 px-5 py-3 text-sm font-black text-[#7a2022] transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md">

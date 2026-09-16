@@ -58,19 +58,19 @@ export default function HamdanHeader() {
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
-            <button
-              type="button"
-              className="hidden items-center gap-2 rounded-xl border border-[#8f1f23]/20 bg-white px-3.5 py-2.5 text-sm font-bold text-[#7f2425] transition hover:-translate-y-0.5 hover:shadow-md md:flex"
+            <a
+              href="#cuenta"
+              className="hidden items-center gap-2 rounded-xl border border-[#8f1f23]/20 bg-white px-3.5 py-2.5 text-sm font-bold text-[#7f2425] transition hover:-translate-y-0.5 hover:border-[#8f1f23]/35 hover:bg-[#fff8ee] hover:shadow-md md:flex"
             >
               <UserIcon size={18} />
               <span className="hidden lg:inline">Iniciar sesión</span>
-            </button>
+            </a>
 
             <a
               href="https://wa.me/543813514449"
               target="_blank"
               rel="noreferrer"
-              className="hidden items-center gap-2 rounded-xl bg-[#15975d] px-3.5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#118552] hover:shadow-md lg:flex"
+              className="hidden items-center gap-2 rounded-xl border border-[#15975d]/40 bg-[#15975d]/12 px-3.5 py-2.5 text-sm font-black text-[#0b7145] shadow-sm transition hover:-translate-y-0.5 hover:border-[#15975d]/60 hover:bg-[#15975d]/18 hover:shadow-md lg:flex"
             >
               <WhatsAppIcon size={19} />
               <span>Pedir por WhatsApp</span>
