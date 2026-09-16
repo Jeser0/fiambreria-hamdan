@@ -1,10 +1,10 @@
 import { BasketIcon, CardIcon, ClipboardIcon, StoreIcon, UserIcon } from "./Icons";
 
 const steps = [
-  { n: "1", title: "Ingresá o explorá", text: "Creá tu cuenta o navegá sin registrarte.", icon: <StoreIcon size={28} /> },
-  { n: "2", title: "Elegí tus categorías", text: "Fiambres, lácteos, alimentos y más.", icon: <BasketIcon size={28} /> },
-  { n: "3", title: "Armá tu pedido", text: "Agregá lo que necesitás y revisá tu carrito.", icon: <ClipboardIcon size={28} /> },
-  { n: "4", title: "Pagá o coordiná", text: "Pago online, transferencia o WhatsApp.", icon: <CardIcon size={28} /> },
+  { n: "1", title: "Explorá", text: "Entrá al catálogo mayorista y buscá lo que necesitás.", icon: <StoreIcon size={28} /> },
+  { n: "2", title: "Elegí productos", text: "Filtrá quesos, fiambres y alimentos disponibles para consulta.", icon: <BasketIcon size={28} /> },
+  { n: "3", title: "Armá tu pedido", text: "Marcá los productos y agregá cantidades o presentaciones.", icon: <ClipboardIcon size={28} /> },
+  { n: "4", title: "Enviá la consulta", text: "Mandá el pedido armado al WhatsApp mayorista para confirmar precio y stock.", icon: <CardIcon size={28} /> },
 ];
 
 export default function ShoppingJourney() {
@@ -37,12 +37,12 @@ export default function ShoppingJourney() {
         <aside id="cuenta" className="scroll-mt-40 rounded-3xl border border-[#8f1f23]/12 bg-[#f7ead7] p-6">
           <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#8f1f23] shadow-sm"><UserIcon size={22} /></div>
           <h3 className="font-display mt-4 text-2xl font-black text-[#7b2022]">Registrate o iniciá sesión</h3>
-          <p className="mt-3 text-sm leading-6 text-[#68574e]">Guardá tus pedidos, consultá tu historial y comprá más rápido cuando habilitemos las cuentas de clientes.</p>
+          <p className="mt-3 text-sm leading-6 text-[#68574e]">Estamos preparando las cuentas para que puedas guardar pedidos, consultar tu historial y comprar más rápido.</p>
           <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-            <button type="button" className="rounded-xl bg-[#8f1f23] px-4 py-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#76191d] hover:shadow-md">Iniciar sesión</button>
-            <button type="button" className="rounded-xl border border-[#8f1f23]/25 bg-white px-4 py-3 text-sm font-black text-[#7f2023] transition hover:-translate-y-0.5 hover:bg-[#fffaf2] hover:shadow-md">Registrarse</button>
+            <button type="button" disabled className="cursor-not-allowed rounded-xl bg-[#8f1f23]/70 px-4 py-3 text-sm font-black text-white/90">Iniciar sesión</button>
+            <button type="button" disabled className="cursor-not-allowed rounded-xl border border-[#8f1f23]/15 bg-white/70 px-4 py-3 text-sm font-black text-[#7f2023]/70">Registrarse</button>
           </div>
-          <p className="mt-3 text-[11px] leading-4 text-[#8a7468]">El acceso con Google se integrará con autenticación real; no vamos a simular cuentas ni contraseñas.</p>
+          <p className="mt-3 text-[11px] leading-4 text-[#8a7468]">Próxima etapa: acceso real con Google. Hasta entonces, los pedidos se coordinan por WhatsApp.</p>
         </aside>
       </div>
     </section>

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BasketIcon, SearchIcon, UserIcon, WhatsAppIcon } from "./Icons";
+import { SearchIcon, UserIcon, WhatsAppIcon } from "./Icons";
+import OrderCartButton from "./OrderCartButton";
 
 const navItems = [
   ["Inicio", "/"],
@@ -78,11 +79,7 @@ export default function HamdanHeader() {
               <span>Pedir por WhatsApp</span>
             </a>
 
-            <button type="button" className="cart-board relative flex items-center gap-2 px-4 py-2.5 text-sm font-black text-[#fff6dc]" aria-label="Abrir mi pedido">
-              <BasketIcon size={20} />
-              <span className="hidden sm:inline">Mi pedido</span>
-              <span className="absolute -right-1 -top-2 flex h-6 min-w-6 items-center justify-center rounded-full border-2 border-[#fff6dc] bg-[#a51621] px-1 text-xs text-white">0</span>
-            </button>
+<OrderCartButton />
           </div>
         </div>
 

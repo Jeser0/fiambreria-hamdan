@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BoxIcon, SearchIcon, WhatsAppIcon } from "./Icons";
 import {
   wholesaleCategories,
@@ -28,8 +28,39 @@ export default function WholesaleCatalog({
   const [query, setQuery] = useState(initialQuery);
   const [category, setCategory] = useState<CategoryFilter>(initialCategory);
   const [selected, setSelected] = useState<string[]>([]);
+  const [selectionLoaded, setSelectionLoaded] = useState(false);
   const [businessName, setBusinessName] = useState("");
   const [detail, setDetail] = useState("");
+
+
+  useEffect(() => {
+    let restoredSelection: string[] = [];
+
+    try {
+      const stored = window.localStorage.getItem("hamdan-wholesale-selection");
+      const parsed = stored ? JSON.parse(stored) : [];
+      if (Array.isArray(parsed)) {
+        restoredSelection = parsed.filter((id): id is string =>
+          typeof id === "string" && wholesaleProducts.some((product) => product.id === id),
+        );
+      }
+    } catch {
+      restoredSelection = [];
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      setSelected(restoredSelection);
+      setSelectionLoaded(true);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
+    if (!selectionLoaded) return;
+    window.localStorage.setItem("hamdan-wholesale-selection", JSON.stringify(selected));
+    window.dispatchEvent(new Event("hamdan-cart-updated"));
+  }, [selected, selectionLoaded]);
 
   const filteredProducts = useMemo(() => {
     const normalizedQuery = normalize(query);
@@ -144,7 +175,7 @@ export default function WholesaleCatalog({
         )}
       </div>
 
-      <aside className="h-fit rounded-[2rem] border border-[#8f1f23]/12 bg-[#f7ead7] p-6 shadow-[0_16px_34px_rgba(84,48,30,0.08)] xl:sticky xl:top-32">
+      <aside id="consulta" className="h-fit scroll-mt-36 rounded-[2rem] border border-[#8f1f23]/12 bg-[#f7ead7] p-6 shadow-[0_16px_34px_rgba(84,48,30,0.08)] xl:sticky xl:top-32">
         <p className="text-xs font-black uppercase tracking-[0.18em] text-[#a66c1e]">Consulta mayorista</p>
         <h2 className="font-display mt-2 text-3xl font-black leading-none text-[#771e23]">Armá tu consulta</h2>
         <p className="mt-3 text-sm leading-6 text-[#715e53]">Seleccioná los productos que te interesan y enviá el detalle directamente al WhatsApp mayorista.</p>

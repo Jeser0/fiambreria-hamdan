@@ -35,15 +35,15 @@ export default function OrderExperience() {
           <SparkIcon size={18} className="absolute right-8 top-7 text-[#f1c85d]" />
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#efc663]">Compra online</p>
-              <h2 className="font-display mt-2 text-3xl font-black leading-none">Tu pedido, a un clic</h2>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#efc663]">Próxima etapa</p>
+              <h2 className="font-display mt-2 text-3xl font-black leading-none">Compra online</h2>
             </div>
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f4ca63] text-[#6b241d] shadow-inner"><BasketIcon size={28} /></div>
           </div>
           <div className="mt-6 grid gap-3 text-sm">
-            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><CardIcon size={18} className="text-[#f2c75f]" /><span>Pago online con Mercado Pago</span></div>
-            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><span className="text-[#f2c75f]">✓</span><span>Transferencia bancaria</span></div>
-            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><WhatsAppIcon size={18} className="text-[#f2c75f]" /><span>También podés coordinar por WhatsApp</span></div>
+            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><CardIcon size={18} className="text-[#f2c75f]" /><span>Mercado Pago y transferencia, cuando habilitemos el checkout</span></div>
+            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><span className="text-[#f2c75f]">✓</span><span>Cuenta de cliente e historial de pedidos</span></div>
+            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><WhatsAppIcon size={18} className="text-[#f2c75f]" /><span>Hoy ya podés armar la consulta y enviarla por WhatsApp</span></div>
           </div>
           <p className="handwritten mt-6 rotate-[-2deg] text-right text-lg font-bold text-[#f5d384]">Del local a tu mesa ♥</p>
         </aside>
