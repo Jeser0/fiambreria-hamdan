@@ -12,12 +12,24 @@ export const metadata: Metadata = {
 };
 
 type MayoristaPageProps = {
-  searchParams: Promise<{ q?: string | string[] }>;
+  searchParams: Promise<{
+    q?: string | string[];
+    categoria?: string | string[];
+  }>;
 };
 
 export default async function MayoristaPage({ searchParams }: MayoristaPageProps) {
   const params = await searchParams;
   const query = Array.isArray(params.q) ? params.q[0] ?? "" : params.q ?? "";
+  const requestedCategory = Array.isArray(params.categoria)
+    ? params.categoria[0]
+    : params.categoria;
+  const initialCategory =
+    requestedCategory === "quesos" ||
+    requestedCategory === "fiambres" ||
+    requestedCategory === "alimentos"
+      ? requestedCategory
+      : "todos";
 
   return (
     <main className="min-h-screen bg-[#fffaf0] text-[#382a22]">
@@ -62,7 +74,7 @@ export default async function MayoristaPage({ searchParams }: MayoristaPageProps
             <h2 className="font-display mt-2 text-4xl font-black text-[#7c171c]">Elegí qué querés consultar</h2>
             <p className="mt-3 text-sm leading-6 text-[#6e5a4f]">No mostramos precios desactualizados: el valor final y la disponibilidad se confirman con el equipo de Hamdan al momento del pedido.</p>
           </div>
-          <WholesaleCatalog initialQuery={query} />
+          <WholesaleCatalog initialQuery={query} initialCategory={initialCategory} />
         </div>
       </section>
 

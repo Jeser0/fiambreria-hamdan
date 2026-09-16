@@ -5,9 +5,9 @@ import { BasketIcon, SearchIcon, UserIcon, WhatsAppIcon } from "./Icons";
 const navItems = [
   ["Inicio", "/"],
   ["Quiénes somos", "/#historia"],
-  ["Fiambres", "/mayorista#catalogo"],
-  ["Lácteos", "/mayorista#catalogo"],
-  ["Alimentos", "/mayorista#catalogo"],
+  ["Fiambres", "/mayorista?categoria=fiambres#catalogo"],
+  ["Lácteos", "/mayorista?categoria=quesos#catalogo"],
+  ["Alimentos", "/mayorista?categoria=alimentos#catalogo"],
   ["Mayorista", "/mayorista"],
   ["Cómo pedir", "/#como-pedir"],
   ["Contacto", "/#contacto"],

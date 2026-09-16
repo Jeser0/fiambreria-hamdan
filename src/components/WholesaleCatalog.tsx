@@ -18,9 +18,15 @@ function normalize(value: string) {
     .trim();
 }
 
-export default function WholesaleCatalog({ initialQuery = "" }: { initialQuery?: string }) {
+export default function WholesaleCatalog({
+  initialQuery = "",
+  initialCategory = "todos",
+}: {
+  initialQuery?: string;
+  initialCategory?: CategoryFilter;
+}) {
   const [query, setQuery] = useState(initialQuery);
-  const [category, setCategory] = useState<CategoryFilter>("todos");
+  const [category, setCategory] = useState<CategoryFilter>(initialCategory);
   const [selected, setSelected] = useState<string[]>([]);
   const [businessName, setBusinessName] = useState("");
   const [detail, setDetail] = useState("");
