@@ -17,7 +17,11 @@ const navItems = [
 
 export default function HamdanHeader() {
   const pathname = usePathname();
-  const storePath = pathname.startsWith("/minorista") ? "/minorista" : "/mayorista";
+  const storePath = pathname.startsWith("/minorista")
+    ? "/minorista"
+    : pathname.startsWith("/mayorista")
+      ? "/mayorista"
+      : null;
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#7a221f]/10 bg-[#fffaf0]/95 shadow-[0_8px_30px_rgba(72,32,18,0.08)] backdrop-blur-xl">
@@ -59,16 +63,24 @@ export default function HamdanHeader() {
               })}
             </nav>
 
-            <form action={storePath} className="mx-auto mt-0 flex max-w-2xl items-center gap-3 rounded-full border border-[#6f1719]/15 bg-white/80 px-4 py-2.5 text-sm text-[#7d6b60] shadow-inner xl:mt-2">
-              <SearchIcon size={18} className="shrink-0 text-[#5e4033]" />
-              <input
-                name="q"
-                type="search"
-                placeholder={`Buscar en tienda ${storePath === "/minorista" ? "minorista" : "mayorista"}...`}
-                className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-[#9c8c82]"
-                aria-label={`Buscar en tienda ${storePath === "/minorista" ? "minorista" : "mayorista"}`}
-              />
-            </form>
+            {storePath ? (
+              <form action={storePath} className="mx-auto mt-0 flex max-w-2xl items-center gap-3 rounded-full border border-[#6f1719]/15 bg-white/80 px-4 py-2.5 text-sm text-[#7d6b60] shadow-inner xl:mt-2">
+                <SearchIcon size={18} className="shrink-0 text-[#5e4033]" />
+                <input
+                  name="q"
+                  type="search"
+                  placeholder={`Buscar en tienda ${storePath === "/minorista" ? "minorista" : "mayorista"}...`}
+                  className="min-w-0 flex-1 bg-transparent outline-none placeholder:text-[#9c8c82]"
+                  aria-label={`Buscar en tienda ${storePath === "/minorista" ? "minorista" : "mayorista"}`}
+                />
+              </form>
+            ) : (
+              <div className="mx-auto mt-0 hidden max-w-2xl items-center justify-center gap-2 rounded-full border border-[#6f1719]/12 bg-white/65 px-3 py-2 shadow-inner md:flex xl:mt-2">
+                <span className="mr-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#8a6a58]">Comprar</span>
+                <Link href="/mayorista" className="soft-press rounded-full bg-[#fff0b7] px-4 py-2 text-xs font-black text-[#4b2e20] transition hover:bg-[#ffe59a]">Mayorista</Link>
+                <Link href="/minorista" className="soft-press rounded-full border border-[#8f1f23]/12 bg-white px-4 py-2 text-xs font-black text-[#7a2022] transition hover:bg-[#fff4e7]">Minorista</Link>
+              </div>
+            )}
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
