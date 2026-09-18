@@ -481,7 +481,7 @@ export default function StoreCatalog({
             <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#956318]">Mi pedido {mode}</span>
             <span className="font-display text-lg font-black text-[#54241f]">{selectedProducts.length} {selectedProducts.length === 1 ? "producto" : "productos"}</span>
           </span>
-          <span className="rounded-xl bg-[#251b12] px-4 py-2 text-xs font-black text-[#fff7e7]">Ver carrito →</span>
+          <span className="rounded-xl border border-[#b98525]/30 bg-white/65 px-4 py-2 text-xs font-black text-[#2b2118] shadow-sm">Ver carrito →</span>
         </a>
       )}
     </div>
