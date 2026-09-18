@@ -1,4 +1,5 @@
 import Image from "next/image";
+import HamdiniAnimator from "./HamdiniAnimator";
 import { BasketIcon, BoxIcon, SparkIcon, StoreIcon } from "./Icons";
 
 export default function HamdanHero() {
@@ -50,19 +51,8 @@ export default function HamdanHero() {
           </div>
 
           <div className="hamdini-enter relative mt-12 w-full">
-            <div className="hamdini-float relative mx-auto w-[92%]">
-              <Image
-                src="/brand/hamdini.png"
-                alt="Hamdini, mascota de Fiambrería Hamdan"
-                width={700}
-                height={700}
-                className="relative z-[1] h-auto w-full drop-shadow-[0_22px_18px_rgba(90,45,20,0.16)]"
-                priority
-              />
-              <span className="hamdini-wink" aria-hidden="true" />
-              <span className="hamdini-spark hamdini-spark-one" aria-hidden="true">✦</span>
-              <span className="hamdini-spark hamdini-spark-two" aria-hidden="true">✧</span>
-              <span className="hamdini-spark hamdini-spark-three" aria-hidden="true">✦</span>
+            <div className="relative mx-auto w-[92%] drop-shadow-[0_22px_18px_rgba(90,45,20,0.16)]">
+              <HamdiniAnimator />
             </div>
           </div>
 

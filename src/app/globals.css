@@ -213,109 +213,27 @@ summary {
   }
 }
 
-/* Hamdini: animación de entrada e idle deliberadamente sutil. */
+/* Hamdini usa frames reales: se anima al entrar y al tocar el personaje. */
 .hamdini-enter {
-  animation: hamdini-enter 700ms cubic-bezier(0.2, 0.72, 0.25, 1) both;
+  animation: hamdini-enter 620ms cubic-bezier(0.2, 0.72, 0.25, 1) both;
 }
 
-.hamdini-float {
-  transform-origin: 48% 88%;
-  animation: hamdini-idle 5.8s ease-in-out 850ms infinite;
+.hamdini-frame-player {
+  transform-origin: 50% 88%;
+  border-radius: 28px;
 }
 
-.hamdini-spark {
-  position: absolute;
-  z-index: 4;
-  color: #d99d27;
-  line-height: 1;
-  opacity: 0;
-  filter: drop-shadow(0 0 7px rgba(239, 195, 90, 0.65));
-  pointer-events: none;
-}
-
-.hamdini-spark-one {
-  left: 10.5%;
-  top: 34%;
-  font-size: 21px;
-  animation: hamdini-sparkle 4.8s ease-in-out 1.05s infinite;
-}
-
-.hamdini-spark-two {
-  left: 15%;
-  top: 28%;
-  font-size: 14px;
-  animation: hamdini-sparkle 4.8s ease-in-out 1.2s infinite;
-}
-
-.hamdini-spark-three {
-  left: 6.5%;
-  top: 41%;
-  font-size: 11px;
-  animation: hamdini-sparkle 4.8s ease-in-out 1.35s infinite;
-}
-
-/* Guiño breve sobre un solo ojo. El resto del tiempo el overlay es invisible. */
-.hamdini-wink {
-  position: absolute;
-  z-index: 3;
-  left: 37.7%;
-  top: 42.7%;
-  width: 10.8%;
-  height: 8.7%;
-  border-radius: 50%;
-  opacity: 0;
-  transform: rotate(5deg) scaleY(0.15);
-  transform-origin: center;
-  background: linear-gradient(180deg, #efb2a9 0%, #e9a99f 72%, #b66d67 73%, #b66d67 77%, #e9a99f 78%);
-  pointer-events: none;
-  animation: hamdini-wink 8s ease-in-out 2.1s infinite;
+.hamdini-frame-player:active {
+  transform: scale(0.992);
 }
 
 @keyframes hamdini-enter {
   from {
     opacity: 0;
-    transform: translateY(16px) scale(0.985);
+    transform: translateY(14px) scale(0.985);
   }
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes hamdini-idle {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  48% {
-    transform: translateY(-5px) rotate(-0.45deg);
-  }
-  58% {
-    transform: translateY(-4px) rotate(0.55deg);
-  }
-}
-
-@keyframes hamdini-sparkle {
-  0%, 13%, 100% {
-    opacity: 0;
-    transform: translate3d(0, 5px, 0) scale(0.65) rotate(0deg);
-  }
-  4% {
-    opacity: 0.95;
-    transform: translate3d(0, 0, 0) scale(1.08) rotate(18deg);
-  }
-  8% {
-    opacity: 0.45;
-    transform: translate3d(4px, -5px, 0) scale(0.88) rotate(32deg);
-  }
-}
-
-@keyframes hamdini-wink {
-  0%, 7%, 100% {
-    opacity: 0;
-    transform: rotate(5deg) scaleY(0.15);
-  }
-  2.4%, 4.3% {
-    opacity: 0.97;
-    transform: rotate(5deg) scaleY(1);
   }
 }
