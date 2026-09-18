@@ -28,7 +28,7 @@ export default function HamdanHero() {
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
-            <a href="#secciones" className="magic-button inline-flex items-center gap-2 rounded-xl border border-[#7d171c]/25 bg-[#a7242b] px-5 py-3 text-sm font-black text-[#fff8eb] shadow-[0_8px_20px_rgba(142,30,36,0.18)] transition hover:-translate-y-0.5 hover:bg-[#941f25] hover:shadow-[0_12px_24px_rgba(142,30,36,0.24)]">
+            <a href="#secciones" className="magic-button inline-flex items-center gap-2 rounded-xl border border-[#5d1117] bg-[#7b1f24] px-5 py-3 text-sm font-black text-white shadow-[0_8px_20px_rgba(94,24,29,0.24)] transition hover:-translate-y-0.5 hover:bg-[#65191e] hover:shadow-[0_12px_24px_rgba(94,24,29,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7a13a] focus-visible:ring-offset-2">
               <StoreIcon size={18} /> Explorar secciones <span aria-hidden>→</span>
             </a>
             <a href="/mayorista" className="inline-flex items-center gap-2 rounded-xl bg-[#f5c95c] px-5 py-3 text-sm font-black text-[#3f2d1f] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f7d475] hover:shadow-lg">
