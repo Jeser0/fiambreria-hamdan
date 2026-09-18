@@ -1,8 +1,5 @@
-import {
-  BoxIcon,
-  ClipboardIcon,
-  PinIcon,
-} from "./Icons";
+import Link from "next/link";
+import { BoxIcon } from "./Icons";
 
 function CheeseIcon() {
   return (
@@ -29,33 +26,30 @@ function FoodIcon() {
 }
 
 const cards = [
-  { title: "Fiambres", subtitle: "Los clásicos de siempre", href: "/mayorista?categoria=fiambres#catalogo", icon: <HamIcon />, tone: "text-[#8f1f23]" },
-  { title: "Lácteos", subtitle: "Calidad todos los días", href: "/mayorista?categoria=quesos#catalogo", icon: <CheeseIcon />, tone: "text-[#b66d0f]" },
-  { title: "Alimentos", subtitle: "Todo para tu mesa", href: "/mayorista?categoria=alimentos#catalogo", icon: <FoodIcon />, tone: "text-[#8f1f23]" },
-  { title: "Pedidos por mayor", subtitle: "Precios especiales", href: "/mayorista", icon: <BoxIcon size={28} />, tone: "text-[#b66d0f]" },
-  { title: "Cómo pedir", subtitle: "Rápido y sencillo", href: "#como-pedir", icon: <ClipboardIcon size={28} />, tone: "text-[#8f1f23]" },
-  { title: "Contacto", subtitle: "Te esperamos", href: "#contacto", icon: <PinIcon size={28} />, tone: "text-[#8f1f23]" },
+  { title: "Fiambres", href: "/mayorista?categoria=fiambres#catalogo", icon: <HamIcon />, tone: "text-[#8f1f23]" },
+  { title: "Lácteos", href: "/mayorista?categoria=quesos#catalogo", icon: <CheeseIcon />, tone: "text-[#b66d0f]" },
+  { title: "Alimentos", href: "/mayorista?categoria=alimentos#catalogo", icon: <FoodIcon />, tone: "text-[#8f1f23]" },
+  { title: "Mayorista", href: "/mayorista", icon: <BoxIcon size={28} />, tone: "text-[#b66d0f]" },
 ];
 
 export default function SectionGateways() {
   return (
-    <section id="secciones" className="scroll-mt-40 border-y border-[#7f241f]/10 bg-[#fff7e9] py-6">
-      <div className="mx-auto grid max-w-[1500px] gap-3 px-5 sm:grid-cols-2 sm:px-6 lg:grid-cols-3 xl:grid-cols-6 lg:px-8">
+    <section id="secciones" aria-label="Secciones principales" className="scroll-mt-40 border-y border-[#7f241f]/10 bg-[#fff7e9] py-6">
+      <div className="mx-auto grid max-w-[1100px] gap-3 px-5 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
         {cards.map((card) => (
-          <a
+          <Link
             key={card.title}
             href={card.href}
-            className="group flex min-h-28 items-center gap-4 rounded-2xl border border-[#7d3c32]/12 bg-[#fffdf7] p-4 shadow-[0_8px_20px_rgba(78,45,26,0.05)] transition hover:-translate-y-1 hover:border-[#8f1f23]/25 hover:shadow-[0_14px_26px_rgba(78,45,26,0.11)]"
+            className="group flex min-h-24 items-center gap-4 rounded-2xl border border-[#7d3c32]/12 bg-[#fffdf7] p-4 shadow-[0_8px_20px_rgba(78,45,26,0.05)] transition hover:-translate-y-1 hover:border-[#8f1f23]/25 hover:shadow-[0_14px_26px_rgba(78,45,26,0.11)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7a13a] focus-visible:ring-offset-2"
           >
             <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#fbefdd] ${card.tone}`}>
               {card.icon}
             </div>
             <div className="min-w-0 flex-1">
               <h2 className="font-display text-lg font-black leading-tight text-[#762025]">{card.title}</h2>
-              <p className="mt-1 text-xs leading-5 text-[#78665b]">{card.subtitle}</p>
             </div>
-            <span className="text-xl font-black text-[#8f1f23] transition group-hover:translate-x-1">›</span>
-          </a>
+            <span aria-hidden="true" className="text-xl font-black text-[#8f1f23] transition group-hover:translate-x-1">›</span>
+          </Link>
         ))}
       </div>
     </section>
