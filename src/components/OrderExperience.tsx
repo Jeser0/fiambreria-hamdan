@@ -3,7 +3,7 @@ import { BasketIcon, BoxIcon, SparkIcon } from "./Icons";
 
 export default function OrderExperience() {
   return (
-    <section id="mayorista" className="scroll-mt-40 bg-[#fff7e8] py-14 lg:py-16">
+    <section id="tiendas" className="scroll-mt-40 bg-[#fff7e8] py-14 lg:py-16">
       <div className="mx-auto grid max-w-[1500px] gap-6 px-5 sm:px-6 lg:grid-cols-2 lg:px-8">
         <div className="wood-card relative overflow-hidden rounded-[2rem] p-7 text-[#fff7e5] shadow-[0_20px_45px_rgba(82,29,23,0.16)] sm:p-9">
           <div className="absolute -right-10 -top-10 h-44 w-44 rounded-full border border-[#f5ca63]/20" />
