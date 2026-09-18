@@ -1,35 +1,37 @@
 # Fiambrería Hamdan
 
-Sitio web en desarrollo para **Fiambrería Hamdan**, comercio familiar de San Miguel de Tucumán con trayectoria desde 1992.
+Sitio web para **Fiambrería Hamdan**, comercio familiar de San Miguel de Tucumán con trayectoria desde 1992.
 
-La primera etapa está enfocada en presentar la marca y convertir la web en una herramienta real para **consultas y pedidos mayoristas**, manteniendo separada la futura experiencia minorista.
+La versión actual está enfocada en una experiencia mayorista clara y utilizable: catálogo, armado de pedido y envío de la consulta al WhatsApp comercial.
 
 ## Estado actual
 
 - Home responsive con identidad visual Hamdan y Hamdini.
+- Hamdini integrado con fondo transparente y animación sutil de entrada, guiño y destellos.
 - Header fijo con navegación, buscador mayorista, WhatsApp y pedido persistente.
 - Hero con historia de la marca y fachada del local.
 - Accesos directos a Fiambres, Lácteos, Alimentos y Mayorista.
-- Página `/mayorista` con catálogo filtrable.
-- Búsqueda del catálogo desde el header.
+- Página `/mayorista` con catálogo filtrable y buscador.
+- Catálogo mayorista ampliado con productos verificados del negocio.
 - Selección persistente de productos mediante `localStorage`.
-- Armado de consulta con nombre del comercio y detalle de cantidades.
-- Generación automática del mensaje y envío al WhatsApp mayorista.
+- Cantidad/presentación editable por producto.
+- Nombre del comercio y observaciones persistentes.
+- Página `/pedido` para revisar, editar, vaciar y copiar el pedido.
+- Generación automática del resumen y envío directo al WhatsApp mayorista.
 - Footer simplificado con teléfono, WhatsApp, dirección y horarios.
 - SEO local inicial con metadata, JSON-LD, `sitemap.xml` y `robots.txt`.
 - Acceso flotante a WhatsApp.
 
-## Funcionalidad todavía no habilitada
+## Integraciones externas pendientes
 
-Las siguientes funciones se muestran únicamente como próxima etapa y **no deben presentarse como operativas** hasta completar sus integraciones reales:
+Estas funciones requieren credenciales o cuentas de terceros y no se muestran como operativas en la interfaz pública:
 
-- Registro e inicio de sesión.
 - Inicio de sesión con Google.
-- Cuenta e historial de pedidos.
+- Cuenta e historial de pedidos en servidor.
 - Checkout minorista.
 - Mercado Pago.
-- Transferencias registradas desde la web.
-- Panel de administración de precios y stock.
+- Registro automático de transferencias.
+- Panel de administración con base de datos para precios y stock.
 
 ## Stack
 
@@ -59,19 +61,19 @@ npm run build
 ## Rutas actuales
 
 ```text
-/            Home institucional y acceso a compra
-/mayorista   Catálogo, filtros y armado de consulta mayorista
+/            Home institucional y accesos principales
+/mayorista   Catálogo, filtros y armado rápido de consulta
+/pedido      Revisión completa del pedido mayorista
 ```
 
-## Próximas etapas
+## Próxima etapa de producción
 
-1. Reemplazar/expandir catálogo con datos administrables y fotos reales.
-2. Integrar autenticación real con Google.
-3. Agregar base de datos de clientes y pedidos.
-4. Implementar carrito/checkout minorista separado del mayorista.
-5. Integrar Mercado Pago y comprobación de transferencias.
-6. Crear panel de administración para productos, precios, stock y pedidos.
-7. Desplegar en producción y conectar `fiambreriahamdan.com`.
+1. Cargar fotografías reales de productos cuando estén disponibles.
+2. Conectar el dominio y desplegar la versión validada.
+3. Crear credenciales de Google OAuth si se decide habilitar cuentas.
+4. Elegir base de datos para clientes/pedidos y panel de administración.
+5. Integrar Mercado Pago únicamente cuando estén disponibles las credenciales comerciales.
+6. Agregar el catálogo minorista como experiencia separada del mayorista.
 
 ## Agentes de programación
 
