@@ -23,9 +23,11 @@ export default function OrderCartButton() {
   const pulseTimer = useRef<number | null>(null);
 
   useEffect(() => {
-    const initialCount = readCount();
-    previousCount.current = initialCount;
-    setCount(initialCount);
+    const initialFrame = window.requestAnimationFrame(() => {
+      const initialCount = readCount();
+      previousCount.current = initialCount;
+      setCount(initialCount);
+    });
 
     const updateCount = () => {
       const nextCount = readCount();
@@ -43,6 +45,7 @@ export default function OrderCartButton() {
     window.addEventListener(ORDER_UPDATED_EVENT, updateCount);
 
     return () => {
+      window.cancelAnimationFrame(initialFrame);
       window.removeEventListener("storage", updateCount);
       window.removeEventListener(ORDER_UPDATED_EVENT, updateCount);
       if (pulseTimer.current) window.clearTimeout(pulseTimer.current);

@@ -400,3 +400,10 @@ summary {
   opacity: 0.7;
   transform: translateX(520%) rotate(18deg);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
