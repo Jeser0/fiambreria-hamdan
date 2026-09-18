@@ -84,7 +84,7 @@ export default function ProductMedia({
 }) {
   if (image) {
     return (
-      <div className="product-media relative aspect-[16/9] overflow-hidden rounded-2xl border border-[#7f241f]/10 bg-[#fff7e7]">
+      <div className="product-media relative aspect-[16/7] overflow-hidden rounded-2xl border border-[#7f241f]/10 bg-[#fff7e7]">
         <Image
           src={image}
           alt={imageAlt ?? name}
