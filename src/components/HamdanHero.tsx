@@ -28,7 +28,7 @@ export default function HamdanHero() {
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
-            <a href="#secciones" className="magic-button inline-flex items-center gap-2 rounded-xl border border-[#5d1117] bg-[#7b1f24] px-5 py-3 text-sm font-black text-white shadow-[0_8px_20px_rgba(94,24,29,0.24)] transition hover:-translate-y-0.5 hover:bg-[#65191e] hover:shadow-[0_12px_24px_rgba(94,24,29,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7a13a] focus-visible:ring-offset-2">
+            <a href="#secciones" className="magic-button inline-flex items-center gap-2 rounded-xl border border-[#d2ad59]/70 bg-[#fff5d8] px-5 py-3 text-sm font-black text-[#21180f] shadow-[0_8px_20px_rgba(145,103,31,0.12)] transition hover:-translate-y-0.5 hover:border-[#c6932f] hover:bg-[#ffe9a8] hover:shadow-[0_12px_24px_rgba(145,103,31,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7a13a] focus-visible:ring-offset-2">
               <StoreIcon size={18} /> Explorar secciones <span aria-hidden>→</span>
             </a>
             <a href="/mayorista" className="inline-flex items-center gap-2 rounded-xl bg-[#f5c95c] px-5 py-3 text-sm font-black text-[#3f2d1f] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f7d475] hover:shadow-lg">
@@ -41,34 +41,32 @@ export default function HamdanHero() {
         </div>
 
         <div className="relative mx-auto flex w-full max-w-[410px] items-end justify-center self-end lg:max-w-[460px]">
-          <div className="absolute left-0 top-12 -rotate-3 rounded-md bg-[#f3dfba] px-4 py-3 shadow-md">
-            <p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-[#8d6b37]">Desde</p>
-            <p className="font-display text-center text-3xl font-black text-[#7b221f]">1992</p>
-            <p className="handwritten mt-1 max-w-28 text-center text-sm text-[#4f392e]">Tradición, calidad y sabor tucumano</p>
-          </div>
-
-          <p className="handwritten absolute -top-1 right-0 rotate-[-4deg] text-center text-xl font-bold text-[#8f2024] sm:text-2xl">
+          <p className="handwritten absolute -top-1 right-0 z-20 rotate-[-4deg] text-center text-xl font-bold text-[#8f2024] sm:text-2xl">
             Más de 30 años<br />junto a vos ♥
           </p>
 
-          <div className="speech-bubble absolute right-0 top-20 z-10 hidden max-w-32 rotate-3 rounded-[45%] border-2 border-[#8e1e24] bg-[#fffdf6] px-4 py-3 text-center sm:block">
+          <div className="speech-bubble absolute right-0 top-20 z-20 hidden max-w-32 rotate-3 rounded-[45%] border-2 border-[#8e1e24] bg-[#fffdf6]/95 px-4 py-3 text-center shadow-sm sm:block">
             <p className="handwritten text-lg font-bold leading-5 text-[#8e1e24]">¡Te ayudo a comprar!</p>
           </div>
 
-          <Image
-            src="/brand/hamdini.svg"
-            alt="Hamdini, mascota de Fiambrería Hamdan"
-            width={700}
-            height={700}
-            className="relative z-[1] mt-14 w-[85%] drop-shadow-[0_22px_18px_rgba(90,45,20,0.15)]"
-            priority
-          />
-
-          <div className="absolute bottom-3 right-2 z-10 flex items-center gap-1 text-[#c68825]">
-            <SparkIcon size={20} />
-            <SparkIcon size={13} className="-translate-y-5" />
+          <div className="hamdini-enter relative mt-12 w-full">
+            <div className="hamdini-float relative mx-auto w-[92%]">
+              <Image
+                src="/brand/hamdini.png"
+                alt="Hamdini, mascota de Fiambrería Hamdan"
+                width={700}
+                height={700}
+                className="relative z-[1] h-auto w-full drop-shadow-[0_22px_18px_rgba(90,45,20,0.16)]"
+                priority
+              />
+              <span className="hamdini-wink" aria-hidden="true" />
+              <span className="hamdini-spark hamdini-spark-one" aria-hidden="true">✦</span>
+              <span className="hamdini-spark hamdini-spark-two" aria-hidden="true">✧</span>
+              <span className="hamdini-spark hamdini-spark-three" aria-hidden="true">✦</span>
+            </div>
           </div>
-          <p className="handwritten absolute bottom-2 right-8 z-10 rotate-[-5deg] text-lg font-bold text-[#8e1e24]">Hamdini siempre con vos ♥</p>
+
+          <p className="handwritten absolute bottom-1 right-7 z-10 rotate-[-4deg] text-lg font-bold text-[#8e1e24]">Hamdini siempre con vos ♥</p>
         </div>
 
         <div className="relative mx-auto w-full max-w-[560px] lg:mx-0">
