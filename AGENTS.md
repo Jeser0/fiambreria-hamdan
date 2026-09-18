@@ -16,11 +16,13 @@ This repository is the public website and wholesale-ordering experience for Fiam
 
 - Preserve the warm, artisanal Hamdan identity: cream, burgundy, cheese-gold and wood/kraft tones.
 - Hamdini is the brand mascot. Use it as a guide, not as visual noise.
-- The first operational focus is wholesale sales and inquiries.
+- The site has two operational storefronts: wholesale and retail. Keep their carts, prices and rules separate.
 - Do not invent prices, stock, product availability, opening hours, addresses, phone numbers or payment status.
-- Prices and availability must remain explicitly confirmable by Hamdan until an authenticated admin source exists.
+- Prices may only come from the verified Hamdan price lists already encoded in `src/data/catalog.ts`; do not invent or silently adjust them.
+- Stock must follow the business-provided list exactly. Use the product `active` flag as the current frontend gate until the admin database exists.
 - Do not present Google login, Mercado Pago, transfer checkout or customer accounts as functional until real integrations are configured and verified.
-- Keep the retail catalog separable from the wholesale catalog so it can be added later without restructuring the whole application.
+- Wholesale minimums are currently: Sándwich x4 = 20 packages, Sándwich x8 = 40 packages, Pizzas = 20 units. Do not weaken these rules without explicit business instruction.
+- Retail ordering has no wholesale minimum.
 
 ## Current business data
 
