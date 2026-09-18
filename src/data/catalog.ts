@@ -14,6 +14,8 @@ export type CatalogProduct = {
   retailPrice?: number;
   wholesalePrice?: number;
   wholesaleSamePrice?: boolean;
+  image?: string;
+  imageAlt?: string;
   active: boolean;
 };
 
