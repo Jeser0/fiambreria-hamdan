@@ -2,7 +2,7 @@
 
 Sitio web para **Fiambrería Hamdan**, comercio familiar de San Miguel de Tucumán con trayectoria desde 1992.
 
-La versión actual ya separa la experiencia comercial en dos tiendas dentro del mismo sitio: **Mayorista** y **Minorista**.
+La versión actual deja **cerrado el frontend comercial** y separa la experiencia en dos tiendas dentro del mismo sitio: **Mayorista** y **Minorista**. Los próximos cambios estructurales corresponden al backend, panel administrativo y conexiones reales.
 
 ## Estado actual
 
@@ -12,10 +12,12 @@ La versión actual ya separa la experiencia comercial en dos tiendas dentro del 
 - Dos tiendas independientes: `/mayorista` y `/minorista`.
 - Precios minoristas y mayoristas cargados desde las listas provistas por Hamdan.
 - Categorías separadas: Quesos y lácteos, Fiambres, Sándwich x4, Sándwich x8 y Pizzas.
-- Carrito persistente por tienda mediante `localStorage`.
+- Carrito persistente por tienda mediante `localStorage`, con validación de cantidades, mínimos mayoristas y acceso rápido en móvil.
 - El producto se agrega al carrito sin sacar al cliente del catálogo.
 - Feedback visual al agregar productos y contador animado.
 - Pedido enviado por WhatsApp sin registro obligatorio.
+- Tarjetas preparadas para imágenes administrables; si un producto no tiene foto, se usa un fallback visual por categoría.
+- Navegación y carrito conscientes de Mayorista/Minorista para no mezclar pedidos.
 - Footer con teléfono, WhatsApp, dirección y horarios.
 - SEO local inicial con metadata, JSON-LD, sitemap y robots.
 
@@ -45,6 +47,12 @@ La compra no exige iniciar sesión:
 - **Minorista:** carrito independiente, precios minoristas y sin mínimos mayoristas.
 - **Cuenta opcional:** más adelante se puede agregar Google para historial y repetición de pedidos.
 - **Administración:** el futuro panel para modificar precios, stock y productos sí requerirá autenticación y roles.
+
+## Estado del frontend
+
+El frontend queda considerado **versión final para iniciar backend**, salvo correcciones puntuales de contenido, la lista definitiva de stock y la incorporación progresiva de fotos reales. No hace falta rediseñar las tiendas para conectar una base de datos.
+
+Contrato para la siguiente etapa: [`BACKEND_HANDOFF.md`](./BACKEND_HANDOFF.md).
 
 ## Próximas integraciones
 

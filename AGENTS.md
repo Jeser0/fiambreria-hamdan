@@ -17,6 +17,8 @@ This repository is the public website and wholesale-ordering experience for Fiam
 - Preserve the warm, artisanal Hamdan identity: cream, burgundy, cheese-gold and wood/kraft tones.
 - Hamdini is the brand mascot. Use it as a guide, not as visual noise.
 - The site has two operational storefronts: wholesale and retail. Keep their carts, prices and rules separate.
+- Treat the current visual/storefront architecture as frontend-final. Prefer backend/data integration over structural redesign unless the business explicitly requests a UI change.
+- Product images are optional. Preserve the category fallback in `ProductMedia` and populate `image`/`imageAlt` when managed media becomes available.
 - Do not invent prices, stock, product availability, opening hours, addresses, phone numbers or payment status.
 - Prices may only come from the verified Hamdan price lists already encoded in `src/data/catalog.ts`; do not invent or silently adjust them.
 - Stock must follow the business-provided list exactly. Use the product `active` flag as the current frontend gate until the admin database exists.
