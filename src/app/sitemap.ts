@@ -1,23 +1,22 @@
 import type { MetadataRoute } from "next";
+import { business } from "@/data/business";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://fiambreriahamdan.com";
-
   return [
     {
-      url: baseUrl,
+      url: business.siteUrl,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${baseUrl}/mayorista`,
+      url: `${business.siteUrl}/mayorista`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/minorista`,
+      url: `${business.siteUrl}/minorista`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.9,

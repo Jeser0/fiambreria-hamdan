@@ -1,33 +1,36 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import { business } from "@/data/business";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://fiambreriahamdan.com"),
+  metadataBase: new URL(business.siteUrl),
   title: {
     default: "Fiambrería Hamdan | Fiambres y Quesos en Tucumán",
     template: "%s | Fiambrería Hamdan",
   },
   description:
-    "Fiambrería Hamdan, desde 1992 en San Miguel de Tucumán. Fiambres, quesos, lácteos, alimentos y atención mayorista.",
+    "Fiambrería Hamdan, desde 1992 en San Miguel de Tucumán. Tienda mayorista y minorista de fiambres, quesos, sándwiches y pizzas.",
   keywords: [
     "Fiambrería Hamdan",
     "fiambres Tucumán",
     "quesos Tucumán",
     "mayorista fiambres Tucumán",
+    "sándwiches Tucumán",
+    "pizzas Tucumán",
     "San Miguel de Tucumán",
   ],
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Fiambrería Hamdan",
+    title: business.name,
     description: "Tradición, calidad y sabor tucumano desde 1992.",
     type: "website",
     locale: "es_AR",
     url: "/",
-    siteName: "Fiambrería Hamdan",
+    siteName: business.name,
   },
 };
 
@@ -39,16 +42,16 @@ export const viewport: Viewport = {
 const localBusinessJsonLd = {
   "@context": "https://schema.org",
   "@type": "Store",
-  name: "Fiambrería Hamdan",
-  url: "https://fiambreriahamdan.com",
-  telephone: "+54 381 255 0960",
-  foundingDate: "1992",
+  name: business.name,
+  url: business.siteUrl,
+  telephone: business.phoneDisplay,
+  foundingDate: String(business.since),
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Av. Colón 340",
-    addressLocality: "San Miguel de Tucumán",
-    addressRegion: "Tucumán",
-    addressCountry: "AR",
+    streetAddress: business.address,
+    addressLocality: business.city,
+    addressRegion: business.province,
+    addressCountry: business.countryCode,
   },
   openingHoursSpecification: [
     {

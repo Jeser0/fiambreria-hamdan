@@ -1,10 +1,11 @@
 import type { MetadataRoute } from "next";
+import { business } from "@/data/business";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Fiambrería Hamdan",
+    name: business.name,
     short_name: "Hamdan",
-    description: "Fiambrería Hamdan — tradición tucumana desde 1992.",
+    description: `${business.name} — tradición tucumana desde ${business.since}.`,
     start_url: "/",
     display: "standalone",
     background_color: "#fffaf0",
