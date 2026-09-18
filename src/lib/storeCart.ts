@@ -26,9 +26,10 @@ export function cartNotesKey(mode: StoreMode) {
 
 function modeProducts(mode: StoreMode) {
   return catalogProducts.filter((product) =>
-    mode === "mayorista"
+    product.active &&
+    (mode === "mayorista"
       ? typeof product.wholesalePrice === "number"
-      : typeof product.retailPrice === "number",
+      : typeof product.retailPrice === "number"),
   );
 }
 
