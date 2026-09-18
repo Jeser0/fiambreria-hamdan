@@ -252,3 +252,63 @@ summary {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Catálogo: feedback inmediato sin movimientos exagerados. */
+.catalog-results-enter {
+  animation: catalog-results-enter 220ms ease both;
+}
+
+.product-card {
+  transition:
+    transform 190ms ease,
+    border-color 190ms ease,
+    background-color 190ms ease,
+    box-shadow 190ms ease;
+}
+
+.product-card:not(.product-card-selected):hover {
+  transform: translateY(-3px);
+  border-color: rgba(143, 31, 35, 0.25);
+  box-shadow: 0 14px 28px rgba(84, 48, 30, 0.09);
+}
+
+.product-card-added {
+  animation: product-card-added 520ms ease both;
+}
+
+.order-summary-item-enter {
+  animation: order-summary-item-enter 260ms ease both;
+}
+
+.category-pill {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 120ms ease;
+}
+
+.cart-count-pulse {
+  animation: cart-count-pulse 380ms cubic-bezier(0.2, 0.8, 0.25, 1);
+}
+
+@keyframes catalog-results-enter {
+  from { opacity: 0.45; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes product-card-added {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(143, 31, 35, 0); }
+  45% { transform: scale(1.012); box-shadow: 0 13px 30px rgba(143, 31, 35, 0.13); }
+  100% { transform: scale(1); }
+}
+
+@keyframes order-summary-item-enter {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cart-count-pulse {
+  0%, 100% { transform: scale(1); }
+  48% { transform: scale(1.28); }
+}
