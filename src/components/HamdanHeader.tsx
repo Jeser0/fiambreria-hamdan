@@ -48,7 +48,7 @@ export default function HamdanHeader() {
               ))}
             </nav>
 
-            <form action="/mayorista" className="mx-auto mt-0 flex max-w-2xl items-center gap-3 rounded-full border border-[#6f1719]/15 bg-white/80 px-4 py-2.5 text-sm text-[#7d6b60] shadow-inner xl:mt-2">
+            <form action="/mayorista" className="field-shell mx-auto mt-0 flex max-w-2xl items-center gap-3 rounded-full border border-[#6f1719]/15 bg-white/80 px-4 py-2.5 text-sm text-[#7d6b60] shadow-inner xl:mt-2">
               <SearchIcon size={18} className="shrink-0 text-[#5e4033]" />
               <input
                 name="q"
@@ -65,7 +65,7 @@ export default function HamdanHeader() {
               href="https://wa.me/543813514449"
               target="_blank"
               rel="noreferrer"
-              className="hidden items-center gap-2 rounded-xl border border-[#15975d]/40 bg-[#15975d]/12 px-3.5 py-2.5 text-sm font-black text-[#0b7145] shadow-sm transition hover:-translate-y-0.5 hover:border-[#15975d]/60 hover:bg-[#15975d]/18 hover:shadow-md lg:flex"
+              className="soft-press hidden items-center gap-2 rounded-xl border border-[#15975d]/40 bg-[#15975d]/12 px-3.5 py-2.5 text-sm font-black text-[#0b7145] shadow-sm transition hover:-translate-y-0.5 hover:border-[#15975d]/60 hover:bg-[#15975d]/18 hover:shadow-md lg:flex"
             >
               <WhatsAppIcon size={19} />
               <span>Pedir por WhatsApp</span>

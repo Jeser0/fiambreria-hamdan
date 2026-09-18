@@ -40,7 +40,7 @@ export default function ShoppingJourney() {
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/65 text-[#21180f] shadow-sm"><BasketIcon size={22} /></div>
           <h3 className="font-display mt-4 text-2xl font-black text-[#56251f]">Sin registro obligatorio</h3>
           <p className="mt-3 text-sm leading-6 text-[#68574e]">Tu selección queda guardada en este dispositivo. Podés revisar el pedido y enviarlo cuando estés listo.</p>
-          <Link href="/pedido" className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-[#21180f] px-4 py-3 text-sm font-black text-[#fff7dd] transition hover:-translate-y-0.5 hover:bg-[#35271a]">
+          <Link href="/pedido" className="soft-press mt-5 inline-flex w-full items-center justify-center rounded-xl bg-[#21180f] px-4 py-3 text-sm font-black text-[#fff7dd] transition hover:-translate-y-0.5 hover:bg-[#35271a]">
             Ver mi pedido →
           </Link>
         </aside>

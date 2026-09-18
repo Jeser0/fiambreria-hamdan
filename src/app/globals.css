@@ -312,3 +312,91 @@ summary {
   0%, 100% { transform: scale(1); }
   48% { transform: scale(1.28); }
 }
+
+/* Profundidad consistente y microinteracciones. */
+.gateway-card {
+  transition:
+    transform 190ms ease,
+    border-color 190ms ease,
+    box-shadow 190ms ease,
+    background-color 190ms ease;
+}
+
+.gateway-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(143, 31, 35, 0.24);
+  background-color: #fffef9;
+  box-shadow: 0 14px 28px rgba(78, 45, 26, 0.10);
+}
+
+.gateway-icon {
+  transition: transform 190ms ease, background-color 190ms ease;
+}
+
+.gateway-card:hover .gateway-icon {
+  transform: scale(1.055);
+  background-color: #f9e7c9;
+}
+
+.gateway-arrow {
+  transition: transform 190ms ease;
+}
+
+.gateway-card:hover .gateway-arrow {
+  transform: translateX(4px);
+}
+
+.storefront-card {
+  transform: rotate(1deg);
+  box-shadow: 0 18px 35px rgba(77, 43, 24, 0.16);
+  transition:
+    transform 260ms cubic-bezier(0.2, 0.72, 0.25, 1),
+    box-shadow 260ms ease;
+}
+
+.storefront-card:hover {
+  transform: rotate(0deg) translateY(-2px) scale(1.008);
+  box-shadow: 0 24px 42px rgba(77, 43, 24, 0.20);
+}
+
+.soft-press {
+  transform-origin: center;
+}
+
+.soft-press:active {
+  transform: translateY(1px) scale(0.985) !important;
+}
+
+.field-shell {
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.field-shell:focus-within {
+  border-color: rgba(198, 138, 29, 0.58);
+  background-color: #fffdf8;
+  box-shadow: 0 0 0 3px rgba(239, 195, 90, 0.13);
+}
+
+.warm-field:focus {
+  border-color: rgba(198, 138, 29, 0.62) !important;
+  box-shadow: 0 0 0 3px rgba(239, 195, 90, 0.14);
+}
+
+.magic-button::before {
+  content: "";
+  position: absolute;
+  inset: -80% auto -80% -35%;
+  width: 24%;
+  transform: rotate(18deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.52), transparent);
+  opacity: 0;
+  transition: transform 360ms ease, opacity 180ms ease;
+}
+
+.magic-button:hover::before {
+  opacity: 0.7;
+  transform: translateX(520%) rotate(18deg);
+}

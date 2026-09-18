@@ -147,7 +147,7 @@ export default function WholesaleOrderSummary() {
                 <input
                   value={quantities[product.id] ?? ""}
                   onChange={(event) => updateQuantity(product.id, event.target.value)}
-                  className="mt-2 w-full rounded-xl border border-[#8f1f23]/15 bg-white px-3 py-2.5 text-sm font-normal normal-case tracking-normal text-[#4f3b33] outline-none transition focus:border-[#8f1f23]/45"
+                  className="warm-field mt-2 w-full rounded-xl border border-[#8f1f23]/15 bg-white px-3 py-2.5 text-sm font-normal normal-case tracking-normal text-[#4f3b33] outline-none transition focus:border-[#8f1f23]/45"
                   placeholder="Ej. 2 hormas"
                 />
               </label>
@@ -173,7 +173,7 @@ export default function WholesaleOrderSummary() {
           <input
             value={businessName}
             onChange={(event) => setBusinessName(event.target.value.slice(0, 100))}
-            className="mt-2 w-full rounded-xl border border-[#8f1f23]/15 bg-white px-4 py-3 text-sm font-normal normal-case tracking-normal text-[#4f3b33] outline-none transition focus:border-[#8f1f23]/45"
+            className="warm-field mt-2 w-full rounded-xl border border-[#8f1f23]/15 bg-white px-4 py-3 text-sm font-normal normal-case tracking-normal text-[#4f3b33] outline-none transition focus:border-[#8f1f23]/45"
             placeholder="Ej. Almacén San Martín"
           />
         </label>
@@ -184,7 +184,7 @@ export default function WholesaleOrderSummary() {
             value={notes}
             onChange={(event) => setNotes(event.target.value.slice(0, 800))}
             rows={4}
-            className="mt-2 w-full resize-none rounded-xl border border-[#8f1f23]/15 bg-white px-4 py-3 text-sm font-normal normal-case tracking-normal text-[#4f3b33] outline-none transition focus:border-[#8f1f23]/45"
+            className="warm-field mt-2 w-full resize-none rounded-xl border border-[#8f1f23]/15 bg-white px-4 py-3 text-sm font-normal normal-case tracking-normal text-[#4f3b33] outline-none transition focus:border-[#8f1f23]/45"
             placeholder="Marca preferida, formato u otra consulta..."
           />
         </label>
@@ -194,11 +194,11 @@ export default function WholesaleOrderSummary() {
           <pre className="mt-2 max-h-48 overflow-auto whitespace-pre-wrap font-sans text-[11px] leading-5 text-[#66534a]">{orderText}</pre>
         </div>
 
-        <a href={whatsappUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#15975d]/45 bg-[#15975d]/12 px-5 py-3.5 text-sm font-black text-[#0b7145] transition hover:-translate-y-0.5 hover:bg-[#15975d]/18 hover:shadow-md">
+        <a href={whatsappUrl} target="_blank" rel="noreferrer" className="soft-press mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#15975d]/45 bg-[#15975d]/12 px-5 py-3.5 text-sm font-black text-[#0b7145] transition hover:-translate-y-0.5 hover:bg-[#15975d]/18 hover:shadow-md">
           <WhatsAppIcon size={19} /> Enviar pedido por WhatsApp
         </a>
 
-        <button type="button" onClick={copyOrder} className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#8f1f23]/15 bg-white/75 px-5 py-3 text-sm font-black text-[#7b2022] transition hover:bg-white">
+        <button type="button" onClick={copyOrder} className="soft-press mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#8f1f23]/15 bg-white/75 px-5 py-3 text-sm font-black text-[#7b2022] transition hover:bg-white">
           <ClipboardIcon size={18} /> {copied ? "Pedido copiado ✓" : "Copiar resumen"}
         </button>
       </aside>

@@ -19,10 +19,10 @@ export default function OrderExperience() {
               </p>
             </div>
             <div className="flex min-w-52 flex-col gap-3">
-              <Link href="/mayorista" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#f1d9b4]/45 bg-[#fff7e5]/12 px-5 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#fff7e5]/18">
+              <Link href="/mayorista" className="soft-press inline-flex items-center justify-center gap-2 rounded-xl border border-[#f1d9b4]/45 bg-[#fff7e5]/12 px-5 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#fff7e5]/18">
                 <BoxIcon size={18} /> Ver catálogo mayorista
               </Link>
-              <a href="https://wa.me/543813514449?text=Hola%20Hamdan%2C%20quisiera%20hacer%20una%20consulta%20mayorista." target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#f1d9b4]/45 bg-[#fff7e5]/12 px-5 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#fff7e5]/18">
+              <a href="https://wa.me/543813514449?text=Hola%20Hamdan%2C%20quisiera%20hacer%20una%20consulta%20mayorista." target="_blank" rel="noreferrer" className="soft-press inline-flex items-center justify-center gap-2 rounded-xl border border-[#f1d9b4]/45 bg-[#fff7e5]/12 px-5 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#fff7e5]/18">
                 <WhatsAppIcon size={19} /> Consultar mayorista
               </a>
             </div>
@@ -43,7 +43,7 @@ export default function OrderExperience() {
             <div className="flex items-center gap-3 rounded-xl border border-[#6f4813]/10 bg-white/35 px-4 py-3"><ClipboardIcon size={18} className="text-[#8f1f23]" /><span>Completá cantidades y observaciones</span></div>
             <div className="flex items-center gap-3 rounded-xl border border-[#6f4813]/10 bg-white/35 px-4 py-3"><WhatsAppIcon size={18} className="text-[#0b7145]" /><span>Enviá el resumen directo a Hamdan</span></div>
           </div>
-          <Link href="/pedido" className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-[#251b12] px-5 py-3.5 text-sm font-black text-[#fff6dc] transition hover:-translate-y-0.5 hover:bg-[#3a2a1b]">
+          <Link href="/pedido" className="soft-press mt-6 inline-flex w-full items-center justify-center rounded-xl bg-[#251b12] px-5 py-3.5 text-sm font-black text-[#fff6dc] transition hover:-translate-y-0.5 hover:bg-[#3a2a1b]">
             Revisar mi pedido →
           </Link>
         </aside>

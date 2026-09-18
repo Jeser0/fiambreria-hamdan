@@ -29,13 +29,13 @@ export default function HamdanHero() {
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
-            <a href="#secciones" className="magic-button inline-flex items-center gap-2 rounded-xl border border-[#d2ad59]/70 bg-[#fff5d8] px-5 py-3 text-sm font-black text-[#21180f] shadow-[0_8px_20px_rgba(145,103,31,0.12)] transition hover:-translate-y-0.5 hover:border-[#c6932f] hover:bg-[#ffe9a8] hover:shadow-[0_12px_24px_rgba(145,103,31,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7a13a] focus-visible:ring-offset-2">
+            <a href="#secciones" className="magic-button soft-press inline-flex items-center gap-2 rounded-xl border border-[#d2ad59]/70 bg-[#fff5d8] px-5 py-3 text-sm font-black text-[#21180f] shadow-[0_8px_20px_rgba(145,103,31,0.12)] transition hover:-translate-y-0.5 hover:border-[#c6932f] hover:bg-[#ffe9a8] hover:shadow-[0_12px_24px_rgba(145,103,31,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7a13a] focus-visible:ring-offset-2">
               <StoreIcon size={18} /> Explorar secciones <span aria-hidden>→</span>
             </a>
-            <a href="/mayorista" className="inline-flex items-center gap-2 rounded-xl bg-[#f5c95c] px-5 py-3 text-sm font-black text-[#3f2d1f] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f7d475] hover:shadow-lg">
+            <a href="/mayorista" className="soft-press inline-flex items-center gap-2 rounded-xl bg-[#f5c95c] px-5 py-3 text-sm font-black text-[#3f2d1f] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f7d475] hover:shadow-lg">
               <BasketIcon size={18} /> Ver catálogo mayorista <span aria-hidden>→</span>
             </a>
-            <a href="#mayorista" className="inline-flex items-center gap-2 rounded-xl border border-[#8e1e24]/30 bg-[#fffaf0]/70 px-5 py-3 text-sm font-black text-[#7a2022] transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md">
+            <a href="#mayorista" className="soft-press inline-flex items-center gap-2 rounded-xl border border-[#8e1e24]/30 bg-[#fffaf0]/70 px-5 py-3 text-sm font-black text-[#7a2022] transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md">
               <BoxIcon size={18} /> Pedidos por mayor <span aria-hidden>→</span>
             </a>
           </div>
@@ -60,7 +60,7 @@ export default function HamdanHero() {
         </div>
 
         <div className="relative mx-auto w-full max-w-[560px] lg:mx-0">
-          <div className="polaroid rotate-[1deg] bg-[#fffdf7] p-3 shadow-[0_18px_35px_rgba(77,43,24,0.16)]">
+          <div className="polaroid storefront-card bg-[#fffdf7] p-3">
             <Image
               src="/brand/storefront.svg"
               alt="Fachada de Fiambrería Hamdan en San Miguel de Tucumán"

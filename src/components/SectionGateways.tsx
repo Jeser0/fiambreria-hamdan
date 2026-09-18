@@ -42,15 +42,15 @@ export default function SectionGateways() {
           <Link
             key={card.title}
             href={card.href}
-            className="group flex min-h-24 items-center gap-4 rounded-2xl border border-[#7d3c32]/12 bg-[#fffdf7] p-4 shadow-[0_8px_20px_rgba(78,45,26,0.05)] transition hover:-translate-y-1 hover:border-[#8f1f23]/25 hover:shadow-[0_14px_26px_rgba(78,45,26,0.11)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7a13a] focus-visible:ring-offset-2"
+            className="gateway-card group flex min-h-24 items-center gap-4 rounded-2xl border border-[#7d3c32]/12 bg-[#fffdf7] p-4 shadow-[0_8px_20px_rgba(78,45,26,0.05)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7a13a] focus-visible:ring-offset-2"
           >
-            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#fbefdd] ${card.tone}`}>
+            <div className={`gateway-icon flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#fbefdd] ${card.tone}`}>
               {card.icon}
             </div>
             <div className="min-w-0 flex-1">
               <h2 className="font-display text-lg font-black leading-tight text-[#762025]">{card.title}</h2>
             </div>
-            <span aria-hidden="true" className="text-xl font-black text-[#8f1f23] transition group-hover:translate-x-1">›</span>
+            <span aria-hidden="true" className="gateway-arrow text-xl font-black text-[#8f1f23]">›</span>
           </Link>
         ))}
         </div>
