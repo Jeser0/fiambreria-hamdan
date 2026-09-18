@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BoxIcon, SearchIcon, WhatsAppIcon } from "./Icons";
+import ProductMedia from "./ProductMedia";
+import { SearchIcon, WhatsAppIcon } from "./Icons";
 import {
   catalogCategories,
   priceForMode,
@@ -67,6 +68,11 @@ export default function StoreCatalog({
   initialCategory?: CategoryFilter;
 }) {
   const products = useMemo(() => productsForMode(mode), [mode]);
+  const availableCategories = useMemo(
+    () => catalogCategories.filter((item) => products.some((product) => product.category === item.id)),
+    [products],
+  );
+
   const [query, setQuery] = useState(initialQuery);
   const [category, setCategory] = useState<CategoryFilter>(initialCategory);
   const [selected, setSelected] = useState<string[]>([]);
@@ -75,6 +81,7 @@ export default function StoreCatalog({
   const [customer, setCustomer] = useState("");
   const [notes, setNotes] = useState("");
   const [recentlyAdded, setRecentlyAdded] = useState<string | null>(null);
+  const [statusMessage, setStatusMessage] = useState("");
   const addFeedbackTimer = useRef<number | null>(null);
 
   useEffect(() => {
@@ -134,17 +141,19 @@ export default function StoreCatalog({
           return next;
         });
         setRecentlyAdded(null);
+        setStatusMessage(`${product.name} fue quitado del carrito.`);
         return current.filter((id) => id !== product.id);
       }
 
       if (addFeedbackTimer.current) window.clearTimeout(addFeedbackTimer.current);
       setRecentlyAdded(product.id);
+      setStatusMessage(`${product.name} fue agregado al carrito.`);
       addFeedbackTimer.current = window.setTimeout(() => setRecentlyAdded(null), 1100);
 
-      const hasMinimum = mode === "mayorista" && Boolean(wholesaleMinimums[product.category]);
-      if (hasMinimum) {
-        setQuantities((currentQuantities) => ({ ...currentQuantities, [product.id]: "1" }));
-      }
+      setQuantities((currentQuantities) => ({
+        ...currentQuantities,
+        [product.id]: currentQuantities[product.id] || "1",
+      }));
 
       return [...current, product.id];
     });
@@ -155,6 +164,12 @@ export default function StoreCatalog({
     setQuantities((current) => ({ ...current, [productId]: cleaned }));
   }
 
+  function clearCart() {
+    setSelected([]);
+    setQuantities({});
+    setStatusMessage("El carrito quedó vacío.");
+  }
+
   const groupTotals = useMemo(() => {
     const totals: Partial<Record<CatalogCategoryId, number>> = {};
     for (const product of selectedProducts) {
@@ -163,6 +178,14 @@ export default function StoreCatalog({
     }
     return totals;
   }, [quantities, selectedProducts]);
+
+  const quantityIssues = useMemo(
+    () =>
+      selectedProducts
+        .filter((product) => positiveNumber(quantities[product.id] ?? "") <= 0)
+        .map((product) => `Indicá una cantidad válida para ${product.name}.`),
+    [quantities, selectedProducts],
+  );
 
   const minimumIssues = useMemo(() => {
     if (mode !== "mayorista") return [] as string[];
@@ -179,7 +202,7 @@ export default function StoreCatalog({
     });
   }, [groupTotals, mode, selectedProducts]);
 
-  const canSend = selectedProducts.length > 0 && minimumIssues.length === 0;
+  const canSend = loaded && selectedProducts.length > 0 && minimumIssues.length === 0 && quantityIssues.length === 0;
 
   const messageLines = [
     mode === "mayorista"
@@ -202,7 +225,9 @@ export default function StoreCatalog({
   const whatsappUrl = `https://wa.me/543813514449?text=${encodeURIComponent(messageLines.join("\n"))}`;
 
   return (
-    <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_410px]">
+    <div className="relative grid gap-8 xl:grid-cols-[minmax(0,1fr)_410px]">
+      <p className="sr-only" aria-live="polite" aria-atomic="true">{statusMessage}</p>
+
       <div>
         <div className="rounded-3xl border border-[#7f241f]/10 bg-white/80 p-4 shadow-[0_12px_28px_rgba(84,48,30,0.06)] sm:p-5">
           <label className="field-shell flex items-center gap-3 rounded-2xl border border-[#7a221f]/15 bg-[#fffaf2] px-4 py-3 text-sm text-[#765f52]">
@@ -225,7 +250,7 @@ export default function StoreCatalog({
             >
               Todos
             </button>
-            {catalogCategories.map((item) => (
+            {availableCategories.map((item) => (
               <button
                 key={item.id}
                 type="button"
@@ -248,21 +273,26 @@ export default function StoreCatalog({
               <article
                 key={product.id}
                 id={product.id}
-                className={`product-card rounded-3xl border p-5 ${isSelected ? "product-card-selected border-[#8f1f23]/45 bg-[#fff8ea] shadow-[0_12px_28px_rgba(143,31,35,0.08)]" : "border-[#7f241f]/10 bg-white/80"} ${recentlyAdded === product.id ? "product-card-added" : ""}`}
+                className={`product-card group rounded-3xl border p-4 sm:p-5 ${isSelected ? "product-card-selected border-[#8f1f23]/45 bg-[#fff8ea] shadow-[0_12px_28px_rgba(143,31,35,0.08)]" : "border-[#7f241f]/10 bg-white/80"} ${recentlyAdded === product.id ? "product-card-added" : ""}`}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#f7ead4] text-[#8f1f23]">
-                    <BoxIcon size={22} />
+                <ProductMedia
+                  name={product.name}
+                  category={product.category}
+                  image={product.image}
+                  imageAlt={product.imageAlt}
+                />
+
+                <div className="mt-4 flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <span className="inline-flex rounded-full bg-[#f7eddc] px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#9b6822]">
+                      {categoryLabel(product.category)}
+                    </span>
+                    <h2 className="font-display mt-3 text-2xl font-black leading-tight text-[#742026]">{product.name}</h2>
+                    {minText && <p className="mt-2 text-xs font-bold text-[#956318]">{minText}</p>}
                   </div>
-                  <span className="rounded-full bg-[#f7eddc] px-3 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#9b6822]">
-                    {categoryLabel(product.category)}
-                  </span>
                 </div>
 
-                <h2 className="font-display mt-5 text-2xl font-black text-[#742026]">{product.name}</h2>
-                {minText && <p className="mt-2 text-xs font-bold text-[#956318]">{minText}</p>}
-
-                <div className="mt-5 flex items-end justify-between gap-3">
+                <div className="mt-5 flex items-end justify-between gap-3 border-t border-[#8f1f23]/8 pt-4">
                   <div>
                     <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#9b6b2a]">
                       Precio {mode === "mayorista" ? "mayorista" : "minorista"}
@@ -278,7 +308,7 @@ export default function StoreCatalog({
                   <button
                     type="button"
                     onClick={() => addOrRemove(product)}
-                    className={`soft-press rounded-xl px-3.5 py-2 text-xs font-black transition-all duration-200 ${isSelected ? "bg-[#8f1f23] text-white shadow-sm" : "border border-[#8f1f23]/20 bg-white text-[#7f2023] hover:bg-[#fff4e6]"}`}
+                    className={`soft-press shrink-0 rounded-xl px-3.5 py-2.5 text-xs font-black transition-all duration-200 ${isSelected ? "bg-[#8f1f23] text-white shadow-sm" : "border border-[#8f1f23]/20 bg-white text-[#7f2023] hover:bg-[#fff4e6]"}`}
                     aria-pressed={isSelected}
                   >
                     {isSelected ? "✓ Agregado" : "+ Agregar"}
@@ -299,25 +329,32 @@ export default function StoreCatalog({
 
       <aside
         id="carrito"
-        className="h-fit scroll-mt-36 rounded-[2rem] border border-[#d6ae55]/40 bg-[#fff0b7]/70 p-6 shadow-[0_16px_34px_rgba(84,48,30,0.08)] xl:sticky xl:top-32"
+        className="h-fit scroll-mt-36 rounded-[2rem] border border-[#d6ae55]/40 bg-[#fff0b7]/70 p-5 shadow-[0_16px_34px_rgba(84,48,30,0.08)] sm:p-6 xl:sticky xl:top-32"
       >
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-[#9f6817]">
-          Mi pedido {mode}
-        </p>
-        <h2 className="font-display mt-2 text-3xl font-black leading-none text-[#5f271f]">Tu carrito</h2>
-        <p className="mt-3 text-sm leading-6 text-[#715e53]">
-          Agregá productos sin salir de la tienda. Tu selección queda guardada en este dispositivo.
-        </p>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#9f6817]">Mi pedido {mode}</p>
+            <h2 className="font-display mt-2 text-3xl font-black leading-none text-[#5f271f]">Tu carrito</h2>
+          </div>
+          {selectedProducts.length > 0 && (
+            <button
+              type="button"
+              onClick={clearCart}
+              className="rounded-lg px-2 py-1 text-[11px] font-black text-[#8f1f23] underline decoration-[#8f1f23]/25 underline-offset-4 hover:decoration-[#8f1f23]"
+            >
+              Vaciar
+            </button>
+          )}
+        </div>
+        <p className="mt-3 text-sm leading-6 text-[#715e53]">Agregá productos sin salir de la tienda. Tu selección queda guardada en este dispositivo.</p>
 
         <div className="mt-5 rounded-2xl border border-[#8f1f23]/10 bg-white/65 p-4">
-          <p className="text-xs font-black uppercase tracking-[0.12em] text-[#8f1f23]">
-            Productos: {selectedProducts.length}
-          </p>
+          <p className="text-xs font-black uppercase tracking-[0.12em] text-[#8f1f23]">Productos: {selectedProducts.length}</p>
           {selectedProducts.length ? (
-            <ul className="mt-3 space-y-3 text-sm text-[#604d44]">
+            <ul className="mt-3 max-h-[420px] space-y-3 overflow-auto pr-1 text-sm text-[#604d44]">
               {selectedProducts.map((product) => {
                 const price = priceForMode(product, mode);
-                const needsNumericQuantity = mode === "mayorista" && Boolean(wholesaleMinimums[product.category]);
+                const minControlled = mode === "mayorista" && Boolean(wholesaleMinimums[product.category]);
                 return (
                   <li
                     key={product.id}
@@ -326,9 +363,7 @@ export default function StoreCatalog({
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <span className="font-bold">{product.name}</span>
-                        <p className="mt-1 text-[11px] text-[#8b6a58]">
-                          {categoryLabel(product.category)} · {typeof price === "number" ? formatARS(price) : "Consultar"}
-                        </p>
+                        <p className="mt-1 text-[11px] text-[#8b6a58]">{categoryLabel(product.category)} · {typeof price === "number" ? formatARS(price) : "Consultar"}</p>
                       </div>
                       <button
                         type="button"
@@ -339,14 +374,17 @@ export default function StoreCatalog({
                         ×
                       </button>
                     </div>
-                    <input
-                      inputMode={needsNumericQuantity ? "numeric" : "decimal"}
-                      value={quantities[product.id] ?? ""}
-                      onChange={(event) => updateQuantity(product.id, event.target.value)}
-                      className="warm-field mt-2 w-full rounded-lg border border-[#8f1f23]/12 bg-[#fffaf2] px-3 py-2 text-xs outline-none transition"
-                      placeholder={needsNumericQuantity ? "Cantidad de paquetes / unidades" : "Cantidad"}
-                      aria-label={`Cantidad para ${product.name}`}
-                    />
+                    <label className="mt-2 block text-[10px] font-black uppercase tracking-[0.1em] text-[#8c6856]">
+                      Cantidad{minControlled ? " para el mínimo" : ""}
+                      <input
+                        inputMode="decimal"
+                        value={quantities[product.id] ?? ""}
+                        onChange={(event) => updateQuantity(product.id, event.target.value)}
+                        className="warm-field mt-1.5 w-full rounded-lg border border-[#8f1f23]/12 bg-[#fffaf2] px-3 py-2 text-xs font-normal normal-case tracking-normal outline-none transition"
+                        placeholder="Ej. 2"
+                        aria-label={`Cantidad para ${product.name}`}
+                      />
+                    </label>
                   </li>
                 );
               })}
@@ -372,7 +410,7 @@ export default function StoreCatalog({
                 );
               })}
               {!selectedProducts.some((product) => wholesaleMinimums[product.category]) && (
-                <p>Quesos y fiambres no tienen un mínimo configurado en esta etapa.</p>
+                <p>Quesos y fiambres no tienen un mínimo automático configurado.</p>
               )}
             </div>
           </div>
@@ -399,11 +437,11 @@ export default function StoreCatalog({
           />
         </label>
 
-        {minimumIssues.length > 0 && (
+        {(quantityIssues.length > 0 || minimumIssues.length > 0) && (
           <div className="mt-4 rounded-xl border border-[#b54843]/20 bg-[#fff4ee] px-4 py-3 text-xs leading-5 text-[#8a332f]">
-            <p className="font-black">Completá los mínimos para habilitar el pedido:</p>
+            <p className="font-black">Antes de enviar:</p>
             <ul className="mt-1 list-disc pl-4">
-              {minimumIssues.map((issue) => <li key={issue}>{issue}</li>)}
+              {[...quantityIssues, ...minimumIssues].map((issue) => <li key={issue}>{issue}</li>)}
             </ul>
           </div>
         )}
@@ -423,16 +461,29 @@ export default function StoreCatalog({
             disabled
             className="cheese-action mt-5 inline-flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-xl px-5 py-3.5 text-sm font-black opacity-60"
           >
-            <WhatsAppIcon size={19} /> {selectedProducts.length ? "Completá el mínimo para enviar" : "Agregá productos para comprar"}
+            <WhatsAppIcon size={19} /> {selectedProducts.length ? "Completá el pedido para enviar" : "Agregá productos para comprar"}
           </button>
         )}
 
         <p className="mt-3 text-center text-[11px] leading-4 text-[#897268]">
           {mode === "mayorista"
-            ? "Los pedidos mayoristas se validan según los mínimos publicados y disponibilidad de stock."
+            ? "Los pedidos mayoristas se validan según mínimos publicados y disponibilidad de stock."
             : "Los precios corresponden a la lista minorista provista por Hamdan."}
         </p>
       </aside>
+
+      {selectedProducts.length > 0 && (
+        <a
+          href="#carrito"
+          className="mobile-cart-dock soft-press fixed inset-x-4 bottom-4 z-40 flex items-center justify-between gap-3 rounded-2xl border border-[#c49532]/40 bg-[#fff0b7]/95 px-4 py-3 shadow-[0_16px_40px_rgba(72,42,20,0.22)] backdrop-blur-md xl:hidden"
+        >
+          <span>
+            <span className="block text-[10px] font-black uppercase tracking-[0.12em] text-[#956318]">Mi pedido {mode}</span>
+            <span className="font-display text-lg font-black text-[#54241f]">{selectedProducts.length} {selectedProducts.length === 1 ? "producto" : "productos"}</span>
+          </span>
+          <span className="rounded-xl bg-[#251b12] px-4 py-2 text-xs font-black text-[#fff7e7]">Ver carrito →</span>
+        </a>
+      )}
     </div>
   );
 }
