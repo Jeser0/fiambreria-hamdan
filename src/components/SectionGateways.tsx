@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BoxIcon } from "./Icons";
+import ScrollReveal from "./ScrollReveal";
 
 function CheeseIcon() {
   return (
@@ -35,7 +36,8 @@ const cards = [
 export default function SectionGateways() {
   return (
     <section id="secciones" aria-label="Secciones principales" className="scroll-mt-40 border-y border-[#7f241f]/10 bg-[#fff7e9] py-6">
-      <div className="mx-auto grid max-w-[1100px] gap-3 px-5 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+      <ScrollReveal className="mx-auto max-w-[1100px] px-5 sm:px-6 lg:px-8">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => (
           <Link
             key={card.title}
@@ -51,7 +53,8 @@ export default function SectionGateways() {
             <span aria-hidden="true" className="text-xl font-black text-[#8f1f23] transition group-hover:translate-x-1">›</span>
           </Link>
         ))}
-      </div>
+        </div>
+      </ScrollReveal>
     </section>
   );
 }

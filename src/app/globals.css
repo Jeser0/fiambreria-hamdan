@@ -237,3 +237,18 @@ summary {
     transform: translateY(0) scale(1);
   }
 }
+
+/* Aparición sutil, una sola vez, al entrar cada bloque en viewport. */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 400ms ease,
+    transform 400ms cubic-bezier(0.2, 0.72, 0.25, 1);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal.scroll-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}

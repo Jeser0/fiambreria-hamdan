@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { BasketIcon, BoxIcon, ClipboardIcon, SparkIcon, WhatsAppIcon } from "./Icons";
+import ScrollReveal from "./ScrollReveal";
 
 export default function OrderExperience() {
   return (
     <section id="mayorista" className="scroll-mt-40 bg-[#fff7e8] py-14 lg:py-16">
-      <div className="mx-auto grid max-w-[1500px] gap-6 px-5 sm:px-6 lg:grid-cols-[1.25fr_0.75fr] lg:px-8">
+      <ScrollReveal className="mx-auto max-w-[1500px] px-5 sm:px-6 lg:px-8">
+        <div className="grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
         <div className="wood-card relative overflow-hidden rounded-[2rem] p-7 text-[#fff7e5] shadow-[0_20px_45px_rgba(82,29,23,0.16)] sm:p-9">
           <div className="absolute -right-10 -top-10 h-44 w-44 rounded-full border border-[#f5ca63]/20" />
           <div className="absolute right-12 top-12 text-[#f6c65a]/70"><SparkIcon size={24} /></div>
@@ -45,7 +47,8 @@ export default function OrderExperience() {
             Revisar mi pedido →
           </Link>
         </aside>
-      </div>
+        </div>
+      </ScrollReveal>
     </section>
   );
 }

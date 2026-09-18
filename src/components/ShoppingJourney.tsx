@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BasketIcon, ClipboardIcon, StoreIcon, WhatsAppIcon } from "./Icons";
+import ScrollReveal from "./ScrollReveal";
 
 const steps = [
   { n: "1", title: "Explorá", text: "Entrá al catálogo mayorista y buscá lo que necesitás.", icon: <StoreIcon size={28} /> },
@@ -11,7 +12,8 @@ const steps = [
 export default function ShoppingJourney() {
   return (
     <section id="como-pedir" className="paper-surface scroll-mt-40 py-14 lg:py-16">
-      <div className="mx-auto grid max-w-[1500px] gap-6 px-5 sm:px-6 lg:grid-cols-[0.7fr_2fr_0.8fr] lg:px-8">
+      <ScrollReveal className="mx-auto max-w-[1500px] px-5 sm:px-6 lg:px-8">
+        <div className="grid gap-6 lg:grid-cols-[0.7fr_2fr_0.8fr]">
         <div className="flex flex-col justify-center rounded-3xl border border-[#8f1f23]/10 bg-[#fff8eb]/80 p-6">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#b27624]">Cómo pedir</p>
           <h2 className="font-display mt-2 text-4xl font-black leading-[0.95] text-[#7f1c21]">Tu compra mayorista, ordenada</h2>
@@ -42,7 +44,8 @@ export default function ShoppingJourney() {
             Ver mi pedido →
           </Link>
         </aside>
-      </div>
+        </div>
+      </ScrollReveal>
     </section>
   );
 }
