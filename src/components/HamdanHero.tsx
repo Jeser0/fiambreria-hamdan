@@ -1,6 +1,6 @@
 import Image from "next/image";
 import HamdiniAnimator from "./HamdiniAnimator";
-import { BasketIcon, BoxIcon, SparkIcon, StoreIcon } from "./Icons";
+import { BasketIcon, SparkIcon, StoreIcon } from "./Icons";
 
 export default function HamdanHero() {
   return (
@@ -35,8 +35,8 @@ export default function HamdanHero() {
             <a href="/mayorista" className="soft-press inline-flex items-center gap-2 rounded-xl bg-[#f5c95c] px-5 py-3 text-sm font-black text-[#3f2d1f] shadow-sm transition hover:-translate-y-0.5 hover:bg-[#f7d475] hover:shadow-lg">
               <BasketIcon size={18} /> Ver catálogo mayorista <span aria-hidden>→</span>
             </a>
-            <a href="#mayorista" className="soft-press inline-flex items-center gap-2 rounded-xl border border-[#8e1e24]/30 bg-[#fffaf0]/70 px-5 py-3 text-sm font-black text-[#7a2022] transition hover:-translate-y-0.5 hover:bg-white hover:shadow-md">
-              <BoxIcon size={18} /> Pedidos por mayor <span aria-hidden>→</span>
+            <a href="/minorista" className="cheese-action soft-press inline-flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-black">
+              <BasketIcon size={18} /> Comprar por menor <span aria-hidden>→</span>
             </a>
           </div>
         </div>

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { BoxIcon } from "./Icons";
-import ScrollReveal from "./ScrollReveal";
 
 function CheeseIcon() {
   return (
@@ -28,16 +27,16 @@ function FoodIcon() {
 
 const cards = [
   { title: "Fiambres", href: "/mayorista?categoria=fiambres#catalogo", icon: <HamIcon />, tone: "text-[#8f1f23]" },
-  { title: "Lácteos", href: "/mayorista?categoria=quesos#catalogo", icon: <CheeseIcon />, tone: "text-[#b66d0f]" },
-  { title: "Alimentos", href: "/mayorista?categoria=alimentos#catalogo", icon: <FoodIcon />, tone: "text-[#8f1f23]" },
-  { title: "Mayorista", href: "/mayorista", icon: <BoxIcon size={28} />, tone: "text-[#b66d0f]" },
+  { title: "Quesos y lácteos", href: "/mayorista?categoria=quesos#catalogo", icon: <CheeseIcon />, tone: "text-[#b66d0f]" },
+  { title: "Sándwich x4", href: "/mayorista?categoria=sandwich-x4#catalogo", icon: <FoodIcon />, tone: "text-[#8f1f23]" },
+  { title: "Sándwich x8", href: "/mayorista?categoria=sandwich-x8#catalogo", icon: <FoodIcon />, tone: "text-[#8f1f23]" },
+  { title: "Pizzas", href: "/mayorista?categoria=pizzas#catalogo", icon: <BoxIcon size={28} />, tone: "text-[#b66d0f]" },
 ];
 
 export default function SectionGateways() {
   return (
-    <section id="secciones" aria-label="Secciones principales" className="scroll-mt-40 border-y border-[#7f241f]/10 bg-[#fff7e9] py-6">
-      <ScrollReveal className="mx-auto max-w-[1100px] px-5 sm:px-6 lg:px-8">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <section id="secciones" aria-label="Categorías principales" className="scroll-mt-40 border-y border-[#7f241f]/10 bg-[#fff7e9] py-6">
+      <div className="mx-auto grid max-w-[1350px] gap-3 px-5 sm:grid-cols-2 sm:px-6 lg:grid-cols-5 lg:px-8">
         {cards.map((card) => (
           <Link
             key={card.title}
@@ -53,8 +52,7 @@ export default function SectionGateways() {
             <span aria-hidden="true" className="gateway-arrow text-xl font-black text-[#8f1f23]">›</span>
           </Link>
         ))}
-        </div>
-      </ScrollReveal>
+      </div>
     </section>
   );
 }
