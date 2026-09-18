@@ -6,6 +6,7 @@ import StoreCatalog from "@/components/StoreCatalog";
 import StoreSwitcher from "@/components/StoreSwitcher";
 import { BasketIcon, SparkIcon, WhatsAppIcon } from "@/components/Icons";
 import type { CatalogCategoryId } from "@/data/catalog";
+import { whatsappUrl } from "@/data/business";
 
 export const metadata: Metadata = {
   title: "Tienda minorista",
@@ -60,7 +61,7 @@ export default async function MinoristaPage({ searchParams }: StorePageProps) {
                   <p className="mt-1 text-xs leading-5 text-[#6d584b]">Sin registro obligatorio y sin mezclar precios mayoristas.</p>
                 </div>
               </div>
-              <a href="https://wa.me/543813514449?text=Hola%20Hamdan%2C%20tengo%20una%20consulta%20sobre%20la%20tienda%20minorista." target="_blank" rel="noreferrer" className="cheese-action mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-black">
+              <a href={whatsappUrl("Hola Hamdan, tengo una consulta sobre la tienda minorista.")} target="_blank" rel="noreferrer" className="cheese-action mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-black">
                 <WhatsAppIcon size={18} /> Consulta minorista
               </a>
             </div>

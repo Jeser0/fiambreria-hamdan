@@ -1,6 +1,7 @@
 import Image from "next/image";
 import HamdiniAnimator from "./HamdiniAnimator";
 import { BasketIcon, SparkIcon, StoreIcon } from "./Icons";
+import { business } from "@/data/business";
 
 export default function HamdanHero() {
   return (
@@ -71,7 +72,7 @@ export default function HamdanHero() {
             />
             <div className="flex items-center justify-between gap-3 px-2 pb-1 pt-3">
               <p className="handwritten text-base font-bold text-[#7f2724]">Nuestra casa en Tucumán ♥</p>
-              <span className="rounded-full bg-[#f4e2b9] px-3 py-1 text-xs font-extrabold text-[#7e5524]">Av. Colón 340</span>
+              <span className="rounded-full bg-[#f4e2b9] px-3 py-1 text-xs font-extrabold text-[#7e5524]">{business.address}</span>
             </div>
           </div>
 

@@ -12,6 +12,7 @@ import {
   type CatalogProduct,
   type StoreMode,
 } from "@/data/catalog";
+import { whatsappUrl } from "@/data/business";
 import {
   cartCustomerKey,
   cartNotesKey,
@@ -222,7 +223,7 @@ export default function StoreCatalog({
       : "Quedo atento/a a la confirmación del pedido.",
   ].filter(Boolean);
 
-  const whatsappUrl = `https://wa.me/543813514449?text=${encodeURIComponent(messageLines.join("\n"))}`;
+  const orderWhatsappUrl = whatsappUrl(messageLines.join("\n"));
 
   return (
     <div className="relative grid gap-8 xl:grid-cols-[minmax(0,1fr)_410px]">
@@ -448,7 +449,7 @@ export default function StoreCatalog({
 
         {canSend ? (
           <a
-            href={whatsappUrl}
+            href={orderWhatsappUrl}
             target="_blank"
             rel="noreferrer"
             className="soft-press mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#15975d]/45 bg-[#15975d]/12 px-5 py-3.5 text-sm font-black text-[#0b7145] transition hover:-translate-y-0.5 hover:bg-[#15975d]/18 hover:shadow-md"

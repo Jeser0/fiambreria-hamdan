@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SearchIcon, WhatsAppIcon } from "./Icons";
 import OrderCartButton from "./OrderCartButton";
+import { whatsappUrl } from "@/data/business";
 
 const navItems = [
   ["Inicio", "/"],
@@ -85,7 +86,7 @@ export default function HamdanHeader() {
 
           <div className="flex shrink-0 items-center gap-2">
             <a
-              href="https://wa.me/543813514449"
+              href={whatsappUrl()}
               target="_blank"
               rel="noreferrer"
               className="soft-press hidden items-center gap-2 rounded-xl border border-[#15975d]/40 bg-[#15975d]/12 px-3.5 py-2.5 text-sm font-black text-[#0b7145] shadow-sm transition hover:-translate-y-0.5 hover:border-[#15975d]/60 hover:bg-[#15975d]/18 hover:shadow-md lg:flex"

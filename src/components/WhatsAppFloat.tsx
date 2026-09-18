@@ -1,9 +1,10 @@
 import { WhatsAppIcon } from "./Icons";
+import { whatsappUrl } from "@/data/business";
 
 export default function WhatsAppFloat() {
   return (
     <a
-      href="https://wa.me/543813514449?text=Hola%20Hamdan%2C%20quisiera%20hacer%20una%20consulta."
+      href={whatsappUrl("Hola Hamdan, quisiera hacer una consulta.")}
       target="_blank"
       rel="noreferrer"
       aria-label="Consultar a Fiambrería Hamdan por WhatsApp"
