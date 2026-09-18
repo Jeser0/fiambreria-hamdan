@@ -100,13 +100,13 @@ summary {
   isolation: isolate;
   min-height: 46px;
   overflow: visible;
-  border: 1px solid rgba(123, 85, 22, 0.34);
+  border: 1px solid rgba(123, 85, 22, 0.28);
   border-radius: 14px;
   background:
     radial-gradient(circle at 18% 31%, rgba(66, 48, 14, 0.14) 0 4px, transparent 4.5px),
     radial-gradient(circle at 76% 68%, rgba(66, 48, 14, 0.11) 0 5px, transparent 5.5px),
     radial-gradient(circle at 56% 22%, rgba(255, 255, 255, 0.28) 0 3px, transparent 3.5px),
-    linear-gradient(135deg, rgba(250, 213, 104, 0.94), rgba(244, 190, 62, 0.82));
+    linear-gradient(135deg, rgba(255, 239, 174, 0.82), rgba(247, 203, 86, 0.68));
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.55),
     inset 0 -1px 0 rgba(128, 88, 16, 0.08),
