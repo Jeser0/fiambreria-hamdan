@@ -1,4 +1,5 @@
-import { BasketIcon, BoxIcon, CardIcon, SparkIcon, WhatsAppIcon } from "./Icons";
+import Link from "next/link";
+import { BasketIcon, BoxIcon, ClipboardIcon, SparkIcon, WhatsAppIcon } from "./Icons";
 
 export default function OrderExperience() {
   return (
@@ -12,40 +13,37 @@ export default function OrderExperience() {
               <p className="text-xs font-black uppercase tracking-[0.2em] text-[#f2c86c]">Hamdan Distribuciones</p>
               <h2 className="font-display mt-3 text-4xl font-black leading-none sm:text-5xl">Pedidos por mayor</h2>
               <p className="mt-5 max-w-2xl text-sm leading-7 text-[#f8e7cf]/80 sm:text-base">
-                Una sección pensada para comercios, despensas, almacenes, autoservicios y gastronomía. Consultá disponibilidad y precios mayoristas sin mezclarlo con la compra minorista.
+                Una sección pensada para comercios, despensas, almacenes, autoservicios y gastronomía. Elegí productos y armá una consulta ordenada para confirmar disponibilidad y precio vigente.
               </p>
-              <div className="mt-6 flex flex-wrap gap-2 text-xs font-bold">
-                {['Precios especiales', 'Atención personalizada', 'Quesos y alimentos', 'Pedidos organizados'].map((label) => (
-                  <span key={label} className="rounded-full border border-white/15 bg-white/10 px-3 py-2">✓ {label}</span>
-                ))}
-              </div>
             </div>
             <div className="flex min-w-52 flex-col gap-3">
-              <a href="https://wa.me/543813514449?text=Hola%20Hamdan%2C%20quisiera%20consultar%20por%20precios%20mayoristas." target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/12 px-5 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/18">
+              <Link href="/mayorista" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#f1d9b4]/45 bg-[#fff7e5]/12 px-5 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#fff7e5]/18">
+                <BoxIcon size={18} /> Ver catálogo mayorista
+              </Link>
+              <a href="https://wa.me/543813514449?text=Hola%20Hamdan%2C%20quisiera%20hacer%20una%20consulta%20mayorista." target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-2 rounded-xl border border-[#f1d9b4]/45 bg-[#fff7e5]/12 px-5 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#fff7e5]/18">
                 <WhatsAppIcon size={19} /> Consultar mayorista
-              </a>
-              <a href="/mayorista" className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/12 px-5 py-3.5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/18">
-                <BoxIcon size={18} /> Ver sección mayorista
               </a>
             </div>
           </div>
         </div>
 
-        <aside className="relative overflow-hidden rounded-[2rem] bg-[#8f1c23] p-7 text-white shadow-[0_20px_45px_rgba(105,25,28,0.16)] sm:p-8">
-          <SparkIcon size={18} className="absolute right-8 top-7 text-[#f1c85d]" />
+        <aside className="relative overflow-hidden rounded-[2rem] border border-[#d6ae55]/35 bg-[#fff0b7] p-7 text-[#251b12] shadow-[0_20px_45px_rgba(130,91,24,0.12)] sm:p-8">
+          <SparkIcon size={18} className="absolute right-8 top-7 text-[#b77a12]" />
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#efc663]">Próxima etapa</p>
-              <h2 className="font-display mt-2 text-3xl font-black leading-none">Compra online</h2>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#9f6817]">Pedido guardado</p>
+              <h2 className="font-display mt-2 text-3xl font-black leading-none text-[#59251f]">Tu pedido, a un clic</h2>
             </div>
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#f4ca63] text-[#6b241d] shadow-inner"><BasketIcon size={28} /></div>
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/55 text-[#251b12] shadow-inner"><BasketIcon size={28} /></div>
           </div>
           <div className="mt-6 grid gap-3 text-sm">
-            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><CardIcon size={18} className="text-[#f2c75f]" /><span>Mercado Pago y transferencia, cuando habilitemos el checkout</span></div>
-            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><span className="text-[#f2c75f]">✓</span><span>Cuenta de cliente e historial de pedidos</span></div>
-            <div className="flex items-center gap-3 rounded-xl bg-white/[0.08] px-4 py-3"><WhatsAppIcon size={18} className="text-[#f2c75f]" /><span>Hoy ya podés armar la consulta y enviarla por WhatsApp</span></div>
+            <div className="flex items-center gap-3 rounded-xl border border-[#6f4813]/10 bg-white/35 px-4 py-3"><BasketIcon size={18} className="text-[#8f1f23]" /><span>Agregá productos desde el catálogo</span></div>
+            <div className="flex items-center gap-3 rounded-xl border border-[#6f4813]/10 bg-white/35 px-4 py-3"><ClipboardIcon size={18} className="text-[#8f1f23]" /><span>Completá cantidades y observaciones</span></div>
+            <div className="flex items-center gap-3 rounded-xl border border-[#6f4813]/10 bg-white/35 px-4 py-3"><WhatsAppIcon size={18} className="text-[#0b7145]" /><span>Enviá el resumen directo a Hamdan</span></div>
           </div>
-          <p className="handwritten mt-6 rotate-[-2deg] text-right text-lg font-bold text-[#f5d384]">Del local a tu mesa ♥</p>
+          <Link href="/pedido" className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-[#251b12] px-5 py-3.5 text-sm font-black text-[#fff6dc] transition hover:-translate-y-0.5 hover:bg-[#3a2a1b]">
+            Revisar mi pedido →
+          </Link>
         </aside>
       </div>
     </section>

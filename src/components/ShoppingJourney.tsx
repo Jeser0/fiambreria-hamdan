@@ -1,10 +1,11 @@
-import { BasketIcon, CardIcon, ClipboardIcon, StoreIcon, UserIcon } from "./Icons";
+import Link from "next/link";
+import { BasketIcon, ClipboardIcon, StoreIcon, WhatsAppIcon } from "./Icons";
 
 const steps = [
   { n: "1", title: "Explorá", text: "Entrá al catálogo mayorista y buscá lo que necesitás.", icon: <StoreIcon size={28} /> },
   { n: "2", title: "Elegí productos", text: "Filtrá quesos, fiambres y alimentos disponibles para consulta.", icon: <BasketIcon size={28} /> },
-  { n: "3", title: "Armá tu pedido", text: "Marcá los productos y agregá cantidades o presentaciones.", icon: <ClipboardIcon size={28} /> },
-  { n: "4", title: "Enviá la consulta", text: "Mandá el pedido armado al WhatsApp mayorista para confirmar precio y stock.", icon: <CardIcon size={28} /> },
+  { n: "3", title: "Armá tu pedido", text: "Marcá productos y agregá cantidades o presentaciones.", icon: <ClipboardIcon size={28} /> },
+  { n: "4", title: "Enviá la consulta", text: "Mandá el pedido por WhatsApp para confirmar precio y disponibilidad.", icon: <WhatsAppIcon size={28} /> },
 ];
 
 export default function ShoppingJourney() {
@@ -12,10 +13,9 @@ export default function ShoppingJourney() {
     <section id="como-pedir" className="paper-surface scroll-mt-40 py-14 lg:py-16">
       <div className="mx-auto grid max-w-[1500px] gap-6 px-5 sm:px-6 lg:grid-cols-[0.7fr_2fr_0.8fr] lg:px-8">
         <div className="flex flex-col justify-center rounded-3xl border border-[#8f1f23]/10 bg-[#fff8eb]/80 p-6">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#b27624]">Comprar es simple</p>
-          <h2 className="font-display mt-2 text-4xl font-black leading-[0.95] text-[#7f1c21]">Cómo comprar en Hamdan</h2>
-          <p className="mt-4 text-sm leading-6 text-[#6e5a4f]">Es rápido, claro y sin vueltas. Elegí cómo querés comprar y nosotros te acompañamos.</p>
-          <p className="handwritten mt-5 rotate-[-2deg] text-lg font-bold text-[#a56c21]">¡Hacé tu pedido en minutos! ↗</p>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#b27624]">Cómo pedir</p>
+          <h2 className="font-display mt-2 text-4xl font-black leading-[0.95] text-[#7f1c21]">Tu compra mayorista, ordenada</h2>
+          <p className="mt-4 text-sm leading-6 text-[#6e5a4f]">Elegí productos, anotá cantidades y enviá una sola consulta con todo el detalle.</p>
         </div>
 
         <div className="rounded-3xl border border-[#8f1f23]/10 bg-white/80 p-5 shadow-[0_12px_28px_rgba(84,48,30,0.06)]">
@@ -27,22 +27,20 @@ export default function ShoppingJourney() {
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#c68a1d] text-sm font-black text-white">{step.n}</span>
                   <span className="text-[#8f1f23]">{step.icon}</span>
                 </div>
-                <h3 className="mt-4 font-display text-lg font-black text-[#7b2022]">{step.title}</h3>
+                <h3 className="font-display mt-4 text-lg font-black text-[#7b2022]">{step.title}</h3>
                 <p className="mt-2 text-xs leading-5 text-[#76645a]">{step.text}</p>
               </div>
             ))}
           </div>
         </div>
 
-        <aside id="cuenta" className="scroll-mt-40 rounded-3xl border border-[#8f1f23]/12 bg-[#f7ead7] p-6">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#8f1f23] shadow-sm"><UserIcon size={22} /></div>
-          <h3 className="font-display mt-4 text-2xl font-black text-[#7b2022]">Registrate o iniciá sesión</h3>
-          <p className="mt-3 text-sm leading-6 text-[#68574e]">Estamos preparando las cuentas para que puedas guardar pedidos, consultar tu historial y comprar más rápido.</p>
-          <div className="mt-5 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-            <button type="button" disabled className="cursor-not-allowed rounded-xl bg-[#8f1f23]/70 px-4 py-3 text-sm font-black text-white/90">Iniciar sesión</button>
-            <button type="button" disabled className="cursor-not-allowed rounded-xl border border-[#8f1f23]/15 bg-white/70 px-4 py-3 text-sm font-black text-[#7f2023]/70">Registrarse</button>
-          </div>
-          <p className="mt-3 text-[11px] leading-4 text-[#8a7468]">Próxima etapa: acceso real con Google. Hasta entonces, los pedidos se coordinan por WhatsApp.</p>
+        <aside className="rounded-3xl border border-[#d6ae55]/35 bg-[#fff3c9] p-6 shadow-[0_12px_28px_rgba(130,91,24,0.08)]">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/65 text-[#21180f] shadow-sm"><BasketIcon size={22} /></div>
+          <h3 className="font-display mt-4 text-2xl font-black text-[#56251f]">Sin registro obligatorio</h3>
+          <p className="mt-3 text-sm leading-6 text-[#68574e]">Tu selección queda guardada en este dispositivo. Podés revisar el pedido y enviarlo cuando estés listo.</p>
+          <Link href="/pedido" className="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-[#21180f] px-4 py-3 text-sm font-black text-[#fff7dd] transition hover:-translate-y-0.5 hover:bg-[#35271a]">
+            Ver mi pedido →
+          </Link>
         </aside>
       </div>
     </section>

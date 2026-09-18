@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { SearchIcon, UserIcon, WhatsAppIcon } from "./Icons";
+import { SearchIcon, WhatsAppIcon } from "./Icons";
 import OrderCartButton from "./OrderCartButton";
 
 const navItems = [
@@ -61,14 +61,6 @@ export default function HamdanHeader() {
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
-            <Link
-              href="/#cuenta"
-              className="hidden items-center gap-2 rounded-xl border border-[#8f1f23]/20 bg-white px-3.5 py-2.5 text-sm font-bold text-[#7f2425] transition hover:-translate-y-0.5 hover:border-[#8f1f23]/35 hover:bg-[#fff8ee] hover:shadow-md md:flex"
-            >
-              <UserIcon size={18} />
-              <span className="hidden lg:inline">Iniciar sesión</span>
-            </Link>
-
             <a
               href="https://wa.me/543813514449"
               target="_blank"
