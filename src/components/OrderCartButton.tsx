@@ -1,36 +1,30 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BasketIcon } from "./Icons";
-import { ORDER_SELECTION_KEY, ORDER_UPDATED_EVENT } from "@/lib/wholesaleOrder";
+import { type StoreMode } from "@/data/catalog";
+import {
+  STORE_CART_UPDATED_EVENT,
+  readStoredSelection,
+} from "@/lib/storeCart";
 
-function readCount() {
-  try {
-    const value = window.localStorage.getItem(ORDER_SELECTION_KEY);
-    if (!value) return 0;
-    const parsed = JSON.parse(value);
-    return Array.isArray(parsed) ? parsed.length : 0;
-  } catch {
-    return 0;
-  }
+function modeFromPath(pathname: string): StoreMode {
+  return pathname.startsWith("/minorista") ? "minorista" : "mayorista";
 }
 
 export default function OrderCartButton() {
+  const pathname = usePathname();
+  const mode = modeFromPath(pathname);
   const [count, setCount] = useState(0);
   const [pulse, setPulse] = useState(false);
   const previousCount = useRef(0);
   const pulseTimer = useRef<number | null>(null);
 
   useEffect(() => {
-    const initialFrame = window.requestAnimationFrame(() => {
-      const initialCount = readCount();
-      previousCount.current = initialCount;
-      setCount(initialCount);
-    });
-
     const updateCount = () => {
-      const nextCount = readCount();
+      const nextCount = readStoredSelection(mode).length;
       if (nextCount > previousCount.current) {
         if (pulseTimer.current) window.clearTimeout(pulseTimer.current);
         setPulse(false);
@@ -41,22 +35,28 @@ export default function OrderCartButton() {
       setCount(nextCount);
     };
 
+    updateCount();
     window.addEventListener("storage", updateCount);
-    window.addEventListener(ORDER_UPDATED_EVENT, updateCount);
+    window.addEventListener(STORE_CART_UPDATED_EVENT, updateCount);
 
     return () => {
-      window.cancelAnimationFrame(initialFrame);
       window.removeEventListener("storage", updateCount);
-      window.removeEventListener(ORDER_UPDATED_EVENT, updateCount);
+      window.removeEventListener(STORE_CART_UPDATED_EVENT, updateCount);
       if (pulseTimer.current) window.clearTimeout(pulseTimer.current);
     };
-  }, []);
+  }, [mode]);
+
+  const href = pathname.startsWith("/minorista")
+    ? "/minorista#carrito"
+    : pathname.startsWith("/mayorista")
+      ? "/mayorista#carrito"
+      : "/mayorista#carrito";
 
   return (
     <Link
-      href="/pedido"
+      href={href}
       className="cart-board soft-press relative flex items-center gap-2 px-4 py-2.5 text-sm font-black text-[#1f1a13] transition hover:-translate-y-0.5 hover:shadow-[0_10px_22px_rgba(111,78,24,0.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8f1f23] focus-visible:ring-offset-2"
-      aria-label={`Abrir mi pedido. ${count} productos seleccionados`}
+      aria-label={`Abrir carrito ${mode}. ${count} productos seleccionados`}
     >
       <BasketIcon size={20} />
       <span className="hidden sm:inline">Mi pedido</span>
