@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { BoxIcon, SearchIcon, WhatsAppIcon } from "./Icons";
 import {
@@ -7,6 +8,16 @@ import {
   wholesaleProducts,
   type WholesaleCategoryId,
 } from "@/data/wholesale";
+import {
+  notifyOrderUpdated,
+  ORDER_BUSINESS_KEY,
+  ORDER_NOTES_KEY,
+  ORDER_QUANTITIES_KEY,
+  ORDER_SELECTION_KEY,
+  readStoredQuantities,
+  readStoredSelection,
+  type QuantityMap,
+} from "@/lib/wholesaleOrder";
 
 type CategoryFilter = "todos" | WholesaleCategoryId;
 
@@ -28,28 +39,22 @@ export default function WholesaleCatalog({
   const [query, setQuery] = useState(initialQuery);
   const [category, setCategory] = useState<CategoryFilter>(initialCategory);
   const [selected, setSelected] = useState<string[]>([]);
+  const [quantities, setQuantities] = useState<QuantityMap>({});
   const [selectionLoaded, setSelectionLoaded] = useState(false);
   const [businessName, setBusinessName] = useState("");
   const [detail, setDetail] = useState("");
 
-
   useEffect(() => {
-    let restoredSelection: string[] = [];
-
-    try {
-      const stored = window.localStorage.getItem("hamdan-wholesale-selection");
-      const parsed = stored ? JSON.parse(stored) : [];
-      if (Array.isArray(parsed)) {
-        restoredSelection = parsed.filter((id): id is string =>
-          typeof id === "string" && wholesaleProducts.some((product) => product.id === id),
-        );
-      }
-    } catch {
-      restoredSelection = [];
-    }
+    const restoredSelection = readStoredSelection();
+    const restoredQuantities = readStoredQuantities();
+    const restoredBusiness = window.localStorage.getItem(ORDER_BUSINESS_KEY) ?? "";
+    const restoredNotes = window.localStorage.getItem(ORDER_NOTES_KEY) ?? "";
 
     const frame = window.requestAnimationFrame(() => {
       setSelected(restoredSelection);
+      setQuantities(restoredQuantities);
+      setBusinessName(restoredBusiness.slice(0, 100));
+      setDetail(restoredNotes.slice(0, 800));
       setSelectionLoaded(true);
     });
 
@@ -58,9 +63,12 @@ export default function WholesaleCatalog({
 
   useEffect(() => {
     if (!selectionLoaded) return;
-    window.localStorage.setItem("hamdan-wholesale-selection", JSON.stringify(selected));
-    window.dispatchEvent(new Event("hamdan-cart-updated"));
-  }, [selected, selectionLoaded]);
+    window.localStorage.setItem(ORDER_SELECTION_KEY, JSON.stringify(selected));
+    window.localStorage.setItem(ORDER_QUANTITIES_KEY, JSON.stringify(quantities));
+    window.localStorage.setItem(ORDER_BUSINESS_KEY, businessName);
+    window.localStorage.setItem(ORDER_NOTES_KEY, detail);
+    notifyOrderUpdated();
+  }, [businessName, detail, quantities, selected, selectionLoaded]);
 
   const filteredProducts = useMemo(() => {
     const normalizedQuery = normalize(query);
@@ -74,11 +82,22 @@ export default function WholesaleCatalog({
   }, [category, query]);
 
   function toggleProduct(productId: string) {
-    setSelected((current) =>
-      current.includes(productId)
-        ? current.filter((id) => id !== productId)
-        : [...current, productId],
-    );
+    setSelected((current) => {
+      if (current.includes(productId)) {
+        setQuantities((currentQuantities) => {
+          const next = { ...currentQuantities };
+          delete next[productId];
+          return next;
+        });
+        return current.filter((id) => id !== productId);
+      }
+
+      return [...current, productId];
+    });
+  }
+
+  function updateQuantity(productId: string, value: string) {
+    setQuantities((current) => ({ ...current, [productId]: value.slice(0, 80) }));
   }
 
   const selectedProducts = wholesaleProducts.filter((product) => selected.includes(product.id));
@@ -86,15 +105,18 @@ export default function WholesaleCatalog({
     "Hola Hamdan, quisiera hacer una consulta mayorista.",
     businessName ? `Comercio / nombre: ${businessName}` : "",
     selectedProducts.length ? "Productos:" : "",
-    ...selectedProducts.map((product) => `- ${product.name}`),
-    detail ? `Detalle de cantidades / presentación: ${detail}` : "",
+    ...selectedProducts.map((product) => {
+      const quantity = quantities[product.id]?.trim();
+      return `- ${product.name}${quantity ? ` — ${quantity}` : ""}`;
+    }),
+    detail ? `Detalle adicional: ${detail}` : "",
     "¿Me pueden indicar disponibilidad y precio vigente?",
   ].filter(Boolean);
 
   const whatsappUrl = `https://wa.me/543813514449?text=${encodeURIComponent(messageLines.join("\n"))}`;
 
   return (
-    <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_390px]">
+    <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_410px]">
       <div>
         <div className="rounded-3xl border border-[#7f241f]/10 bg-white/80 p-4 shadow-[0_12px_28px_rgba(84,48,30,0.06)] sm:p-5">
           <label className="flex items-center gap-3 rounded-2xl border border-[#7a221f]/15 bg-[#fffaf2] px-4 py-3 text-sm text-[#765f52]">
@@ -152,14 +174,14 @@ export default function WholesaleCatalog({
                 <h2 className="font-display mt-5 text-2xl font-black text-[#742026]">{product.name}</h2>
                 <p className="mt-2 text-sm leading-6 text-[#725f54]">{product.description}</p>
                 <div className="mt-5 flex items-center justify-between gap-3">
-                  <p className="text-xs font-bold text-[#9b6b2a]">Precio actualizado a consultar</p>
+                  <p className="text-xs font-bold text-[#9b6b2a]">Precio vigente a consultar</p>
                   <button
                     type="button"
                     onClick={() => toggleProduct(product.id)}
                     className={`rounded-xl px-3.5 py-2 text-xs font-black transition ${isSelected ? "bg-[#8f1f23] text-white" : "border border-[#8f1f23]/20 bg-white text-[#7f2023] hover:bg-[#fff4e6]"}`}
                     aria-pressed={isSelected}
                   >
-                    {isSelected ? "✓ Agregado" : "+ Consultar"}
+                    {isSelected ? "✓ Agregado" : "+ Agregar"}
                   </button>
                 </div>
               </article>
@@ -176,18 +198,27 @@ export default function WholesaleCatalog({
       </div>
 
       <aside id="consulta" className="h-fit scroll-mt-36 rounded-[2rem] border border-[#8f1f23]/12 bg-[#f7ead7] p-6 shadow-[0_16px_34px_rgba(84,48,30,0.08)] xl:sticky xl:top-32">
-        <p className="text-xs font-black uppercase tracking-[0.18em] text-[#a66c1e]">Consulta mayorista</p>
+        <p className="text-xs font-black uppercase tracking-[0.18em] text-[#a66c1e]">Mi pedido mayorista</p>
         <h2 className="font-display mt-2 text-3xl font-black leading-none text-[#771e23]">Armá tu consulta</h2>
-        <p className="mt-3 text-sm leading-6 text-[#715e53]">Seleccioná los productos que te interesan y enviá el detalle directamente al WhatsApp mayorista.</p>
+        <p className="mt-3 text-sm leading-6 text-[#715e53]">Agregá productos, indicá cantidades y enviá todo junto al WhatsApp mayorista.</p>
 
         <div className="mt-5 rounded-2xl border border-[#8f1f23]/10 bg-white/70 p-4">
           <p className="text-xs font-black uppercase tracking-[0.12em] text-[#8f1f23]">Seleccionados: {selectedProducts.length}</p>
           {selectedProducts.length ? (
-            <ul className="mt-3 space-y-2 text-sm text-[#604d44]">
+            <ul className="mt-3 space-y-3 text-sm text-[#604d44]">
               {selectedProducts.map((product) => (
-                <li key={product.id} className="flex items-start justify-between gap-3">
-                  <span>• {product.name}</span>
-                  <button type="button" onClick={() => toggleProduct(product.id)} className="text-xs font-black text-[#9a302e]" aria-label={`Quitar ${product.name}`}>×</button>
+                <li key={product.id} className="rounded-xl border border-[#8f1f23]/8 bg-white/70 p-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <span className="font-bold">{product.name}</span>
+                    <button type="button" onClick={() => toggleProduct(product.id)} className="rounded-md px-1.5 text-sm font-black text-[#9a302e] hover:bg-[#9a302e]/8" aria-label={`Quitar ${product.name}`}>×</button>
+                  </div>
+                  <input
+                    value={quantities[product.id] ?? ""}
+                    onChange={(event) => updateQuantity(product.id, event.target.value)}
+                    className="mt-2 w-full rounded-lg border border-[#8f1f23]/12 bg-[#fffaf2] px-3 py-2 text-xs outline-none transition focus:border-[#8f1f23]/40"
+                    placeholder="Cantidad / presentación"
+                    aria-label={`Cantidad o presentación para ${product.name}`}
+                  />
                 </li>
               ))}
             </ul>
@@ -200,31 +231,41 @@ export default function WholesaleCatalog({
           Nombre o comercio
           <input
             value={businessName}
-            onChange={(event) => setBusinessName(event.target.value)}
+            onChange={(event) => setBusinessName(event.target.value.slice(0, 100))}
             className="mt-2 w-full rounded-xl border border-[#8f1f23]/15 bg-white px-4 py-3 text-sm font-normal normal-case tracking-normal text-[#4f3b33] outline-none transition focus:border-[#8f1f23]/45"
             placeholder="Ej. Almacén San Martín"
           />
         </label>
 
         <label className="mt-4 block text-xs font-black uppercase tracking-[0.1em] text-[#70453b]">
-          Cantidades o detalle
+          Detalle adicional
           <textarea
             value={detail}
-            onChange={(event) => setDetail(event.target.value)}
-            rows={4}
+            onChange={(event) => setDetail(event.target.value.slice(0, 800))}
+            rows={3}
             className="mt-2 w-full resize-none rounded-xl border border-[#8f1f23]/15 bg-white px-4 py-3 text-sm font-normal normal-case tracking-normal text-[#4f3b33] outline-none transition focus:border-[#8f1f23]/45"
-            placeholder="Ej. 3 hormas de Tybo, 20 paquetes de sándwiches..."
+            placeholder="Ej. marca preferida, formato, consulta especial..."
           />
         </label>
 
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#15975d]/45 bg-[#15975d]/12 px-5 py-3.5 text-sm font-black text-[#0b7145] transition hover:-translate-y-0.5 hover:bg-[#15975d]/18 hover:shadow-md"
-        >
-          <WhatsAppIcon size={19} /> Enviar consulta por WhatsApp
-        </a>
+        {selectedProducts.length ? (
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#15975d]/45 bg-[#15975d]/12 px-5 py-3.5 text-sm font-black text-[#0b7145] transition hover:-translate-y-0.5 hover:bg-[#15975d]/18 hover:shadow-md"
+          >
+            <WhatsAppIcon size={19} /> Enviar por WhatsApp
+          </a>
+        ) : (
+          <div className="mt-5 rounded-xl border border-[#8f1f23]/10 bg-white/55 px-4 py-3 text-center text-xs font-bold text-[#806d62]">
+            Agregá al menos un producto para enviar la consulta.
+          </div>
+        )}
+
+        <Link href="/pedido" className="mt-3 inline-flex w-full items-center justify-center rounded-xl border border-[#8f1f23]/18 bg-white/70 px-5 py-3 text-sm font-black text-[#7b2022] transition hover:bg-white">
+          Revisar pedido completo →
+        </Link>
         <p className="mt-3 text-center text-[11px] leading-4 text-[#897268]">Los precios y la disponibilidad se confirman al momento de la consulta.</p>
       </aside>
     </div>
