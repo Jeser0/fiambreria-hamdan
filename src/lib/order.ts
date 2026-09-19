@@ -6,8 +6,8 @@ import {
   type CatalogCategoryId,
   type CatalogProduct,
   type StoreMode,
-} from "@/data/catalog";
-import type { QuantityMap } from "@/lib/storeCart";
+} from "../data/catalog";
+import type { QuantityMap } from "./storeCart";
 
 const currencyFormatter = new Intl.NumberFormat("es-AR", {
   style: "currency",
@@ -21,7 +21,9 @@ export function formatARS(value: number): string {
 }
 
 export function categoryLabel(category: CatalogCategoryId): string {
-  return catalogCategories.find((item) => item.id === category)?.label ?? category;
+  return (
+    catalogCategories.find((item) => item.id === category)?.label ?? category
+  );
 }
 
 export function productLabel(product: CatalogProduct): string {
@@ -33,7 +35,9 @@ export function productLabel(product: CatalogProduct): string {
 }
 
 export function isPackagedProduct(product: CatalogProduct): boolean {
-  return product.category === "pizzas" || product.category.startsWith("sandwich-");
+  return (
+    product.category === "pizzas" || product.category.startsWith("sandwich-")
+  );
 }
 
 // Only decimal notation is accepted: no exponents, negatives or thousands separators.
@@ -46,6 +50,7 @@ export function parseQuantity(value: string): number {
 }
 
 export type OrderLine = {
+  mode: StoreMode;
   product: CatalogProduct;
   quantity: number;
   unitPrice: number;
@@ -64,19 +69,29 @@ export function buildOrderLines(
       const quantity = parseQuantity(quantities[product.id] ?? "");
       const unitPrice = priceForMode(product, mode);
       // No price fallback between stores. productsForMode already filters missing prices.
-      if (unitPrice === undefined || !Number.isFinite(unitPrice) || unitPrice < 0) {
-        throw new Error(`Precio inválido en el catálogo ${mode}: ${product.id}`);
+      if (
+        unitPrice === undefined ||
+        !Number.isFinite(unitPrice) ||
+        unitPrice < 0
+      ) {
+        throw new Error(
+          `Precio inválido en el catálogo ${mode}: ${product.id}`,
+        );
       }
-      const quantityError = quantity === 0
-        ? "Ingresá una cantidad mayor a 0 y hasta 999.999 (máximo 3 decimales)."
-        : isPackagedProduct(product) && !Number.isInteger(quantity)
-          ? `Ingresá ${product.category === "pizzas" ? "unidades" : "paquetes"} enteros.`
-          : undefined;
+      const quantityError =
+        quantity === 0
+          ? "Ingresá una cantidad mayor a 0 y hasta 999.999 (máximo 3 decimales)."
+          : isPackagedProduct(product) && !Number.isInteger(quantity)
+            ? `Ingresá ${product.category === "pizzas" ? "unidades enteras" : "paquetes enteros"}.`
+            : undefined;
       return {
+        mode,
         product,
         quantity,
         unitPrice,
-        subtotal: quantityError ? 0 : Math.round((unitPrice * quantity + Number.EPSILON) * 100) / 100,
+        subtotal: quantityError
+          ? 0
+          : Math.round((unitPrice * quantity + Number.EPSILON) * 100) / 100,
         quantityError,
       };
     });
@@ -84,7 +99,10 @@ export function buildOrderLines(
 
 export function calculateOrderTotal(lines: readonly OrderLine[]): number {
   // Sum cents to avoid floating point drift between displayed subtotals and total.
-  return lines.reduce((total, line) => total + Math.round(line.subtotal * 100), 0) / 100;
+  return (
+    lines.reduce((total, line) => total + Math.round(line.subtotal * 100), 0) /
+    100
+  );
 }
 
 export type MinimumStatus = {
@@ -96,13 +114,28 @@ export type MinimumStatus = {
   unit: string;
 };
 
-export function getWholesaleMinimums(mode: StoreMode, lines: readonly OrderLine[]): MinimumStatus[] {
+export function getWholesaleMinimums(
+  mode: StoreMode,
+  lines: readonly OrderLine[],
+): MinimumStatus[] {
   if (mode !== "mayorista") return [];
   return catalogCategories.flatMap(({ id, label }) => {
     const minimum = wholesaleMinimums[id];
     const group = lines.filter((line) => line.product.category === id);
     if (!minimum || group.length === 0) return [];
-    const quantity = group.reduce((sum, line) => sum + (line.quantityError ? 0 : line.quantity), 0);
-    return [{ category: id, label, quantity, minimum, missing: Math.max(0, minimum - quantity), unit: id === "pizzas" ? "unidades" : "paquetes" }];
+    const quantity = group.reduce(
+      (sum, line) => sum + (line.quantityError ? 0 : line.quantity),
+      0,
+    );
+    return [
+      {
+        category: id,
+        label,
+        quantity,
+        minimum,
+        missing: Math.max(0, minimum - quantity),
+        unit: id === "pizzas" ? "unidades" : "paquetes",
+      },
+    ];
   });
 }
