@@ -508,3 +508,16 @@ button:disabled,
 /* The contextual send action remains the only floating action in checkout. */
 body:has(.checkout-layout) .whatsapp-float { display: none; }
 body:has(.mobile-cart-dock) .whatsapp-float { bottom: 6.5rem; }
+
+/* The storefront and mascot share a coordinate plane; their position stays aligned. */
+.hero-scene { position: relative; width: 100%; aspect-ratio: 1931 / 814; }
+.hero-scene-shade { background: linear-gradient(to bottom, #fff9ed, transparent 12%, transparent 90%, #fff9ed); }
+.hero-hamdini { bottom: 0%; left: 49.5%; width: 38%; transform: translateX(-50%); filter: drop-shadow(0 10px 7px rgba(60, 29, 19, 0.23)); }
+.showcase-gallery { scrollbar-width: thin; scrollbar-color: #cfa656 #f5e7cf; }
+@media (min-width: 1024px) {
+  .home-hero { min-height: 570px; display: flex; align-items: center; }
+  .hero-copy { width: 43%; }
+  .hero-scene { position: absolute; right: -4%; bottom: 20px; width: 84%; }
+  .hero-scene-shade { background: linear-gradient(to right, #fff9ed 0%, rgba(255, 249, 237, 0.96) 11%, rgba(255, 249, 237, 0.05) 39%), linear-gradient(to bottom, #fff9ed 0%, transparent 11%, transparent 94%, #fff9ed); }
+  .hero-hamdini { width: 25%; bottom: 1.5%; }
+}

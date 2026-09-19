@@ -36,7 +36,7 @@ export default function HamdanFooter() {
           <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-[1.15fr_repeat(4,1fr)]">
             <div className="flex items-center gap-3">
               <Image
-                src="/brand/logo.svg"
+                src="/brand/logo-hamdan.webp"
                 alt={business.name}
                 width={70}
                 height={70}

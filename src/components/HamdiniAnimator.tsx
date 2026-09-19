@@ -10,7 +10,7 @@ const frames = Array.from(
 
 const frameDurations = [120, 100, 95, 140, 125, 110, 190];
 
-export default function HamdiniAnimator() {
+export default function HamdiniAnimator({ sizes = "(max-width: 1024px) 84vw, 440px" }: { sizes?: string }) {
   const [activeFrame, setActiveFrame] = useState(6);
   const [isPlaying, setIsPlaying] = useState(false);
   const timersRef = useRef<number[]>([]);
@@ -73,7 +73,7 @@ export default function HamdiniAnimator() {
             src={src}
             alt=""
             fill
-            sizes="(max-width: 1024px) 84vw, 440px"
+            sizes={sizes}
             loading="eager"
             className={`object-contain transition-opacity duration-75 ${
               activeFrame === index ? "opacity-100" : "opacity-0"
