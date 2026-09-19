@@ -76,7 +76,7 @@ export default async function MinoristaPage({ searchParams }: StorePageProps) {
             <h2 className="font-display mt-2 text-4xl font-black text-[#7c171c]">Elegí qué querés comprar</h2>
             <p className="mt-3 text-sm leading-6 text-[#6e5a4f]">Los precios mostrados corresponden a la lista minorista provista por Hamdan.</p>
           </div>
-          <StoreCatalog mode="minorista" initialQuery={query} initialCategory={initialCategory} />
+          <StoreCatalog key={`${query}-${initialCategory}`} mode="minorista" initialQuery={query} initialCategory={initialCategory} />
         </div>
       </section>
 

@@ -76,7 +76,7 @@ export default async function MayoristaPage({ searchParams }: StorePageProps) {
             <h2 className="font-display mt-2 text-4xl font-black text-[#7c171c]">Elegí qué querés comprar</h2>
             <p className="mt-3 text-sm leading-6 text-[#6e5a4f]">Los precios mostrados corresponden a la lista mayorista provista por Hamdan. La disponibilidad se confirma al recibir el pedido.</p>
           </div>
-          <StoreCatalog mode="mayorista" initialQuery={query} initialCategory={initialCategory} />
+          <StoreCatalog key={`${query}-${initialCategory}`} mode="mayorista" initialQuery={query} initialCategory={initialCategory} />
         </div>
       </section>
 
