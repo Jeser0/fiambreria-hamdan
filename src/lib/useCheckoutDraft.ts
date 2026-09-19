@@ -18,28 +18,55 @@ export function useCheckoutDraft(mode: StoreMode) {
       if (saved && typeof saved === "object" && !Array.isArray(saved)) {
         for (const [field, value] of Object.entries(saved)) {
           if (typeof value !== "string") continue;
-          if (field === "orderType") draft.orderType = orderTypes.find((item) => item.value === value)?.value ?? "";
-          else if (field === "delivery") draft.delivery = value === "envio" ? "envio" : "retiro";
-          else if (field === "fullName" || field === "phone" || field === "businessName" || field === "taxId" || field === "email" || field === "notes" || field === "address" || field === "locality" || field === "reference") {
+          if (field === "orderType")
+            draft.orderType =
+              orderTypes.find((item) => item.value === value)?.value ?? "";
+          else if (field === "delivery")
+            draft.delivery = value === "envio" ? "envio" : "retiro";
+          else if (
+            field === "fullName" ||
+            field === "phone" ||
+            field === "businessName" ||
+            field === "taxId" ||
+            field === "email" ||
+            field === "notes" ||
+            field === "address" ||
+            field === "locality" ||
+            field === "reference"
+          ) {
             draft[field] = value.slice(0, field === "notes" ? 800 : 254);
           }
         }
       } else {
-        draft.fullName = (window.localStorage.getItem(cartCustomerKey(mode)) ?? "").slice(0, 120);
-        draft.notes = (window.localStorage.getItem(cartNotesKey(mode)) ?? "").slice(0, 800);
+        draft.fullName = (
+          window.localStorage.getItem(cartCustomerKey(mode)) ?? ""
+        ).slice(0, 120);
+        draft.notes = (
+          window.localStorage.getItem(cartNotesKey(mode)) ?? ""
+        ).slice(0, 800);
       }
     } catch {
       // Personal details are optional to persist; unavailable storage must not block an order.
     }
-    const frame = window.requestAnimationFrame(() => { setData(draft); setReady(true); });
+    const frame = window.requestAnimationFrame(() => {
+      setData(draft);
+      setReady(true);
+    });
     return () => window.cancelAnimationFrame(frame);
   }, [key, mode]);
 
-  function update<K extends keyof CheckoutData>(field: K, value: CheckoutData[K]) {
+  function update<K extends keyof CheckoutData>(
+    field: K,
+    value: CheckoutData[K],
+  ) {
     setData((current) => {
       const next = { ...current, [field]: value };
       // Write immediately so navigating back to the catalog never races an effect.
-      try { window.sessionStorage.setItem(key, JSON.stringify(next)); } catch { /* Continue without a draft. */ }
+      try {
+        window.sessionStorage.setItem(key, JSON.stringify(next));
+      } catch {
+        /* Continue without a draft. */
+      }
       return next;
     });
   }

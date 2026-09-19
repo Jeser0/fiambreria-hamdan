@@ -2,12 +2,24 @@
 
 import { useCallback, useSyncExternalStore } from "react";
 import type { StoreMode } from "@/data/catalog";
-import { getCartSnapshot, getServerCartSnapshot, subscribeToCart, updateStoreCart } from "@/lib/storeCart";
+import {
+  getCartSnapshot,
+  getServerCartSnapshot,
+  subscribeToCart,
+  updateStoreCart,
+} from "@/lib/storeCart";
 
 export function useStoreCart(mode: StoreMode) {
-  const subscribe = useCallback((onChange: () => void) => subscribeToCart(mode, onChange), [mode]);
+  const subscribe = useCallback(
+    (onChange: () => void) => subscribeToCart(mode, onChange),
+    [mode],
+  );
   const getSnapshot = useCallback(() => getCartSnapshot(mode), [mode]);
-  const cart = useSyncExternalStore(subscribe, getSnapshot, getServerCartSnapshot);
+  const cart = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerCartSnapshot,
+  );
 
   function toggleProduct(id: string) {
     updateStoreCart(mode, (current) => {
@@ -16,7 +28,9 @@ export function useStoreCart(mode: StoreMode) {
       if (removing) delete quantities[id];
       else quantities[id] = "1";
       return {
-        selected: removing ? current.selected.filter((item) => item !== id) : [...current.selected, id],
+        selected: removing
+          ? current.selected.filter((item) => item !== id)
+          : [...current.selected, id],
         quantities,
       };
     });
@@ -33,7 +47,10 @@ export function useStoreCart(mode: StoreMode) {
     updateStoreCart(mode, (current) => {
       const quantities = { ...current.quantities };
       delete quantities[id];
-      return { selected: current.selected.filter((item) => item !== id), quantities };
+      return {
+        selected: current.selected.filter((item) => item !== id),
+        quantities,
+      };
     });
   }
 
