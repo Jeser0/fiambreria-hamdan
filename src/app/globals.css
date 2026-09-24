@@ -221,6 +221,14 @@ summary {
 .hamdini-frame-player {
   transform-origin: 50% 88%;
   border-radius: 28px;
+  isolation: isolate;
+  backface-visibility: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hamdini-frame-player img {
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .hamdini-frame-player:active {
