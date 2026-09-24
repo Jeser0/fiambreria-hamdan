@@ -13,10 +13,10 @@ const idleFrame = frames.length - 1;
 
 export default function HamdiniAnimator({ sizes = "(max-width: 1024px) 84vw, 440px" }: { sizes?: string }) {
   const [activeFrame, setActiveFrame] = useState(idleFrame);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const timersRef = useRef<number[]>([]);
   const playbackIdRef = useRef(0);
+  const isPlayingRef = useRef(false);
 
   const clearTimers = useCallback(() => {
     timersRef.current.forEach((timer) => window.clearTimeout(timer));
@@ -24,7 +24,7 @@ export default function HamdiniAnimator({ sizes = "(max-width: 1024px) 84vw, 440
   }, []);
 
   const play = useCallback(() => {
-    if (!isReady || isPlaying) return;
+    if (!isReady || isPlayingRef.current) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setActiveFrame(idleFrame);
@@ -35,7 +35,7 @@ export default function HamdiniAnimator({ sizes = "(max-width: 1024px) 84vw, 440
     playbackIdRef.current += 1;
     const playbackId = playbackIdRef.current;
 
-    setIsPlaying(true);
+    isPlayingRef.current = true;
     setActiveFrame(0);
 
     let elapsed = 0;
@@ -56,10 +56,10 @@ export default function HamdiniAnimator({ sizes = "(max-width: 1024px) 84vw, 440
       window.setTimeout(() => {
         if (playbackIdRef.current !== playbackId) return;
         setActiveFrame(idleFrame);
-        setIsPlaying(false);
+        isPlayingRef.current = false;
       }, elapsed),
     );
-  }, [clearTimers, isPlaying, isReady]);
+  }, [clearTimers, isReady]);
 
   useEffect(() => {
     let cancelled = false;
@@ -92,6 +92,7 @@ export default function HamdiniAnimator({ sizes = "(max-width: 1024px) 84vw, 440
     return () => {
       window.clearTimeout(startTimer);
       playbackIdRef.current += 1;
+      isPlayingRef.current = false;
       clearTimers();
     };
   }, [clearTimers, isReady, play]);
