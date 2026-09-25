@@ -1,36 +1,31 @@
-import { createClient } from "@/lib/supabase/server";
+﻿import { getCatalogSnapshot } from "@/lib/catalog-db";
 
 export async function GET() {
-  const supabase = await createClient();
+  try {
+    const catalog = await getCatalogSnapshot();
 
-  const [
-    { count: productCount, error: productsError },
-    { count: categoryCount, error: categoriesError },
-  ] = await Promise.all([
-    supabase
-      .from("products")
-      .select("id", { count: "exact", head: true }),
-
-    supabase
-      .from("categories")
-      .select("id", { count: "exact", head: true }),
-  ]);
-
-  const error = productsError ?? categoriesError;
-
-  if (error) {
+    return Response.json({
+      ok: true,
+      categories: catalog.categories.length,
+      products: catalog.products.length,
+      minimums: Object.fromEntries(
+        catalog.categories.map((category) => [
+          category.id,
+          category.wholesaleMinimum,
+        ]),
+      ),
+      firstProduct: catalog.products[0] ?? null,
+    });
+  } catch (error) {
     return Response.json(
       {
         ok: false,
-        error: error.message,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Error desconocido al cargar el catálogo.",
       },
       { status: 500 },
     );
   }
-
-  return Response.json({
-    ok: true,
-    products: productCount,
-    categories: categoryCount,
-  });
 }
