@@ -4,6 +4,7 @@ import HamdanHero from "@/components/HamdanHero";
 import OrderExperience from "@/components/OrderExperience";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionGateways from "@/components/SectionGateways";
+import ProductShowcase from "@/components/ProductShowcase";
 import ShoppingJourney from "@/components/ShoppingJourney";
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
       <HamdanHeader />
       <HamdanHero />
       <ScrollReveal><SectionGateways /></ScrollReveal>
+      <ScrollReveal><ProductShowcase /></ScrollReveal>
       <ScrollReveal><ShoppingJourney /></ScrollReveal>
       <ScrollReveal><OrderExperience /></ScrollReveal>
       <HamdanFooter />

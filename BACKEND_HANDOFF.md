@@ -53,7 +53,13 @@ El futuro panel puede administrar, si se desea:
 
 ## 4. Carritos y pedidos
 
-Hoy cada tienda usa `localStorage` para conservar selección, cantidades, nombre y observaciones.
+Hoy cada tienda conserva selección y cantidades en las claves originales de `localStorage`. Catálogo, contador y checkout usan el mismo almacenamiento a través de `useStoreCart`. Los borradores de datos del cliente se conservan por pestaña y tienda en `sessionStorage`; se recuperan nombre y observaciones del formato anterior cuando no hay borrador nuevo.
+
+`src/lib/order.ts` calcula importes y mínimos desde los precios del catálogo. `src/lib/checkout.ts` valida los datos y prepara el mensaje de WhatsApp. Los totales son estimados; abrir WhatsApp no crea ni confirma un pedido.
+
+Al incorporar backend, validar precios, cantidades, mínimos y disponibilidad de nuevo en el servidor. La validación actual del navegador mejora la experiencia; no constituye una garantía de precio o stock.
+
+Las fotos institucionales de `src/data/showcase.ts` y `public/showcase/` están separadas de las imágenes individuales de los productos.
 
 Siguiente etapa recomendada:
 
