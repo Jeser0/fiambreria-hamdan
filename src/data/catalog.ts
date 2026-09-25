@@ -105,15 +105,24 @@ export const catalogProducts: CatalogProduct[] = [
   { id: "pizza-cuatro-quesos", name: "4 Quesos", category: "pizzas", retailPrice: 9900, wholesalePrice: 6500, active: true },
 ];
 
-export function productsForMode(mode: StoreMode) {
-  return catalogProducts.filter((product) => {
+export function productsForMode(
+  mode: StoreMode,
+  products: readonly CatalogProduct[] = catalogProducts,
+) {
+  return products.filter((product) => {
     if (!product.active) return false;
+
     return mode === "mayorista"
       ? typeof product.wholesalePrice === "number"
       : typeof product.retailPrice === "number";
   });
 }
 
-export function priceForMode(product: CatalogProduct, mode: StoreMode) {
-  return mode === "mayorista" ? product.wholesalePrice : product.retailPrice;
+export function priceForMode(
+  product: CatalogProduct,
+  mode: StoreMode,
+) {
+  return mode === "mayorista"
+    ? product.wholesalePrice
+    : product.retailPrice;
 }
