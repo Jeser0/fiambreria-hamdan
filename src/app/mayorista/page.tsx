@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import HamdanFooter from "@/components/HamdanFooter";
 import HamdanHeader from "@/components/HamdanHeader";
-import StoreCatalog from "@/components/StoreCatalog";
+import LiveStoreCatalog from "@/components/LiveStoreCatalog";
 import StoreSwitcher from "@/components/StoreSwitcher";
 import { BoxIcon, SparkIcon, WhatsAppIcon } from "@/components/Icons";
 import type { CatalogCategoryId } from "@/data/catalog";
@@ -51,13 +51,6 @@ export default async function MayoristaPage({
   )
     ? (requestedCategory as CatalogCategoryId)
     : "todos";
-
-  const minimums = Object.fromEntries(
-    catalogSnapshot.categories.map((category) => [
-      category.id,
-      category.wholesaleMinimum,
-    ]),
-  ) as Partial<Record<CatalogCategoryId, number>>;
 
   return (
     <main className="min-h-screen bg-[#fffaf0] text-[#382a22]">
@@ -142,14 +135,12 @@ export default async function MayoristaPage({
             </p>
           </div>
 
-          <StoreCatalog
+          <LiveStoreCatalog
             key={`${query}-${initialCategory}`}
             mode="mayorista"
             initialQuery={query}
             initialCategory={initialCategory}
-            catalog={catalogSnapshot.products}
-            categories={categories}
-            minimums={minimums}
+            initialCatalog={catalogSnapshot}
           />
         </div>
       </section>

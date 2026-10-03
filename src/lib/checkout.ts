@@ -1,5 +1,7 @@
 import type { StoreMode } from "../data/catalog";
 import { business } from "../data/business";
+import { catalogCategories, wholesaleMinimums } from "../data/catalog";
+import type { CatalogCategories, CatalogMinimums } from "./catalog";
 import {
   calculateOrderTotal,
   formatARS,
@@ -74,6 +76,8 @@ export function validateCheckout(
   data: CheckoutData,
   lines: readonly OrderLine[],
   mode: StoreMode,
+  categories: CatalogCategories = catalogCategories,
+  minimums: CatalogMinimums = wholesaleMinimums,
 ): CheckoutValidation {
   const fields: CheckoutErrors = {};
   const fullName = data.fullName.trim();
@@ -135,7 +139,7 @@ export function validateCheckout(
   ) {
     cart.push("Revisá las cantidades indicadas en tu pedido.");
   }
-  for (const minimum of getWholesaleMinimums(mode, lines)) {
+  for (const minimum of getWholesaleMinimums(mode, lines, categories, minimums)) {
     if (minimum.missing > 0)
       cart.push(
         `${minimum.label}: faltan ${minimum.missing} ${minimum.unit} para llegar al mínimo de ${minimum.minimum}.`,
@@ -157,8 +161,10 @@ export function buildWhatsAppMessage(
   data: CheckoutData,
   lines: readonly OrderLine[],
   mode: StoreMode,
+  categories: CatalogCategories = catalogCategories,
+  minimums: CatalogMinimums = wholesaleMinimums,
 ): string {
-  if (!validateCheckout(data, lines, mode).valid)
+  if (!validateCheckout(data, lines, mode, categories, minimums).valid)
     throw new Error("El pedido todavía tiene datos pendientes.");
   const orderType = orderTypes.find((type) => type.value === data.orderType)!;
   const numberFormatter = new Intl.NumberFormat("es-AR", {
@@ -196,7 +202,7 @@ export function buildWhatsAppMessage(
   return [
     `Hola Hamdan, quisiera realizar un pedido ${mode}.`,
     customer.join("\n"),
-    `PEDIDO\n${lines.map((line) => `- ${numberFormatter.format(line.quantity)} × ${productLabel(line.product)}\n  ${formatARS(line.unitPrice)} c/u — Subtotal: ${formatARS(line.subtotal)}`).join("\n\n")}`,
+    `PEDIDO\n${lines.map((line) => `- ${numberFormatter.format(line.quantity)} × ${productLabel(line.product, categories)}\n  ${formatARS(line.unitPrice)} c/u — Subtotal: ${formatARS(line.subtotal)}`).join("\n\n")}`,
     `TOTAL ESTIMADO: ${formatARS(calculateOrderTotal(lines))}`,
     delivery.join("\n"),
     ...(data.notes.trim() ? [`OBSERVACIONES\n${data.notes.trim()}`] : []),

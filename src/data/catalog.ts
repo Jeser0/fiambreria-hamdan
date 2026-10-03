@@ -17,6 +17,7 @@ export type CatalogProduct = {
   image?: string;
   imageAlt?: string;
   active: boolean;
+  inStock?: boolean;
 };
 
 export const catalogCategories: Array<{
@@ -110,11 +111,9 @@ export function productsForMode(
   products: readonly CatalogProduct[] = catalogProducts,
 ) {
   return products.filter((product) => {
-    if (!product.active) return false;
-
-    return mode === "mayorista"
-      ? typeof product.wholesalePrice === "number"
-      : typeof product.retailPrice === "number";
+    if (!product.active || product.inStock === false) return false;
+    const price = priceForMode(product, mode);
+    return typeof price === "number" && Number.isFinite(price) && price >= 0;
   });
 }
 

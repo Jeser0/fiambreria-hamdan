@@ -5,13 +5,16 @@ import { useState, type FormEvent } from "react";
 import type { StoreMode } from "@/data/catalog";
 import { whatsappUrl } from "@/data/business";
 import {
-  buildWhatsAppMessage,
   validateCheckout,
   type CheckoutData,
   type CheckoutErrors,
 } from "@/lib/checkout";
 import { buildOrderLines } from "@/lib/order";
-import { getCartSnapshot } from "@/lib/storeCart";
+import { readLatestCartSnapshot } from "@/lib/storeCart";
+import type { CatalogSnapshot } from "@/lib/catalog";
+import { useCurrentCatalog } from "@/lib/useCurrentCatalog";
+import { orderReviewSignature } from "@/lib/prepare-order";
+import { prepareWhatsAppOrder } from "@/app/pedido/actions";
 import { useStoreCart } from "@/lib/useStoreCart";
 import { useCheckoutDraft } from "@/lib/useCheckoutDraft";
 import { WhatsAppIcon } from "@/components/Icons";
@@ -19,17 +22,44 @@ import CartSummary from "./CartSummary";
 import CustomerFields from "./CustomerFields";
 import DeliveryFields from "./DeliveryFields";
 
-export default function Checkout({ mode }: { mode: StoreMode }) {
-  const cart = useStoreCart(mode);
+export default function Checkout({
+  mode,
+  initialCatalog,
+}: {
+  mode: StoreMode;
+  initialCatalog: CatalogSnapshot;
+}) {
+  const {
+    snapshot,
+    minimums,
+    error: catalogError,
+    refresh,
+    setSnapshot,
+  } = useCurrentCatalog(initialCatalog);
+  const cart = useStoreCart(mode, snapshot.products);
   const { data, update, ready } = useCheckoutDraft(mode);
   const [touched, setTouched] = useState<
     Partial<Record<keyof CheckoutData, boolean>>
   >({});
   const [showAllErrors, setShowAllErrors] = useState(false);
   const [handoff, setHandoff] = useState(false);
-  const lines = buildOrderLines(mode, cart.selected, cart.quantities);
-  const validation = validateCheckout(data, lines, mode);
-  const canSend = ready && cart.loaded && validation.valid;
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState("");
+  const lines = buildOrderLines(
+    mode,
+    cart.selected,
+    cart.quantities,
+    snapshot.products,
+  );
+  const validation = validateCheckout(
+    data,
+    lines,
+    mode,
+    snapshot.categories,
+    minimums,
+  );
+  const canSend =
+    ready && cart.loaded && validation.valid && !sending && !catalogError;
   const visibleErrors: CheckoutErrors = Object.fromEntries(
     Object.entries(validation.fields).filter(
       ([field]) => showAllErrors || touched[field as keyof CheckoutData],
@@ -47,25 +77,80 @@ export default function Checkout({ mode }: { mode: StoreMode }) {
     target?.focus();
   }
 
-  function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const current = getCartSnapshot(mode);
+    if (sending) return;
+    const current = readLatestCartSnapshot(mode);
     const currentLines = buildOrderLines(
       mode,
       current.selected,
       current.quantities,
+      snapshot.products,
     );
     if (
       !ready ||
       !current.loaded ||
-      !validateCheckout(data, currentLines, mode).valid
+      !validateCheckout(data, currentLines, mode, snapshot.categories, minimums)
+        .valid
     ) {
       focusFirstError();
       return;
     }
-    const url = whatsappUrl(buildWhatsAppMessage(data, currentLines, mode));
-    window.open(url, "_blank", "noopener,noreferrer");
-    setHandoff(true);
+    const signature = orderReviewSignature(
+      snapshot,
+      mode,
+      current.selected,
+      current.quantities,
+    );
+    const cartAtSubmit = JSON.stringify([current.selected, current.quantities]);
+    // Open within the user gesture so asynchronous verification does not trigger popup blocking.
+    const popup = window.open("about:blank", "_blank");
+    if (popup) popup.opener = null;
+    setSending(true);
+    setSendError("");
+    setHandoff(false);
+    try {
+      const result = await prepareWhatsAppOrder({
+        mode,
+        data,
+        selected: current.selected,
+        quantities: current.quantities,
+      });
+      if (!result.ok) {
+        popup?.close();
+        setSendError(result.error);
+        return;
+      }
+      setSnapshot(result.snapshot);
+      const latest = readLatestCartSnapshot(mode);
+      if (
+        signature !== result.signature ||
+        cartAtSubmit !== JSON.stringify([latest.selected, latest.quantities])
+      ) {
+        popup?.close();
+        setSendError(
+          "El pedido cambió. Actualizamos los precios y productos disponibles; revisá el resumen antes de enviarlo.",
+        );
+        return;
+      }
+      if (!result.validation.valid || !result.message) {
+        popup?.close();
+        setShowAllErrors(true);
+        setSendError(
+          result.validation.cart.join(" ") || "Revisá los campos pendientes.",
+        );
+        return;
+      }
+      const url = whatsappUrl(result.message);
+      if (popup) popup.location.replace(url);
+      else window.open(url, "_blank", "noopener,noreferrer");
+      setHandoff(true);
+    } catch {
+      popup?.close();
+      setSendError("No pudimos verificar el pedido. Intentá nuevamente.");
+    } finally {
+      setSending(false);
+    }
   }
 
   const fieldProps = {
@@ -105,7 +190,7 @@ export default function Checkout({ mode }: { mode: StoreMode }) {
           aria-busy={!ready}
         >
           <fieldset
-            disabled={!ready}
+            disabled={!ready || sending}
             className="min-w-0 space-y-6 disabled:opacity-60"
           >
             <legend className="sr-only">Datos del pedido {mode}</legend>
@@ -138,7 +223,26 @@ export default function Checkout({ mode }: { mode: StoreMode }) {
             </section>
           </fieldset>
         </form>
-        <CartSummary mode={mode}>
+        <CartSummary
+          mode={mode}
+          catalog={snapshot.products}
+          categories={snapshot.categories}
+          minimums={minimums}
+        >
+          {(sendError || catalogError) && (
+            <div role="alert" className="mt-4 text-sm leading-6 text-[#9a302e]">
+              <p>{sendError || catalogError}</p>
+              {catalogError && (
+                <button
+                  type="button"
+                  onClick={() => void refresh()}
+                  className="checkout-focus rounded font-bold underline"
+                >
+                  Actualizar precios
+                </button>
+              )}
+            </div>
+          )}
           {!canSend && ready && Object.keys(validation.fields).length > 0 && (
             <div
               id="checkout-form-hint"
@@ -162,7 +266,7 @@ export default function Checkout({ mode }: { mode: StoreMode }) {
             aria-describedby={!canSend ? "checkout-send-help" : undefined}
           >
             <WhatsAppIcon size={20} className="shrink-0" />
-            Enviar pedido por WhatsApp
+            {sending ? "Verificando pedido…" : "Enviar pedido por WhatsApp"}
           </button>
           <p
             id="checkout-send-help"
@@ -182,14 +286,13 @@ export default function Checkout({ mode }: { mode: StoreMode }) {
                 confirme.
               </p>
               {canSend && (
-                <a
-                  href={whatsappUrl(buildWhatsAppMessage(data, lines, mode))}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="submit"
+                  form="checkout-form"
                   className="checkout-focus mt-2 inline-block rounded font-bold underline underline-offset-4"
                 >
                   Abrir WhatsApp con el pedido actual
-                </a>
+                </button>
               )}
             </div>
           )}

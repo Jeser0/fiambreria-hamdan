@@ -3,9 +3,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import {
-  catalogCategories,
-  catalogProducts,
-  wholesaleMinimums,
   type CatalogCategoryId,
   type CatalogProduct,
   type StoreMode,
@@ -22,21 +19,21 @@ import { useStoreCart } from "@/lib/useStoreCart";
 
 export default function CartSummary({
   mode,
-  catalog = catalogProducts,
-  categories = catalogCategories,
-  minimums = wholesaleMinimums,
+  catalog,
+  categories,
+  minimums,
   children,
 }: {
   mode: StoreMode;
-  catalog?: readonly CatalogProduct[];
-  categories?: readonly {
+  catalog: readonly CatalogProduct[];
+  categories: readonly {
     id: CatalogCategoryId;
     label: string;
   }[];
-  minimums?: Partial<Record<CatalogCategoryId, number>>;
+  minimums: Partial<Record<CatalogCategoryId, number>>;
   children?: ReactNode;
 }) {
-  const cart = useStoreCart(mode);
+  const cart = useStoreCart(mode, catalog);
 
   const lines = buildOrderLines(
     mode,

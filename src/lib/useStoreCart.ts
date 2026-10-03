@@ -1,15 +1,19 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
-import type { StoreMode } from "@/data/catalog";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
+import type { CatalogProduct, StoreMode } from "@/data/catalog";
 import {
   getCartSnapshot,
   getServerCartSnapshot,
   subscribeToCart,
   updateStoreCart,
+  sanitizeSelection,
 } from "@/lib/storeCart";
 
-export function useStoreCart(mode: StoreMode) {
+export function useStoreCart(
+  mode: StoreMode,
+  catalog?: readonly CatalogProduct[],
+) {
   const subscribe = useCallback(
     (onChange: () => void) => subscribeToCart(mode, onChange),
     [mode],
@@ -21,7 +25,19 @@ export function useStoreCart(mode: StoreMode) {
     getServerCartSnapshot,
   );
 
+  useEffect(() => {
+    if (!catalog || !cart.loaded) return;
+    const selected = sanitizeSelection(cart.selected, mode, catalog);
+    if (selected.length !== cart.selected.length) {
+      updateStoreCart(mode, (current) => ({
+        selected: sanitizeSelection(current.selected, mode, catalog),
+        quantities: current.quantities,
+      }));
+    }
+  }, [catalog, cart.loaded, cart.selected, mode]);
+
   function toggleProduct(id: string) {
+    if (catalog && !sanitizeSelection([id], mode, catalog).length) return;
     updateStoreCart(mode, (current) => {
       const removing = current.selected.includes(id);
       const quantities = { ...current.quantities };
@@ -58,5 +74,14 @@ export function useStoreCart(mode: StoreMode) {
     updateStoreCart(mode, () => ({ selected: [], quantities: {} }));
   }
 
-  return { ...cart, toggleProduct, setQuantity, removeProduct, clearCart };
+  return {
+    ...cart,
+    selected: catalog
+      ? sanitizeSelection(cart.selected, mode, catalog)
+      : cart.selected,
+    toggleProduct,
+    setQuantity,
+    removeProduct,
+    clearCart,
+  };
 }

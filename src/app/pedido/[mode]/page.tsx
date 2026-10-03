@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import HamdanHeader from "@/components/HamdanHeader";
 import HamdanFooter from "@/components/HamdanFooter";
 import Checkout from "@/components/checkout/Checkout";
+import { getCatalogSnapshot } from "@/lib/catalog-db";
 
 export const metadata: Metadata = {
   title: "Revisar pedido",
@@ -18,10 +19,11 @@ export default async function CheckoutPage({
 }) {
   const { mode } = await params;
   if (mode !== "mayorista" && mode !== "minorista") notFound();
+  const catalog = await getCatalogSnapshot();
   return (
     <main className="min-h-screen bg-[#fffaf0] text-[#382a22]">
       <HamdanHeader />
-      <Checkout key={mode} mode={mode} />
+      <Checkout key={mode} mode={mode} initialCatalog={catalog} />
       <HamdanFooter />
     </main>
   );

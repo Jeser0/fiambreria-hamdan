@@ -5,14 +5,20 @@ import { mkdir } from "node:fs/promises";
 // Optional browser checks; Playwright is a development tool, not an app dependency.
 const require = createRequire(import.meta.url);
 const { chromium, webkit, devices } = require(
-  process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES
-    ? `${process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES}/playwright`
-    : "playwright",
+  process.env.HAMDAN_PLAYWRIGHT_MODULE ??
+    (process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES
+      ? `${process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES}/playwright`
+      : "playwright"),
 );
 const url = process.env.HAMDAN_TEST_URL ?? "http://localhost:3000";
 const output = process.env.HAMDAN_QA_OUTPUT ?? ".qa-output";
 await mkdir(output, { recursive: true });
-const launchOptions = { headless: true };
+const launchOptions = {
+  headless: true,
+  ...(process.env.HAMDAN_BROWSER_CHANNEL
+    ? { channel: process.env.HAMDAN_BROWSER_CHANNEL }
+    : {}),
+};
 if (process.env.HAMDAN_CHROMIUM_RUNTIME) {
   const loadedRuntime = require(process.env.HAMDAN_CHROMIUM_RUNTIME);
   const runtime = loadedRuntime.default ?? loadedRuntime;
@@ -37,10 +43,22 @@ const total = async (expected) =>
 async function interceptWhatsApp(target) {
   await target.evaluate(() => {
     window.open = (url) => {
-      window.__hamdanOrderUrl = url;
+      if (String(url).startsWith("https://wa.me/"))
+        window.__hamdanOrderUrl = url;
       return null;
     };
   });
+}
+async function sendAndWait(target) {
+  await target.evaluate(() => {
+    window.__hamdanOrderUrl = null;
+  });
+  await target
+    .getByRole("button", { name: "Enviar pedido por WhatsApp", exact: true })
+    .click();
+  await target.waitForFunction(() =>
+    Boolean(window.__hamdanOrderUrl?.startsWith("https://wa.me/")),
+  );
 }
 async function waitTotal(expected) {
   await page.waitForFunction(
@@ -145,7 +163,7 @@ try {
     .fill("Entregar por la tarde 🧀");
   assert.equal(await send().isEnabled(), true);
   await interceptWhatsApp(page);
-  await send().click();
+  await sendAndWait(page);
   let message = await page.evaluate(() =>
     new URL(window.__hamdanOrderUrl).searchParams.get("text"),
   );
@@ -187,7 +205,7 @@ try {
     .getByLabel("Tipo de pedido", { exact: false })
     .selectOption("particular");
   assert.equal(await page.getByLabel("Dirección", { exact: false }).count(), 0);
-  await send().click();
+  await sendAndWait(page);
   message = await page.evaluate(() =>
     new URL(window.__hamdanOrderUrl).searchParams.get("text"),
   );
@@ -227,7 +245,7 @@ try {
   await quantity("Sándwich x4 — Jamón y queso").fill("2");
   await total("$ 9.000");
   await interceptWhatsApp(page);
-  await send().click();
+  await sendAndWait(page);
   message = await page.evaluate(() =>
     new URL(window.__hamdanOrderUrl).searchParams.get("text"),
   );
@@ -303,9 +321,7 @@ try {
       .getByLabel("Tipo de pedido", { exact: false })
       .selectOption("particular");
     await interceptWhatsApp(mobile);
-    await mobile
-      .getByRole("button", { name: "Enviar pedido por WhatsApp", exact: true })
-      .click();
+    await sendAndWait(mobile);
     assert.match(
       await mobile.evaluate(() => window.__hamdanOrderUrl),
       /^https:\/\/wa.me\//,
@@ -349,9 +365,7 @@ try {
       .getByLabel("Tipo de pedido", { exact: false })
       .selectOption("particular");
     await interceptWhatsApp(iphone);
-    await iphone
-      .getByRole("button", { name: "Enviar pedido por WhatsApp", exact: true })
-      .click();
+    await sendAndWait(iphone);
     assert.match(
       await iphone.evaluate(() => window.__hamdanOrderUrl),
       /^https:\/\/wa.me\//,

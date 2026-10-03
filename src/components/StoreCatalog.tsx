@@ -5,11 +5,8 @@ import ProductMedia from "./ProductMedia";
 import CartSummary from "./checkout/CartSummary";
 import { SearchIcon } from "./Icons";
 import {
-  catalogCategories,
-  catalogProducts,
   priceForMode,
   productsForMode,
-  wholesaleMinimums,
   type CatalogCategoryId,
   type CatalogProduct,
   type StoreMode,
@@ -45,19 +42,19 @@ export default function StoreCatalog({
   mode,
   initialQuery = "",
   initialCategory = "todos",
-  catalog = catalogProducts,
-  categories = catalogCategories,
-  minimums = wholesaleMinimums,
+  catalog,
+  categories,
+  minimums,
 }: {
   mode: StoreMode;
   initialQuery?: string;
   initialCategory?: CategoryFilter;
-  catalog?: readonly CatalogProduct[];
-  categories?: readonly {
+  catalog: readonly CatalogProduct[];
+  categories: readonly {
     id: CatalogCategoryId;
     label: string;
   }[];
-  minimums?: Partial<Record<CatalogCategoryId, number>>;
+  minimums: Partial<Record<CatalogCategoryId, number>>;
 }) {
   const products = useMemo(
     () => productsForMode(mode, catalog),
@@ -79,7 +76,7 @@ export default function StoreCatalog({
   const [category, setCategory] =
     useState<CategoryFilter>(initialCategory);
 
-  const cart = useStoreCart(mode);
+  const cart = useStoreCart(mode, catalog);
   const selected = cart.selected;
 
   const [recentlyAdded, setRecentlyAdded] =
