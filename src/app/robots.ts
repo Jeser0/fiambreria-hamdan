@@ -5,6 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: ["/admin", "/api/", "/pedido"],
     },
     sitemap: "https://fiambreriahamdan.com/sitemap.xml",
   };

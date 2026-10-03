@@ -43,3 +43,4 @@ next-env.d.ts
 # Compiled unit tests
 /.test-build/
 /.qa-output/
+/supabase/.temp/

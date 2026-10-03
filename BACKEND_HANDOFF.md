@@ -1,6 +1,6 @@
 # Backend handoff — Fiambrería Hamdan
 
-El frontend queda preparado para reemplazar los datos locales por una fuente administrable sin rehacer las pantallas.
+El catálogo comercial y el panel administrativo ya utilizan Supabase. Este archivo conserva el contrato original y las posibles ampliaciones. Consultar [`ADMIN_SETUP.md`](./ADMIN_SETUP.md) para el estado actual, la migración aplicada y la configuración de producción.
 
 ## 1. Productos
 
@@ -31,13 +31,13 @@ Reglas:
 
 ## 2. Reglas mayoristas
 
-Actualmente están definidas en frontend:
+Actualmente provienen de `categories.wholesale_minimum` en Supabase, con estos valores verificados:
 
 - Sándwich x4: mínimo total de 20 paquetes surtidos.
 - Sándwich x8: mínimo total de 40 paquetes surtidos.
 - Pizzas: mínimo total de 20 unidades surtidas.
 
-Al pasar a backend conviene convertir estas reglas en configuración administrable, no duplicarlas en múltiples pantallas.
+Las tiendas, el carrito y la validación del servidor comparten esos valores; el panel actual no los modifica.
 
 ## 3. Datos comerciales
 
@@ -57,7 +57,7 @@ Hoy cada tienda conserva selección y cantidades en las claves originales de `lo
 
 `src/lib/order.ts` calcula importes y mínimos desde los precios del catálogo. `src/lib/checkout.ts` valida los datos y prepara el mensaje de WhatsApp. Los totales son estimados; abrir WhatsApp no crea ni confirma un pedido.
 
-Al incorporar backend, validar precios, cantidades, mínimos y disponibilidad de nuevo en el servidor. La validación actual del navegador mejora la experiencia; no constituye una garantía de precio o stock.
+`prepareWhatsAppOrder()` ya vuelve a consultar el catálogo y valida precios, cantidades, mínimos, disponibilidad y formulario en el servidor. Si el pedido cambió, actualiza el resumen antes de permitir otro intento. La validación del navegador mejora la experiencia; el texto sigue siendo editable en WhatsApp y la confirmación corresponde al negocio.
 
 Las fotos institucionales de `src/data/showcase.ts` y `public/showcase/` están separadas de las imágenes individuales de los productos.
 
@@ -71,14 +71,11 @@ Siguiente etapa recomendada:
 
 ## 5. Administración
 
-El panel administrativo sí debe exigir autenticación y roles.
+El panel actual exige Supabase Auth y una membresía activa con rol `owner`, `admin` o `editor`, además de RLS y privilegios limitados de columna.
 
-Funciones mínimas:
+Implementado: búsqueda, filtro por categoría, edición de precios minoristas/mayoristas, activación y disponibilidad. Ampliaciones posibles:
 
-- editar precios minoristas y mayoristas;
-- activar/desactivar productos;
 - subir/cambiar imagen;
-- actualizar stock/disponibilidad;
 - revisar pedidos;
 - modificar mínimos mayoristas si el negocio los cambia;
 - historial de cambios de precio/stock.

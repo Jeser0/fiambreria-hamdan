@@ -2,7 +2,9 @@
 
 Sitio web para **Fiambrería Hamdan**, comercio familiar de San Miguel de Tucumán con trayectoria desde 1992.
 
-Frontend comercial con portada del local, galería de especialidades y checkout completo por WhatsApp. Las tiendas **Mayorista** y **Minorista** mantienen sus carritos, precios y reglas independientes.
+Sitio comercial con catálogo desde Supabase, checkout por WhatsApp y panel de administración. Las tiendas **Mayorista** y **Minorista** mantienen sus carritos, precios y reglas independientes.
+
+Configuración de producción, SQL aplicado, acceso administrativo y pruebas: [`ADMIN_SETUP.md`](./ADMIN_SETUP.md).
 
 ## Estado actual
 
@@ -11,7 +13,9 @@ Frontend comercial con portada del local, galería de especialidades y checkout 
 - Hamdini con secuencia real de 7 frames: movimiento de varita, guiño y magia al entrar y al tocar el personaje.
 - Header fijo con navegación, búsqueda contextual, WhatsApp y carrito.
 - Dos tiendas independientes: `/mayorista` y `/minorista`.
-- Precios minoristas y mayoristas cargados desde las listas provistas por Hamdan.
+- Precios minoristas y mayoristas consultados desde Supabase, inicialmente cargados desde las listas provistas por Hamdan.
+- Mínimos mayoristas desde `categories.wholesale_minimum` y disponibilidad desde `products.active` e `in_stock`.
+- `/admin/login` y `/admin`: Supabase Auth, membresías administrativas, RLS y edición de precios/estados.
 - Categorías separadas: Quesos y lácteos, Fiambres, Sándwich x4, Sándwich x8 y Pizzas.
 - Carrito persistente por tienda mediante `localStorage`, con validación de cantidades, mínimos mayoristas y acceso rápido en móvil.
 - El producto se agrega al carrito sin sacar al cliente del catálogo.
@@ -40,7 +44,7 @@ Quesos y fiambres no tienen un mínimo automático configurado en esta etapa.
 
 ## Stock
 
-El catálogo usa un campo `active` por producto para permitir que el stock/venta se habilite o deshabilite sin cambiar los componentes visuales.
+El catálogo usa `active` e `in_stock` desde Supabase. Ambos deben estar habilitados para vender; también debe estar activa la categoría y existir un precio válido para esa tienda. El panel permite administrarlos sin modificar código.
 
 La próxima lista de stock de fiambres debe respetarse exactamente. No se deben inventar productos disponibles.
 
@@ -51,7 +55,7 @@ La compra no exige iniciar sesión:
 - **Mayorista:** carrito propio, precios mayoristas, mínimos automáticos y WhatsApp.
 - **Minorista:** carrito independiente, precios minoristas y sin mínimos mayoristas.
 - **Cuenta opcional:** más adelante se puede agregar Google para historial y repetición de pedidos.
-- **Administración:** el futuro panel para modificar precios, stock y productos sí requerirá autenticación y roles.
+- **Administración:** el panel para modificar precios y disponibilidad exige autenticación y membresía administrativa activa, comprobadas en servidor y RLS.
 
 ## Estado del frontend
 
@@ -61,9 +65,8 @@ Contrato para la siguiente etapa: [`BACKEND_HANDOFF.md`](./BACKEND_HANDOFF.md).
 
 ## Próximas integraciones
 
-- Base de datos para productos, precios y stock.
-- Panel administrativo para Romi/familia.
-- Google Auth opcional para clientes y obligatorio para administración.
+- Administración de imágenes reales desde Storage.
+- Google Auth opcional para clientes, si se decide implementarlo. La administración actual utiliza correo y contraseña.
 - Persistencia de pedidos en servidor.
 - Mercado Pago si se decide habilitar pago online.
 - Analytics/Search Console y despliegue final.
@@ -104,6 +107,8 @@ npm run build
 /pedido      Redirección de compatibilidad a /pedido/mayorista
 /pedido/mayorista  Checkout mayorista
 /pedido/minorista  Checkout minorista
+/admin/login  Acceso administrativo con correo y contraseña
+/admin        Edición de precios y disponibilidad para cuentas autorizadas
 ```
 
 ## Agentes de programación
@@ -115,6 +120,8 @@ Las reglas de trabajo para ChatGPT/Codex y otros agentes compatibles están docu
 - `src/lib/storeCart.ts` y `useStoreCart.ts`: única fuente compartida para catálogo, contador y revisión; sincronización entre pestañas y conservación de claves anteriores.
 - `src/lib/order.ts`: conversión y validación numérica, `calculateOrderTotal()`, `formatARS()` y mínimos mayoristas. No se usa el precio de otra tienda como alternativa.
 - `src/lib/checkout.ts`: `validateCheckout()` y `buildWhatsAppMessage()`. Omite campos opcionales vacíos y datos de envío cuando corresponde retiro.
+- `src/lib/catalog-db.ts`: consulta actual de Supabase; `catalog.ts` adapta los datos al contrato del frontend.
+- `src/app/pedido/actions.ts` y `prepare-order.ts`: reconstrucción y validación del pedido en servidor con precios actuales; ignoran precios enviados por el navegador.
 - `src/components/checkout/`: campos del cliente, entrega, resumen y coordinación del envío.
 - Los sándwiches y pizzas se piden en cantidades enteras. Las categorías que ya admitían cantidades decimales conservan esa posibilidad, hasta tres decimales.
 - Se permite pasar a la revisión con un mínimo pendiente para corregirlo allí. El botón de WhatsApp queda deshabilitado hasta cumplir todos los requisitos.

@@ -1,5 +1,6 @@
-import {
+﻿import {
   catalogCategories,
+  catalogProducts,
   priceForMode,
   productsForMode,
   wholesaleMinimums,
@@ -20,33 +21,55 @@ export function formatARS(value: number): string {
   return currencyFormatter.format(value).replace(/\u00a0/g, " ");
 }
 
-export function categoryLabel(category: CatalogCategoryId): string {
-  return (
-    catalogCategories.find((item) => item.id === category)?.label ?? category
-  );
+export function categoryLabel(
+  category: CatalogCategoryId,
+  categories: readonly {
+    id: CatalogCategoryId;
+    label: string;
+  }[] = catalogCategories,
+): string {
+  return categories.find((item) => item.id === category)?.label ?? category;
 }
 
-export function productLabel(product: CatalogProduct): string {
-  if (product.category === "pizzas") return `Pizza ${product.name}`;
-  if (product.category.startsWith("sandwich-")) {
-    return `${categoryLabel(product.category)} — ${product.name}`;
+export function productLabel(
+  product: CatalogProduct,
+  categories: readonly {
+    id: CatalogCategoryId;
+    label: string;
+  }[] = catalogCategories,
+): string {
+  if (product.category === "pizzas") {
+    return `Pizza ${product.name}`;
   }
+
+  if (product.category.startsWith("sandwich-")) {
+    return `${categoryLabel(product.category, categories)} — ${product.name}`;
+  }
+
   return product.name;
 }
 
 export function isPackagedProduct(product: CatalogProduct): boolean {
   return (
-    product.category === "pizzas" || product.category.startsWith("sandwich-")
+    product.category === "pizzas" ||
+    product.category.startsWith("sandwich-")
   );
 }
 
-// Only decimal notation is accepted: no exponents, negatives or thousands separators.
-// Quantity strings remain compatible with the existing localStorage schema.
 export function parseQuantity(value: string): number {
   const normalized = value.trim().replace(",", ".");
-  if (!/^\d+(?:\.\d{1,3})?$/.test(normalized)) return 0;
+
+  if (!/^\d+(?:\.\d{1,3})?$/.test(normalized)) {
+    return 0;
+  }
+
   const number = Number(normalized);
-  return Number.isFinite(number) && number > 0 && number <= 999999 ? number : 0;
+
+  return Number.isFinite(number) &&
+    number > 0 &&
+    number <= 999999
+    ? number
+    : 0;
 }
 
 export type OrderLine = {
@@ -62,13 +85,17 @@ export function buildOrderLines(
   mode: StoreMode,
   selection: readonly string[],
   quantities: QuantityMap,
+  catalog: readonly CatalogProduct[] = catalogProducts,
 ): OrderLine[] {
-  return productsForMode(mode)
+  return productsForMode(mode, catalog)
     .filter((product) => selection.includes(product.id))
     .map((product) => {
-      const quantity = parseQuantity(quantities[product.id] ?? "");
+      const quantity = parseQuantity(
+        quantities[product.id] ?? "",
+      );
+
       const unitPrice = priceForMode(product, mode);
-      // No price fallback between stores. productsForMode already filters missing prices.
+
       if (
         unitPrice === undefined ||
         !Number.isFinite(unitPrice) ||
@@ -78,12 +105,19 @@ export function buildOrderLines(
           `Precio inválido en el catálogo ${mode}: ${product.id}`,
         );
       }
+
       const quantityError =
         quantity === 0
           ? "Ingresá una cantidad mayor a 0 y hasta 999.999 (máximo 3 decimales)."
-          : isPackagedProduct(product) && !Number.isInteger(quantity)
-            ? `Ingresá ${product.category === "pizzas" ? "unidades enteras" : "paquetes enteros"}.`
+          : isPackagedProduct(product) &&
+              !Number.isInteger(quantity)
+            ? `Ingresá ${
+                product.category === "pizzas"
+                  ? "unidades enteras"
+                  : "paquetes enteros"
+              }.`
             : undefined;
+
       return {
         mode,
         product,
@@ -91,17 +125,23 @@ export function buildOrderLines(
         unitPrice,
         subtotal: quantityError
           ? 0
-          : Math.round((unitPrice * quantity + Number.EPSILON) * 100) / 100,
+          : Math.round(
+              (unitPrice * quantity + Number.EPSILON) * 100,
+            ) / 100,
         quantityError,
       };
     });
 }
 
-export function calculateOrderTotal(lines: readonly OrderLine[]): number {
-  // Sum cents to avoid floating point drift between displayed subtotals and total.
+export function calculateOrderTotal(
+  lines: readonly OrderLine[],
+): number {
   return (
-    lines.reduce((total, line) => total + Math.round(line.subtotal * 100), 0) /
-    100
+    lines.reduce(
+      (total, line) =>
+        total + Math.round(line.subtotal * 100),
+      0,
+    ) / 100
   );
 }
 
@@ -117,16 +157,35 @@ export type MinimumStatus = {
 export function getWholesaleMinimums(
   mode: StoreMode,
   lines: readonly OrderLine[],
+  categories: readonly {
+    id: CatalogCategoryId;
+    label: string;
+  }[] = catalogCategories,
+  minimums: Partial<
+    Record<CatalogCategoryId, number>
+  > = wholesaleMinimums,
 ): MinimumStatus[] {
-  if (mode !== "mayorista") return [];
-  return catalogCategories.flatMap(({ id, label }) => {
-    const minimum = wholesaleMinimums[id];
-    const group = lines.filter((line) => line.product.category === id);
-    if (!minimum || group.length === 0) return [];
+  if (mode !== "mayorista") {
+    return [];
+  }
+
+  return categories.flatMap(({ id, label }) => {
+    const minimum = minimums[id];
+
+    const group = lines.filter(
+      (line) => line.product.category === id,
+    );
+
+    if (!minimum || group.length === 0) {
+      return [];
+    }
+
     const quantity = group.reduce(
-      (sum, line) => sum + (line.quantityError ? 0 : line.quantity),
+      (sum, line) =>
+        sum + (line.quantityError ? 0 : line.quantity),
       0,
     );
+
     return [
       {
         category: id,
