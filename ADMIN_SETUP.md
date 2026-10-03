@@ -191,7 +191,7 @@ Pruebas y documentación:
 - Se repitieron las 21 pruebas, lint, TypeScript, build y ambos scripts de navegador sobre la compilación local con Supabase real: aprobados.
 - La revisión del código y el escaneo heurístico del historial Git no encontraron secretos versionados ni fallos bloqueantes en catálogo, carrito, checkout o autorización.
 - Las pruebas SQL de `supabase/tests/catalog_security.sql` se repitieron con `ROLLBACK`: lectura pública, bloqueo de escritura de usuarios comunes, imposibilidad de autoasignar membresías, edición autorizada, límites de precios y ocultación de productos no disponibles aprobados. No quedaron modificaciones comerciales.
-- RLS está habilitado en las cuatro tablas públicas. Los permisos de actualización de `products` están limitados a las cinco columnas del panel, con autorización por membresía activa.
+- RLS está habilitado en las cuatro tablas públicas. Los permisos de actualización de `products` están limitados a los cinco campos comerciales del panel y a `image_url`/`image_alt`, con autorización por membresía activa.
 - El asesor de seguridad conserva una advertencia: [protección contra contraseñas filtradas desactivada](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). No se alteraron credenciales ni configuración de Auth.
 - Vercel informó `Ready` para la Preview inicial, pero su protección redirige los navegadores sin sesión al login de Vercel. Ese estado no sustituye la prueba funcional de la Preview: hace falta acceso autorizado antes del merge.
 
