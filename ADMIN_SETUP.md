@@ -47,7 +47,7 @@ La migración:
 
 - conserva RLS habilitado;
 - retira permisos de `TRUNCATE` que RLS no protege;
-- limita las escrituras del panel a precios, `wholesale_same_price`, `active` e `in_stock`;
+- limita las escrituras comerciales del panel a precios, `wholesale_same_price`, `active` e `in_stock` (la extensión de imágenes descrita abajo agrega sus dos columnas);
 - impide que un usuario cree o cambie su propia membresía administrativa;
 - cambia `public.is_admin()` a `SECURITY INVOKER`, con lectura de la membresía propia y sin recursión;
 - permite editar a los roles existentes `owner`, `admin` y `editor`, siempre activos, y bloquea sesiones Auth anónimas;
@@ -60,6 +60,22 @@ No cambia precios, stock, imágenes, mínimos ni usuarios. El `updated_at` exist
 [`supabase/tests/catalog_security.sql`](./supabase/tests/catalog_security.sql) verifica lectura pública, rechazo a no administradores, ausencia de autoasignación de roles, permisos del owner, columnas permitidas y ocultación pública de productos. Todas sus escrituras se revierten con `ROLLBACK`. Se ejecutó contra la base real después de la migración.
 
 La revisión de seguridad de Supabase ya no informa funciones `SECURITY DEFINER` expuestas. Queda la configuración de protección contra contraseñas filtradas: [guía oficial de Supabase](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). Activarla desde Auth cuando esté disponible en el plan. La renovación de sesión sigue el [patrón SSR oficial](https://supabase.com/docs/guides/auth/server-side/creating-a-client?framework=nextjs) con Proxy de Next.js 16.
+
+## Imágenes de productos
+
+Las migraciones `20261003141744_product_image_storage.sql` y `20261003142028_qualify_product_image_upload_path.sql` ya fueron aplicadas al proyecto existente. Los nombres/versiones locales coinciden con el historial remoto. Crean el bucket público `product-images`, limitan los archivos a WebP/JPEG/PNG y 5 MB y agregan permisos de columna para `image_url`/`image_alt`. No cambian imágenes ni datos comerciales existentes.
+
+Desde `/admin`, buscar el producto, seleccionar **Cambiar imagen**, revisar la vista previa y la descripción y pulsar **Guardar imagen**. **Quitar imagen** prepara la eliminación; **Guardar imagen** la confirma y vuelve al placeholder de categoría. Una descripción vacía usa el nombre del producto. Guardar una imagen es independiente del formulario de precios: no envía ni guarda borradores de precios, disponibilidad o activación.
+
+La carga utiliza el cliente público de Supabase y la sesión Auth, sin `service_role`. Se valida MIME, tamaño y firma del archivo en el navegador; se comprueba que pueda decodificarse y se intenta convertir a WebP/reducir a 1600 px en su lado mayor sin recortes ni ampliaciones. Antes de guardar la referencia, el servidor vuelve a comprobar autorización, ruta, versión del producto, firma, MIME, extensión y tamaño del archivo descargado de Storage. La referencia de 1600 × 700 px es orientativa; las tarjetas conservan `16/7`, con `object-contain`, centrado y margen interior.
+
+Las seis políticas nuevas reutilizan `public.is_admin()` y sus roles activos `owner`, `admin` y `editor`. Solo esos miembros pueden cargar, inspeccionar o eliminar archivos. Los visitantes ven los archivos mediante URLs del bucket público; no reciben permisos de escritura. Las restricciones de carga exigen `producto/UUID.ext` y un producto existente. Los objetos son inmutables: reemplazar significa subir a una ruta nueva, guardar `image_url` condicionalmente mediante `updated_at` y luego borrar el anterior. Storage impide borrar cualquier objeto todavía referenciado por un producto, incluso ante una respuesta de red incierta. No se cambian las políticas de membresía ni se permite autoasignarse un rol.
+
+Los errores de limpieza posteriores al guardado se informan sin revertir la nueva imagen. Si se cierra una pestaña después de subir pero antes de guardar, o falla el guardado, puede quedar un archivo pendiente sin referencia. El editor conserva la ruta para reintentar y trata de limpiar la carga pendiente al seleccionar otro archivo o quitar la selección. No hay un proceso automático que elimine archivos antiguos: evita borrar archivos por antigüedad sin verificar referencias. Las fotos externas o de otros buckets quedan preservadas.
+
+Validación realizada: `npm test`, lint, TypeScript y build; pruebas SQL con `ROLLBACK` de catálogo y Storage; rechazo de carga anónima por la API real; navegador con catálogo/Supabase real y fixtures locales de imágenes cuadradas y verticales en ambas tiendas y móvil. `supabase/tests/product_image_security.sql` habilita únicamente en su transacción el flag de protección de borrado que usa la API de Storage para probar políticas sobre metadatos ficticios; conserva RLS y revierte todas las escrituras.
+
+La carga/reemplazo/eliminación desde una sesión real de `/admin` queda pendiente hasta disponer de credenciales administrativas. `tests/browser-product-images.mjs` incluye ese circuito, usa un producto originalmente sin imagen y restaura sus campos de imagen al terminar; se activa mediante `HAMDAN_ADMIN_EMAIL`/`HAMDAN_ADMIN_PASSWORD` en el entorno de prueba, sin imprimirlas. No se creó ninguna cuenta ni se cambiaron credenciales para probarlo. No mergear mientras esa verificación y la Preview autenticada estén pendientes.
 
 ## Cuenta administradora
 
