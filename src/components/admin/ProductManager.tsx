@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
 import { saveProduct } from "@/app/admin/actions";
 import type { AdminCategory, AdminProduct } from "@/lib/admin-product";
+import ProductImageEditor from "./ProductImageEditor";
 
 function normalize(value: string) {
   return value
@@ -20,10 +21,19 @@ function ProductEditor({
   product: AdminProduct;
   category: string;
 }) {
-  const [state, action, pending] = useActionState(saveProduct, {
-    ok: false,
-    message: "",
-  });
+  const [updatedAt, setUpdatedAt] = useState(product.updated_at);
+  const [imageBusy, setImageBusy] = useState(false);
+  const [state, action, pending] = useActionState(
+    async (previous: Parameters<typeof saveProduct>[0], form: FormData) => {
+      const saved = await saveProduct(previous, form);
+      if (saved.ok && saved.updatedAt) setUpdatedAt(saved.updatedAt);
+      return saved;
+    },
+    {
+      ok: false,
+      message: "",
+    },
+  );
   const [retailPrice, setRetailPrice] = useState(
     String(product.retail_price ?? ""),
   );
@@ -33,94 +43,95 @@ function ProductEditor({
   const [active, setActive] = useState(product.active);
   const [inStock, setInStock] = useState(product.in_stock);
   return (
-    <form
-      action={action}
-      className="rounded-3xl border border-[#8f1f23]/15 bg-white/80 p-5 shadow-sm"
-      aria-busy={pending}
-    >
-      <input type="hidden" name="id" value={product.id} />
-      <input
-        type="hidden"
-        name="updatedAt"
-        value={state.updatedAt ?? product.updated_at}
-      />
-      <p className="text-xs font-bold uppercase tracking-wide text-[#a5752b]">
-        {category}
-      </p>
-      <h2 className="font-display mt-2 text-2xl font-black text-[#742026]">
-        {product.name}
-      </h2>
-      <fieldset
-        disabled={pending}
-        className="mt-5 space-y-4 disabled:opacity-60"
-      >
-        <legend className="sr-only">Editar {product.name}</legend>
-        <div className="grid grid-cols-2 gap-4">
-          <label className="text-sm font-bold text-[#663c31]">
-            Precio minorista ($)
-            <input
-              type="text"
-              inputMode="decimal"
-              name="retailPrice"
-              value={retailPrice}
-              onChange={(event) => setRetailPrice(event.target.value)}
-              maxLength={12}
-              aria-label={`Precio minorista de ${product.name}`}
-              className="checkout-input mt-2 w-full px-3 py-3"
-            />
-          </label>
-          <label className="text-sm font-bold text-[#663c31]">
-            Precio mayorista ($)
-            <input
-              type="text"
-              inputMode="decimal"
-              name="wholesalePrice"
-              value={wholesalePrice}
-              onChange={(event) => setWholesalePrice(event.target.value)}
-              maxLength={12}
-              aria-label={`Precio mayorista de ${product.name}`}
-              className="checkout-input mt-2 w-full px-3 py-3"
-            />
-          </label>
-        </div>
-        <div className="flex flex-wrap gap-5 text-sm font-bold text-[#663c31]">
-          <label className="flex min-h-10 items-center gap-2">
-            <input
-              type="checkbox"
-              name="active"
-              checked={active}
-              onChange={(event) => setActive(event.target.checked)}
-              className="h-5 w-5 accent-[#8f1f23]"
-            />
-            Activo
-          </label>
-          <label className="flex min-h-10 items-center gap-2">
-            <input
-              type="checkbox"
-              name="inStock"
-              checked={inStock}
-              onChange={(event) => setInStock(event.target.checked)}
-              className="h-5 w-5 accent-[#8f1f23]"
-            />
-            Disponible
-          </label>
-        </div>
-        <button
-          type="submit"
-          className="cheese-action checkout-focus w-full rounded-xl px-4 py-3 text-sm font-black"
-        >
-          {pending ? "Guardando…" : "Guardar cambios"}
-        </button>
-      </fieldset>
-      {state.message && (
-        <p
-          role={state.ok ? "status" : "alert"}
-          className={`mt-3 text-sm leading-6 ${state.ok ? "text-[#27734c]" : "text-[#9a302e]"}`}
-        >
-          {state.message}
+    <div className="rounded-3xl border border-[#8f1f23]/15 bg-white/80 p-5 shadow-sm">
+      <form action={action} aria-busy={pending}>
+        <input type="hidden" name="id" value={product.id} />
+        <input type="hidden" name="updatedAt" value={updatedAt} />
+        <p className="text-xs font-bold uppercase tracking-wide text-[#a5752b]">
+          {category}
         </p>
-      )}
-    </form>
+        <h2 className="font-display mt-2 text-2xl font-black text-[#742026]">
+          {product.name}
+        </h2>
+        <fieldset
+          disabled={pending || imageBusy}
+          className="mt-5 space-y-4 disabled:opacity-60"
+        >
+          <legend className="sr-only">Editar {product.name}</legend>
+          <div className="grid grid-cols-2 gap-4">
+            <label className="text-sm font-bold text-[#663c31]">
+              Precio minorista ($)
+              <input
+                type="text"
+                inputMode="decimal"
+                name="retailPrice"
+                value={retailPrice}
+                onChange={(event) => setRetailPrice(event.target.value)}
+                maxLength={12}
+                aria-label={`Precio minorista de ${product.name}`}
+                className="checkout-input mt-2 w-full px-3 py-3"
+              />
+            </label>
+            <label className="text-sm font-bold text-[#663c31]">
+              Precio mayorista ($)
+              <input
+                type="text"
+                inputMode="decimal"
+                name="wholesalePrice"
+                value={wholesalePrice}
+                onChange={(event) => setWholesalePrice(event.target.value)}
+                maxLength={12}
+                aria-label={`Precio mayorista de ${product.name}`}
+                className="checkout-input mt-2 w-full px-3 py-3"
+              />
+            </label>
+          </div>
+          <div className="flex flex-wrap gap-5 text-sm font-bold text-[#663c31]">
+            <label className="flex min-h-10 items-center gap-2">
+              <input
+                type="checkbox"
+                name="active"
+                checked={active}
+                onChange={(event) => setActive(event.target.checked)}
+                className="h-5 w-5 accent-[#8f1f23]"
+              />
+              Activo
+            </label>
+            <label className="flex min-h-10 items-center gap-2">
+              <input
+                type="checkbox"
+                name="inStock"
+                checked={inStock}
+                onChange={(event) => setInStock(event.target.checked)}
+                className="h-5 w-5 accent-[#8f1f23]"
+              />
+              Disponible
+            </label>
+          </div>
+          <button
+            type="submit"
+            className="cheese-action checkout-focus w-full rounded-xl px-4 py-3 text-sm font-black"
+          >
+            {pending ? "Guardando…" : "Guardar cambios"}
+          </button>
+        </fieldset>
+        {state.message && (
+          <p
+            role={state.ok ? "status" : "alert"}
+            className={`mt-3 text-sm leading-6 ${state.ok ? "text-[#27734c]" : "text-[#9a302e]"}`}
+          >
+            {state.message}
+          </p>
+        )}
+      </form>
+      <ProductImageEditor
+        product={product}
+        updatedAt={updatedAt}
+        disabled={pending}
+        onBusy={setImageBusy}
+        onSaved={setUpdatedAt}
+      />
+    </div>
   );
 }
 

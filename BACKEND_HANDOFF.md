@@ -73,9 +73,8 @@ Siguiente etapa recomendada:
 
 El panel actual exige Supabase Auth y una membresía activa con rol `owner`, `admin` o `editor`, además de RLS y privilegios limitados de columna.
 
-Implementado: búsqueda, filtro por categoría, edición de precios minoristas/mayoristas, activación y disponibilidad. Ampliaciones posibles:
+Implementado: búsqueda, filtro por categoría, edición de precios minoristas/mayoristas, activación, disponibilidad y gestión de imágenes (vista previa, carga, reemplazo, eliminación y descripción), con Storage y autorización administrativa. Consultar `ADMIN_SETUP.md` para las pruebas pendientes de sesión real. Ampliaciones posibles:
 
-- subir/cambiar imagen;
 - revisar pedidos;
 - modificar mínimos mayoristas si el negocio los cambia;
 - historial de cambios de precio/stock.
