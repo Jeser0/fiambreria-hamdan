@@ -35,7 +35,8 @@ function minimumText(
 
   if (!minimum) return null;
 
-  const unit = category === "pizzas" ? "unidades" : "paquetes";
+  const unit =
+    category === "pizzas" ? "unidades" : "paquetes";
 
   return `Mínimo mayorista: ${minimum} ${unit} surtidos`;
 }
@@ -66,7 +67,9 @@ export default function StoreCatalog({
   const availableCategories = useMemo(
     () =>
       categories.filter((item) =>
-        products.some((product) => product.category === item.id),
+        products.some(
+          (product) => product.category === item.id,
+        ),
       ),
     [categories, products],
   );
@@ -82,14 +85,18 @@ export default function StoreCatalog({
   const [recentlyAdded, setRecentlyAdded] =
     useState<string | null>(null);
 
-  const [statusMessage, setStatusMessage] = useState("");
+  const [statusMessage, setStatusMessage] =
+    useState("");
 
-  const addFeedbackTimer = useRef<number | null>(null);
+  const addFeedbackTimer =
+    useRef<number | null>(null);
 
   useEffect(
     () => () => {
       if (addFeedbackTimer.current) {
-        window.clearTimeout(addFeedbackTimer.current);
+        window.clearTimeout(
+          addFeedbackTimer.current,
+        );
       }
     },
     [],
@@ -100,7 +107,8 @@ export default function StoreCatalog({
 
     return products.filter((product) => {
       const matchesCategory =
-        category === "todos" || product.category === category;
+        category === "todos" ||
+        product.category === category;
 
       const matchesQuery =
         !normalizedQuery ||
@@ -135,16 +143,21 @@ export default function StoreCatalog({
     );
 
     if (addFeedbackTimer.current) {
-      window.clearTimeout(addFeedbackTimer.current);
+      window.clearTimeout(
+        addFeedbackTimer.current,
+      );
     }
 
-    setRecentlyAdded(removing ? null : product.id);
+    setRecentlyAdded(
+      removing ? null : product.id,
+    );
 
     if (!removing) {
-      addFeedbackTimer.current = window.setTimeout(
-        () => setRecentlyAdded(null),
-        1100,
-      );
+      addFeedbackTimer.current =
+        window.setTimeout(
+          () => setRecentlyAdded(null),
+          1100,
+        );
     }
   }
 
@@ -184,7 +197,9 @@ export default function StoreCatalog({
           >
             <button
               type="button"
-              onClick={() => setCategory("todos")}
+              onClick={() =>
+                setCategory("todos")
+              }
               className={`category-pill soft-press rounded-full border px-4 py-2 text-xs font-black transition ${
                 category === "todos"
                   ? "border-[#8f1f23] bg-[#8f1f23] text-white"
@@ -194,20 +209,24 @@ export default function StoreCatalog({
               Todos
             </button>
 
-            {availableCategories.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => setCategory(item.id)}
-                className={`category-pill soft-press rounded-full border px-4 py-2 text-xs font-black transition ${
-                  category === item.id
-                    ? "border-[#8f1f23] bg-[#8f1f23] text-white"
-                    : "border-[#8f1f23]/15 bg-white text-[#74433a] hover:border-[#8f1f23]/35"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+            {availableCategories.map(
+              (item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() =>
+                    setCategory(item.id)
+                  }
+                  className={`category-pill soft-press rounded-full border px-4 py-2 text-xs font-black transition ${
+                    category === item.id
+                      ? "border-[#8f1f23] bg-[#8f1f23] text-white"
+                      : "border-[#8f1f23]/15 bg-white text-[#74433a] hover:border-[#8f1f23]/35"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ),
+            )}
           </div>
         </div>
 
@@ -216,13 +235,18 @@ export default function StoreCatalog({
           className="catalog-results-enter mt-5 grid gap-4 md:grid-cols-2"
         >
           {filteredProducts.map((product) => {
-            const isSelected = selected.includes(product.id);
+            const isSelected =
+              selected.includes(product.id);
 
-            const price = priceForMode(product, mode);
+            const price =
+              priceForMode(product, mode);
 
             const minText =
               mode === "mayorista"
-                ? minimumText(product.category, minimums)
+                ? minimumText(
+                    product.category,
+                    minimums,
+                  )
                 : null;
 
             return (
@@ -285,7 +309,8 @@ export default function StoreCatalog({
                     {mode === "mayorista" &&
                       product.wholesaleSamePrice && (
                         <p className="mt-1 text-[10px] font-bold text-[#8a6b58]">
-                          Mismo precio que por menor
+                          Mismo precio que por
+                          menor
                         </p>
                       )}
                   </div>
@@ -293,7 +318,9 @@ export default function StoreCatalog({
                   <button
                     type="button"
                     disabled={!cart.loaded}
-                    onClick={() => addOrRemove(product)}
+                    onClick={() =>
+                      addOrRemove(product)
+                    }
                     className={`soft-press shrink-0 rounded-xl px-3.5 py-2.5 text-xs font-black transition-all duration-200 ${
                       isSelected
                         ? "bg-[#8f1f23] text-white shadow-sm"
@@ -318,13 +345,19 @@ export default function StoreCatalog({
             </p>
 
             <p className="mt-2 text-sm text-[#725f54]">
-              Probá con otra categoría o búsqueda.
+              Probá con otra categoría o
+              búsqueda.
             </p>
           </div>
         )}
       </div>
 
-      <CartSummary mode={mode} />
+      <CartSummary
+        mode={mode}
+        catalog={catalog}
+        categories={categories}
+        minimums={minimums}
+      />
 
       {selectedProducts.length > 0 && (
         <a

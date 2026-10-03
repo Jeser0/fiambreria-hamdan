@@ -31,11 +31,19 @@ export function categoryLabel(
   return categories.find((item) => item.id === category)?.label ?? category;
 }
 
-export function productLabel(product: CatalogProduct): string {
-  if (product.category === "pizzas") return `Pizza ${product.name}`;
+export function productLabel(
+  product: CatalogProduct,
+  categories: readonly {
+    id: CatalogCategoryId;
+    label: string;
+  }[] = catalogCategories,
+): string {
+  if (product.category === "pizzas") {
+    return `Pizza ${product.name}`;
+  }
 
   if (product.category.startsWith("sandwich-")) {
-    return `${categoryLabel(product.category)} — ${product.name}`;
+    return `${categoryLabel(product.category, categories)} — ${product.name}`;
   }
 
   return product.name;
@@ -51,11 +59,15 @@ export function isPackagedProduct(product: CatalogProduct): boolean {
 export function parseQuantity(value: string): number {
   const normalized = value.trim().replace(",", ".");
 
-  if (!/^\d+(?:\.\d{1,3})?$/.test(normalized)) return 0;
+  if (!/^\d+(?:\.\d{1,3})?$/.test(normalized)) {
+    return 0;
+  }
 
   const number = Number(normalized);
 
-  return Number.isFinite(number) && number > 0 && number <= 999999
+  return Number.isFinite(number) &&
+    number > 0 &&
+    number <= 999999
     ? number
     : 0;
 }
@@ -73,12 +85,15 @@ export function buildOrderLines(
   mode: StoreMode,
   selection: readonly string[],
   quantities: QuantityMap,
-  products: readonly CatalogProduct[] = catalogProducts,
+  catalog: readonly CatalogProduct[] = catalogProducts,
 ): OrderLine[] {
-  return productsForMode(mode, products)
+  return productsForMode(mode, catalog)
     .filter((product) => selection.includes(product.id))
     .map((product) => {
-      const quantity = parseQuantity(quantities[product.id] ?? "");
+      const quantity = parseQuantity(
+        quantities[product.id] ?? "",
+      );
+
       const unitPrice = priceForMode(product, mode);
 
       if (
@@ -94,7 +109,8 @@ export function buildOrderLines(
       const quantityError =
         quantity === 0
           ? "Ingresá una cantidad mayor a 0 y hasta 999.999 (máximo 3 decimales)."
-          : isPackagedProduct(product) && !Number.isInteger(quantity)
+          : isPackagedProduct(product) &&
+              !Number.isInteger(quantity)
             ? `Ingresá ${
                 product.category === "pizzas"
                   ? "unidades enteras"
@@ -109,16 +125,21 @@ export function buildOrderLines(
         unitPrice,
         subtotal: quantityError
           ? 0
-          : Math.round((unitPrice * quantity + Number.EPSILON) * 100) / 100,
+          : Math.round(
+              (unitPrice * quantity + Number.EPSILON) * 100,
+            ) / 100,
         quantityError,
       };
     });
 }
 
-export function calculateOrderTotal(lines: readonly OrderLine[]): number {
+export function calculateOrderTotal(
+  lines: readonly OrderLine[],
+): number {
   return (
     lines.reduce(
-      (total, line) => total + Math.round(line.subtotal * 100),
+      (total, line) =>
+        total + Math.round(line.subtotal * 100),
       0,
     ) / 100
   );
@@ -140,18 +161,28 @@ export function getWholesaleMinimums(
     id: CatalogCategoryId;
     label: string;
   }[] = catalogCategories,
-  minimums: Partial<Record<CatalogCategoryId, number>> = wholesaleMinimums,
+  minimums: Partial<
+    Record<CatalogCategoryId, number>
+  > = wholesaleMinimums,
 ): MinimumStatus[] {
-  if (mode !== "mayorista") return [];
+  if (mode !== "mayorista") {
+    return [];
+  }
 
   return categories.flatMap(({ id, label }) => {
     const minimum = minimums[id];
-    const group = lines.filter((line) => line.product.category === id);
 
-    if (!minimum || group.length === 0) return [];
+    const group = lines.filter(
+      (line) => line.product.category === id,
+    );
+
+    if (!minimum || group.length === 0) {
+      return [];
+    }
 
     const quantity = group.reduce(
-      (sum, line) => sum + (line.quantityError ? 0 : line.quantity),
+      (sum, line) =>
+        sum + (line.quantityError ? 0 : line.quantity),
       0,
     );
 

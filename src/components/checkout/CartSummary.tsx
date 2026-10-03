@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import type { StoreMode } from "@/data/catalog";
+import {
+  catalogCategories,
+  catalogProducts,
+  wholesaleMinimums,
+  type CatalogCategoryId,
+  type CatalogProduct,
+  type StoreMode,
+} from "@/data/catalog";
 import {
   buildOrderLines,
   calculateOrderTotal,
@@ -15,14 +22,36 @@ import { useStoreCart } from "@/lib/useStoreCart";
 
 export default function CartSummary({
   mode,
+  catalog = catalogProducts,
+  categories = catalogCategories,
+  minimums = wholesaleMinimums,
   children,
 }: {
   mode: StoreMode;
+  catalog?: readonly CatalogProduct[];
+  categories?: readonly {
+    id: CatalogCategoryId;
+    label: string;
+  }[];
+  minimums?: Partial<Record<CatalogCategoryId, number>>;
   children?: ReactNode;
 }) {
   const cart = useStoreCart(mode);
-  const lines = buildOrderLines(mode, cart.selected, cart.quantities);
-  const minimums = getWholesaleMinimums(mode, lines);
+
+  const lines = buildOrderLines(
+    mode,
+    cart.selected,
+    cart.quantities,
+    catalog,
+  );
+
+  const minimumStatuses = getWholesaleMinimums(
+    mode,
+    lines,
+    categories,
+    minimums,
+  );
+
   const total = calculateOrderTotal(lines);
 
   return (
@@ -37,6 +66,7 @@ export default function CartSummary({
           <p className="text-xs font-black uppercase tracking-[0.16em] text-[#8b601e]">
             Pedido {mode}
           </p>
+
           <h2
             id="cart-title"
             className="font-display mt-2 text-3xl font-black text-[#5f271f]"
@@ -44,6 +74,7 @@ export default function CartSummary({
             Tu pedido
           </h2>
         </div>
+
         {lines.length > 0 && (
           <button
             type="button"
@@ -54,9 +85,11 @@ export default function CartSummary({
           </button>
         )}
       </div>
+
       <p className="mt-2 text-sm leading-6 text-[#715e53]">
         Revisá las cantidades antes de confirmar.
       </p>
+
       {!cart.loaded ? (
         <p className="py-8 text-sm" role="status">
           Cargando tu carrito…
@@ -64,6 +97,7 @@ export default function CartSummary({
       ) : lines.length === 0 ? (
         <div className="my-5 rounded-2xl border border-dashed border-[#b98525]/35 bg-white/60 p-5 text-sm leading-6">
           <p>Tu carrito está vacío.</p>
+
           <Link
             href={`/${mode}#catalogo`}
             className="checkout-focus mt-2 inline-block rounded font-bold text-[#8f1f23] underline underline-offset-4"
@@ -78,8 +112,9 @@ export default function CartSummary({
         >
           {lines.map((line) => {
             const { product, quantityError } = line;
-            const label = productLabel(product);
+            const label = productLabel(product, categories);
             const id = `quantity-${product.id}`;
+
             return (
               <li
                 key={product.id}
@@ -89,18 +124,23 @@ export default function CartSummary({
                   <p className="text-sm font-bold leading-5 text-[#5f3028]">
                     {label}
                   </p>
+
                   <button
                     type="button"
-                    onClick={() => cart.removeProduct(product.id)}
+                    onClick={() =>
+                      cart.removeProduct(product.id)
+                    }
                     aria-label={`Quitar ${label}`}
                     className="checkout-focus -mr-2 -mt-2 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-xl text-[#8f1f23] hover:bg-[#fff0e4]"
                   >
                     ×
                   </button>
                 </div>
+
                 <p className="mt-1 text-xs text-[#725749]">
                   Precio unitario: {formatARS(line.unitPrice)}
                 </p>
+
                 <div className="mt-3 flex flex-wrap items-end justify-between gap-3">
                   <div className="w-28">
                     <label
@@ -109,33 +149,46 @@ export default function CartSummary({
                     >
                       Cantidad
                     </label>
+
                     <input
                       id={id}
                       type="text"
                       inputMode={
-                        isPackagedProduct(product) ? "numeric" : "decimal"
+                        isPackagedProduct(product)
+                          ? "numeric"
+                          : "decimal"
                       }
-                      value={cart.quantities[product.id] ?? ""}
+                      value={
+                        cart.quantities[product.id] ?? ""
+                      }
                       onChange={(event) =>
-                        cart.setQuantity(product.id, event.target.value)
+                        cart.setQuantity(
+                          product.id,
+                          event.target.value,
+                        )
                       }
                       aria-label={`Cantidad para ${label}`}
                       aria-invalid={Boolean(quantityError)}
                       aria-describedby={
-                        quantityError ? `${id}-error` : undefined
+                        quantityError
+                          ? `${id}-error`
+                          : undefined
                       }
                       maxLength={12}
                       className="checkout-input mt-1 w-full px-3 py-2 text-base tabular-nums"
                     />
                   </div>
+
                   <p className="text-right text-xs text-[#725749]">
                     Subtotal
                     <br />
+
                     <span className="mt-1 block text-base font-black tabular-nums text-[#642a24]">
                       {formatARS(line.subtotal)}
                     </span>
                   </p>
                 </div>
+
                 {quantityError && (
                   <p
                     id={`${id}-error`}
@@ -149,7 +202,8 @@ export default function CartSummary({
           })}
         </ul>
       )}
-      {minimums.length > 0 && (
+
+      {minimumStatuses.length > 0 && (
         <div
           className="mt-4 rounded-2xl border border-[#b98525]/20 bg-[#fff9e3] p-4"
           aria-live="polite"
@@ -158,19 +212,30 @@ export default function CartSummary({
           <h3 className="text-xs font-black uppercase tracking-[0.1em] text-[#79551d]">
             Mínimos mayoristas
           </h3>
+
           <ul className="mt-2 space-y-2 text-xs leading-5">
-            {minimums.map((item) => (
+            {minimumStatuses.map((item) => (
               <li
                 key={item.category}
-                className={item.missing ? "text-[#9a302e]" : "text-[#27734c]"}
+                className={
+                  item.missing
+                    ? "text-[#9a302e]"
+                    : "text-[#27734c]"
+                }
               >
                 <span className="font-bold">
-                  {item.label}: {item.quantity}/{item.minimum} {item.unit}
+                  {item.label}: {item.quantity}/
+                  {item.minimum} {item.unit}
                 </span>
+
                 <span className="block">
                   {item.missing
                     ? item.missing === 1
-                      ? `Falta 1 ${item.category === "pizzas" ? "unidad" : "paquete"}.`
+                      ? `Falta 1 ${
+                          item.category === "pizzas"
+                            ? "unidad"
+                            : "paquete"
+                        }.`
                       : `Faltan ${item.missing} ${item.unit} surtidos.`
                     : "✓ Mínimo cumplido"}
                 </span>
@@ -179,16 +244,21 @@ export default function CartSummary({
           </ul>
         </div>
       )}
+
       <div className="mt-5 border-t border-[#b98525]/25 pt-4">
         <p className="text-xs font-black uppercase tracking-[0.14em] text-[#725024]">
           Total estimado
         </p>
+
         <p
           className="font-display mt-1 min-h-10 text-3xl font-black tabular-nums text-[#742026]"
           aria-live="polite"
           aria-atomic="true"
         >
-          <span className="sr-only">Total estimado: </span>
+          <span className="sr-only">
+            Total estimado:{" "}
+          </span>
+
           <span
             key={total}
             className="order-total-update inline-block"
@@ -197,17 +267,23 @@ export default function CartSummary({
             {formatARS(total)}
           </span>
         </p>
+
         <p className="mt-2 text-xs leading-5 text-[#796052]">
           Confirmamos disponibilidad, total final y, si corresponde, costo de
           envío por WhatsApp.
         </p>
       </div>
+
       {!cart.persistent && (
-        <p role="status" className="mt-3 text-xs text-[#9a302e]">
+        <p
+          role="status"
+          className="mt-3 text-xs text-[#9a302e]"
+        >
           Tu navegador no permite guardar el carrito. Se conservará mientras
           sigas en esta página.
         </p>
       )}
+
       {children ??
         (lines.length > 0 && cart.loaded ? (
           <Link
