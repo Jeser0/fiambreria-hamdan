@@ -166,9 +166,18 @@ Pruebas y documentación:
 - Rutas comerciales, redirección de `/pedido`, 404 de modo inválido y protección de `/admin`: comprobados con el servidor de producción local y la base real.
 - Navegador Chromium: checkout mayorista/minorista, cantidades, mínimos, formularios, WhatsApp, persistencia y sincronización entre pestañas; Pixel 7 e iPhone 13 emulados sin desbordamiento.
 - `tests/browser-backend.mjs`: catálogo real, login inválido rechazado por Auth, precio manipulado corregido por el servidor, precios falsos en almacenamiento ignorados y eliminación de IDs no disponibles.
-- El login exitoso de la cuenta owner, el guardado desde su sesión de navegador y el cierre de sesión requieren las credenciales de esa persona. El script permite comprobarlos mediante `HAMDAN_ADMIN_EMAIL` y `HAMDAN_ADMIN_PASSWORD` en el entorno del proceso; no imprime valores ni los guarda.
+- El owner confirmó manualmente el ingreso al panel local, la visualización de productos y la edición de precios. La repetición en Preview/Production y la comprobación de cierre de sesión requieren su sesión. El script permite comprobar login, guardado y logout mediante `HAMDAN_ADMIN_EMAIL` y `HAMDAN_ADMIN_PASSWORD` en el entorno del proceso; no imprime valores ni los guarda.
 - Safari/WebKit y dispositivos físicos quedan pendientes. No se envían mensajes reales durante las pruebas.
-- Producción requiere desplegar la rama con las variables correctas; no se hizo push, merge ni despliegue.
+- La rama está publicada en GitHub con el [PR #1 hacia main](https://github.com/Jeser0/fiambreria-hamdan/pull/1). La publicación en producción queda condicionada a la auditoría final y a verificar la Preview; consultar el PR para el estado actual del merge.
+
+### Auditoría final del 3 de octubre de 2026
+
+- Se repitieron las 21 pruebas, lint, TypeScript, build y ambos scripts de navegador sobre la compilación local con Supabase real: aprobados.
+- La revisión del código y el escaneo heurístico del historial Git no encontraron secretos versionados ni fallos bloqueantes en catálogo, carrito, checkout o autorización.
+- Las pruebas SQL de `supabase/tests/catalog_security.sql` se repitieron con `ROLLBACK`: lectura pública, bloqueo de escritura de usuarios comunes, imposibilidad de autoasignar membresías, edición autorizada, límites de precios y ocultación de productos no disponibles aprobados. No quedaron modificaciones comerciales.
+- RLS está habilitado en las cuatro tablas públicas. Los permisos de actualización de `products` están limitados a las cinco columnas del panel, con autorización por membresía activa.
+- El asesor de seguridad conserva una advertencia: [protección contra contraseñas filtradas desactivada](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). No se alteraron credenciales ni configuración de Auth.
+- Vercel informó `Ready` para la Preview inicial, pero su protección redirige los navegadores sin sesión al login de Vercel. Ese estado no sustituye la prueba funcional de la Preview: hace falta acceso autorizado antes del merge.
 
 Para repetir navegador en Windows, usando Edge instalado y Playwright fuera de las dependencias de la aplicación:
 
