@@ -4,13 +4,13 @@
 
 - `npm run lint`: sin errores.
 - `npx tsc --noEmit`: sin errores, TypeScript estricto.
-- `npm test`: 12 pruebas aprobadas.
+- `npm test`: 21 pruebas aprobadas, incluidas las 12 originales.
 - `npm run build`: compilación de producción aprobada con Next.js 16.3.5.
 - Recorridos de navegador en Chromium: Mayorista y Minorista completos, sin errores de ejecución.
 - Vista adaptable y pedido minorista comprobados con dimensiones y controles táctiles emulados de Pixel 7 y iPhone 13, sin desbordamiento horizontal.
 - Safari/WebKit y dispositivos físicos: pendientes de comprobación. El entorno disponible no tiene todas las bibliotecas necesarias para ejecutar WebKit. La emulación de iPhone realizada usa Chromium.
 
-Las pruebas interceptan `window.open` y verifican el enlace y mensaje. No envían mensajes reales al negocio.
+Las pruebas interceptan `window.open` y esperan la validación del servidor antes de verificar el enlace y mensaje. No envían mensajes reales al negocio. `tests/browser-backend.mjs` agrega verificación del catálogo real, protección de `/admin`, rechazo de login inválido y manipulación de precios/almacenamiento. El SQL de `supabase/tests/catalog_security.sql` comprueba RLS con rollback.
 
 ## Casos cubiertos
 
@@ -58,4 +58,4 @@ El script usa `http://localhost:3000` y deja capturas en `.qa-output/` (ignorado
 
 ## Alcance de esta versión
 
-Los precios provienen del catálogo existente y no fueron modificados. Los totales son estimados. La disponibilidad y el costo de envío se confirman por WhatsApp. No se implementan backend, registro, pagos, PDF ni WhatsApp API. Los cambios están en la rama `feat/hamdan-checkout-showcase`; el archivo entregado conserva el historial Git.
+Los precios y mínimos comerciales provienen de Supabase; las pruebas no alteran sus valores permanentes. Los totales son estimados. La disponibilidad y el costo de envío se confirman por WhatsApp. Esta rama `feat/supabase-backend` incluye catálogo dinámico, validación final en servidor y administración con Supabase Auth/RLS. No implementa pagos, PDF, pedidos persistidos ni WhatsApp API. Configuración y límites de verificación en [`ADMIN_SETUP.md`](./ADMIN_SETUP.md).
