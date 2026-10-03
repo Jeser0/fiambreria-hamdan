@@ -10,6 +10,8 @@ export type AdminProduct = Pick<
   | "active"
   | "in_stock"
   | "updated_at"
+  | "image_url"
+  | "image_alt"
 >;
 export type AdminCategory = { id: string; name: string };
 export type ProductEditResult = {

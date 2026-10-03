@@ -8,7 +8,7 @@ export default async function AdminPage() {
     supabase
       .from("products")
       .select(
-        "id, name, category_id, retail_price, wholesale_price, active, in_stock, updated_at",
+        "id, name, category_id, retail_price, wholesale_price, active, in_stock, updated_at, image_url, image_alt",
       )
       .order("sort_order")
       .order("id"),

@@ -90,7 +90,7 @@ export default function ProductMedia({
           alt={imageAlt ?? name}
           fill
           sizes="(max-width: 767px) 92vw, (max-width: 1279px) 44vw, 440px"
-          className="object-cover transition-transform duration-300 group-hover:scale-[1.025]"
+          className="object-contain object-center p-3"
         />
       </div>
     );
