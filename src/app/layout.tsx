@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import MetaPixel from "@/components/MetaPixel";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import { business } from "@/data/business";
 import "./globals.css";
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       <body>
         {children}
         <WhatsAppFloat />
+        <MetaPixel />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
