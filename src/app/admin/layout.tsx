@@ -4,8 +4,11 @@ import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Administración",
+  description: "Panel privado de administración de Fiambrería Hamdan.",
   robots: { index: false, follow: false },
-  alternates: { canonical: "/admin" },
+  alternates: { canonical: null },
+  openGraph: null,
+  twitter: null,
 };
 
 export default function AdminLayout({ children }: { children: ReactNode }) {

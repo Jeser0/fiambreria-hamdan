@@ -87,7 +87,7 @@ export default function ProductMedia({
       <div className="product-media relative aspect-[16/7] overflow-hidden rounded-2xl border border-[#7f241f]/10 bg-[#fff7e7]">
         <Image
           src={image}
-          alt={imageAlt ?? name}
+          alt={imageAlt?.trim() || name}
           fill
           sizes="(max-width: 767px) 92vw, (max-width: 1279px) 44vw, 440px"
           className="object-contain object-center p-3"

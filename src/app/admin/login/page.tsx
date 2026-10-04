@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getAdminSession } from "@/lib/admin-auth";
 import AdminLoginForm from "@/components/admin/AdminLoginForm";
+
+export const metadata: Metadata = {
+  title: "Acceso administrativo",
+  description: "Ingreso privado al panel de Fiambrería Hamdan para administradores.",
+};
 
 export default async function AdminLoginPage() {
   if (await getAdminSession()) redirect("/admin");

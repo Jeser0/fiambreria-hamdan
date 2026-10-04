@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { business } from "@/data/business";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -7,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/api/", "/pedido"],
     },
-    sitemap: "https://fiambreriahamdan.com/sitemap.xml",
+    sitemap: new URL("/sitemap.xml", business.siteUrl).href,
   };
 }

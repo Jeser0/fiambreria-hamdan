@@ -7,14 +7,10 @@ import StoreSwitcher from "@/components/StoreSwitcher";
 import { BoxIcon, SparkIcon, WhatsAppIcon } from "@/components/Icons";
 import type { CatalogCategoryId } from "@/data/catalog";
 import { whatsappUrl } from "@/data/business";
+import { publicPageMetadata } from "@/data/seo";
 import { getCatalogSnapshot } from "@/lib/catalog-db";
 
-export const metadata: Metadata = {
-  title: "Tienda mayorista",
-  description:
-    "Tienda mayorista de Fiambrería Hamdan con quesos, fiambres, sándwiches y pizzas. Armá el pedido y envialo por WhatsApp.",
-  alternates: { canonical: "/mayorista" },
-};
+export const metadata: Metadata = publicPageMetadata("wholesale");
 
 type StorePageProps = {
   searchParams: Promise<{

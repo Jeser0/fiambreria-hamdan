@@ -7,14 +7,10 @@ import StoreSwitcher from "@/components/StoreSwitcher";
 import { BasketIcon, SparkIcon, WhatsAppIcon } from "@/components/Icons";
 import type { CatalogCategoryId } from "@/data/catalog";
 import { whatsappUrl } from "@/data/business";
+import { publicPageMetadata } from "@/data/seo";
 import { getCatalogSnapshot } from "@/lib/catalog-db";
 
-export const metadata: Metadata = {
-  title: "Tienda minorista",
-  description:
-    "Tienda minorista de Fiambrería Hamdan con quesos, fiambres, sándwiches y pizzas para el hogar, reuniones y eventos.",
-  alternates: { canonical: "/minorista" },
-};
+export const metadata: Metadata = publicPageMetadata("retail");
 
 type StorePageProps = {
   searchParams: Promise<{

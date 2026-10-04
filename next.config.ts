@@ -2,6 +2,12 @@ import type { NextConfig } from "next";
 import { PHASE_PRODUCTION_BUILD } from "next/constants";
 
 const nextConfig: NextConfig = {
+  async headers() {
+    return ["/admin/:path*", "/api/:path*", "/pedido/:path*"].map((source) => ({
+      source,
+      headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+    }));
+  },
   images: {
     remotePatterns: process.env.NEXT_PUBLIC_SUPABASE_URL
       ? [new URL("/storage/v1/object/public/**", process.env.NEXT_PUBLIC_SUPABASE_URL)]

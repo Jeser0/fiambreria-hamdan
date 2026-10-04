@@ -276,9 +276,9 @@ export default function StoreCatalog({
                       )}
                     </span>
 
-                    <h2 className="font-display mt-3 text-2xl font-black leading-tight text-[#742026]">
+                    <h3 className="font-display mt-3 text-2xl font-black leading-tight text-[#742026]">
                       {product.name}
-                    </h2>
+                    </h3>
 
                     {minText && (
                       <p className="mt-2 text-xs font-bold text-[#956318]">
