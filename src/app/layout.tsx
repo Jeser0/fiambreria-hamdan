@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import GoogleAdsTag from "@/components/GoogleAdsTag";
 import MetaPixel from "@/components/MetaPixel";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import { business } from "@/data/business";
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       <body>
         {children}
         <WhatsAppFloat />
+        <GoogleAdsTag />
         <MetaPixel />
         <script
           type="application/ld+json"
