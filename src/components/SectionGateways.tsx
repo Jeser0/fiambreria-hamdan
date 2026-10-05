@@ -1,36 +1,69 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
-import { BoxIcon } from "./Icons";
+
+function CategoryIcon({ children }: { children: ReactNode }) {
+  return (
+    <svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+      {children}
+    </svg>
+  );
+}
 
 function CheeseIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M4 16 12 5l8 4-8 10-8-3Z" /><path d="M12 5v14" /><circle cx="15" cy="10" r="1" /><circle cx="9" cy="13" r="1" />
-    </svg>
+    <CategoryIcon>
+      <path d="m3.5 12 16-8 5 8v11h-21V12Z" />
+      <path d="M3.5 12h21" />
+      <circle cx="9" cy="17" r="1.5" />
+      <circle cx="18" cy="19" r="1.8" />
+      <path d="M15 8.5h.01" />
+    </CategoryIcon>
   );
 }
 
 function HamIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M6 18c-2-2-1.6-5.4.7-8.1C9.1 7 13 5.6 16 6.7c3.2 1.2 4.9 4.8 3.5 7.9-1.2 2.8-4.8 4.6-8.3 4.4-2.1-.1-4-.5-5.2-1Z" /><circle cx="16" cy="11" r="1.3" /><path d="M7 10 4 7m1 5-3-1" />
-    </svg>
+    <CategoryIcon>
+      <path d="m19.5 5.5-9.5-2C6 2.7 3.2 5.6 3.8 9.5l1.7 10c.4 2.4 2.5 3.8 4.8 3.3l10.5-2" />
+      <ellipse cx="19" cy="13.5" rx="5.5" ry="8" transform="rotate(-12 19 13.5)" />
+      <path d="m8 8 3 1M8.5 17l3 .5" />
+      <circle cx="17.5" cy="10.5" r=".8" />
+      <circle cx="20.5" cy="13.5" r=".8" />
+      <circle cx="18.5" cy="17" r=".8" />
+    </CategoryIcon>
   );
 }
 
-function SandwichIcon() {
+function SandwichIcon({ count }: { count: 4 | 8 }) {
   return (
-    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="m4 9 8-4 8 4-8 4-8-4Z" /><path d="m5 13 7 3 7-3M6 17l6 3 6-3" />
-    </svg>
+    <CategoryIcon>
+      <path d="m3.5 8.5 10-5 10 5-10 5-10-5Z" />
+      <path d="m3.5 12 10 5 10-5M3.5 15.5l10 5" />
+      {count === 8 && <path d="m3.5 19 5 2.5M6.5 22l4 2" />}
+      <rect x="14" y="18" width="12" height="8.5" rx="2.5" fill="#fbefdd" strokeWidth="1.2" />
+      <text x="20" y="24.4" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="8" fontWeight="700" fill="currentColor" stroke="none">x{count}</text>
+    </CategoryIcon>
+  );
+}
+
+function PizzaIcon() {
+  return (
+    <CategoryIcon>
+      <path d="M7 10.5 12.5 24.5 22.5 12" />
+      <path d="M5 7.5A21 21 0 0 1 24 9l-1.5 3A18 18 0 0 0 7 10.5L5 7.5Z" />
+      <circle cx="12" cy="14" r="1.4" />
+      <circle cx="17.5" cy="14.5" r="1.3" />
+      <path d="m13.5 19 1.5-1" />
+    </CategoryIcon>
   );
 }
 
 const cards = [
   { title: "Fiambres", category: "fiambres", icon: <HamIcon />, tone: "text-[#8f1f23]" },
   { title: "Quesos y lácteos", category: "quesos", icon: <CheeseIcon />, tone: "text-[#b66d0f]" },
-  { title: "Sándwich x4", category: "sandwich-x4", icon: <SandwichIcon />, tone: "text-[#8f1f23]" },
-  { title: "Sándwich x8", category: "sandwich-x8", icon: <SandwichIcon />, tone: "text-[#8f1f23]" },
-  { title: "Pizzas", category: "pizzas", icon: <BoxIcon size={28} />, tone: "text-[#b66d0f]" },
+  { title: "Sándwich x4", category: "sandwich-x4", icon: <SandwichIcon count={4} />, tone: "text-[#8f1f23]" },
+  { title: "Sándwich x8", category: "sandwich-x8", icon: <SandwichIcon count={8} />, tone: "text-[#8f1f23]" },
+  { title: "Pizzas", category: "pizzas", icon: <PizzaIcon />, tone: "text-[#b66d0f]" },
 ] as const;
 
 export default function SectionGateways() {
